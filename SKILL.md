@@ -1,10 +1,11 @@
 ---
 name: simplicity-gate
-version: "3.0.0"
+version: "4.0.0"
 description: >
   Evaluates tool/code proposals against the Rule of Least Power.
   Forces selection of the simplest viable tier. Blocks over-engineering.
   Auto-triggers on every code generation, dependency addition, and architecture decision.
+  v4: Auto-fix, interactive mode, inline suppressions, learning, multi-file awareness.
 triggers:
   - tool_invocation
   - code_generation
@@ -21,9 +22,16 @@ triggers:
   - new_component
   - new_function
 auto_trigger: true
+settings:
+  auto_fix: true
+  interactive_mode: true
+  learning_mode: true
+  suppressions: true
+  multi_file_scan: true
+  dependency_cost: true
 ---
 
-# Simplicity Gate v3.0
+# Simplicity Gate v4.0
 
 > Choose the least powerful tool that does the job.
 
@@ -47,6 +55,201 @@ auto_trigger: true
 | Component creation | "Create a component that...", "Build a UI for..." |
 
 **When triggered, ALWAYS run the gate before proceeding.** Do not skip. Do not assume PASS.
+
+---
+
+## Tier 0 — Built-in APIs
+
+Before Tier 1, check if a built-in platform API already exists:
+
+```
+Tier 0 — Built-in APIs
+├── fetch()           — HTTP requests (no axios/node-fetch needed)
+├── URL               — URL parsing (no url.parse needed)
+├── structuredClone() — Deep copy (no lodash.cloneDeep needed)
+├── Intl.DateTimeFormat — Date formatting (no moment needed)
+├── AbortController   — Request cancellation (no axios cancel needed)
+├── crypto.randomUUID — UUID generation (no uuid package needed)
+├── File System Access — Local file ops (no fs-extra needed)
+└── Web Streams       — Streaming (no stream library needed)
+```
+
+**Rule:** If a built-in API does it, don't add a package. Tier 0 is free.
+
+---
+
+## Tier 8 — External Services
+
+For workflow automation, check if a no-code service works:
+
+```
+Tier 8 — External Services
+├── Zapier       — App integrations, webhooks, triggers
+├── IFTTT        — Simple if-this-then-that automations
+├── n8n          — Self-hosted workflow automation
+├── Make         — Complex multi-step automations
+├── Airtable     — Database + forms + automations
+└── Notion API   — Docs + databases + automations
+```
+
+**Rule:** If Zapier/IFTTT/n8n can do it, don't build a custom integration. Tier 8 > Tier 7.
+
+---
+
+## Inline Suppressions
+
+You can skip evaluation for specific lines using comments:
+
+```javascript
+// simplicity-gate: ignore
+const data = require('lodash').cloneDeep(obj);  // Gate won't evaluate this
+
+// simplicity-gate: tier-6-approved
+const app = express();  // Gate marks this as pre-approved
+
+// sg-ignore
+fetch('https://api.example.com');  // Short form also works
+```
+
+**Suppression rules:**
+- `// simplicity-gate: ignore` — Skip this line entirely
+- `// simplicity-gate: tier-N-approved` — Mark as approved at tier N
+- `// sg-ignore` — Short form skip
+- Suppressions are logged in metrics as `suppressed_count`
+- Max 3 suppressions per file; more triggers a WARN
+
+---
+
+## Auto-Fix Mode
+
+When `auto_fix: true` (default), the gate doesn't just suggest — it applies the fix:
+
+```
+SIMPLICITY GATE — AUTO-FIX APPLIED
+Original:   Node.js script (Tier 6)
+Replaced:   jq command (Tier 3)
+File:       transform.sh
+Severity:   3/5
+Tokens:     ~2,000 saved
+```
+
+**Auto-fix rules:**
+- Severity 1-2: Suggest only, ask user to confirm
+- Severity 3: Auto-fix with notification
+- Severity 4-5: Auto-fix and block proceeding until confirmed
+- Always show what changed before and after
+
+---
+
+## Interactive Mode
+
+When `interactive_mode: true`, REJECTs offer choices instead of just blocking:
+
+```
+SIMPLICITY GATE — REJECT [Severity: 3]
+Proposed: Express.js (Tier 7) for API proxy
+
+Options:
+  1. curl + cron (Tier 3) — simplest, no runtime
+  2. Node.js http module (Tier 5) — no dependencies, stays in Node.js
+  3. Keep Express (Tier 7) — justify why lower tiers won't work
+
+Type 1, 2, or 3 (or 'override' to skip gate):
+```
+
+**Interactive rules:**
+- Severity 1-2: Show options, user chooses
+- Severity 3-4: Show options, default to simplest
+- Severity 5: Block, require explicit override
+- User can type `override` to skip any REJECT (logged in metrics)
+
+---
+
+## Learning Mode
+
+When `learning_mode: true`, the gate tracks decisions and adapts:
+
+```yaml
+# .simplicity-gate/history.json
+{
+  "evaluations": [
+    {
+      "date": "2026-03-15",
+      "tool": "react",
+      "verdict": "REJECT",
+      "severity": 4,
+      "override": true,
+      "reason": "existing React project",
+      "user_choice": 3
+    }
+  ],
+  "patterns": {
+    "react_overrides": 5,
+    "express_overrides": 3,
+    "jq_accepted": 12
+  },
+  "suggestions": [
+    "React is frequently overridden — consider adding to allowed_tools",
+    "jq is rarely rejected — tier adjustment not needed"
+  ]
+}
+```
+
+**Learning rules:**
+- Track all overrides and user choices
+- After 5+ overrides for same tool, suggest adding to `allowed_tools`
+- After 10+ accepts for same tool, suggest tier adjustment
+- Suggestions appear at session start: "Based on 15 evaluations, consider..."
+
+---
+
+## Multi-File Awareness
+
+When `multi_file_scan: true`, the gate scans the codebase for patterns:
+
+```
+MULTI-FILE SCAN RESULTS:
+├── JSON parsing found in 3 files (utils/parse.js, api/handler.js, scripts/convert.js)
+│   └── Suggestion: Create shared jq script for all 3
+├── HTTP requests found in 5 files (all using axios)
+│   └── Suggestion: Use fetch() (Tier 0) — remove axios dependency
+└── Date formatting found in 4 files (all using moment)
+    └── Suggestion: Use Intl.DateTimeFormat (Tier 0) — remove moment dependency
+```
+
+**Multi-file rules:**
+- Scan imports/dependencies across all files
+- Group similar operations
+- Suggest centralized solutions
+- Show total savings: "Consolidating saves ~15,000 tokens across 12 files"
+
+---
+
+## Dependency Cost Calculator
+
+When evaluating a package, show actual cost:
+
+```
+DEPENDENCY COST: lodash
+├── Size: 4.2 MB (73.8 KB gzipped)
+├── Install time: ~2s
+├── Transitive deps: 0
+├── Known CVEs: 0
+└── Alternative: Native Array methods (0 bytes, 0 deps)
+
+DEPENDENCY COST: moment
+├── Size: 2.9 MB (72 KB gzipped)
+├── Install time: ~1.5s
+├── Transitive deps: 0
+├── Known CVEs: 1 (prototype pollution)
+└── Alternative: Intl.DateTimeFormat (0 bytes, 0 deps)
+```
+
+**Cost rules:**
+- Show size, install time, transitive deps, CVEs
+- Compare to native/stdlib alternative
+- If CVEs exist → REJECT with security note
+- If transitive deps > 10 → WARN about bloat
 
 ---
 
@@ -820,6 +1023,16 @@ One-off scripts still follow the hierarchy. If jq can do it, use jq — even for
 Check if curl (Tier 3) can handle the integration. Only escalate to Tier 6 if you need persistent connections, connection pooling, or complex retry logic.
 
 ## Changelog
+
+### v4.0.0
+- Added Tier 0 (Built-in APIs) — fetch, URL, structuredClone, Intl, crypto
+- Added Tier 8 (External Services) — Zapier, IFTTT, n8n, Make, Airtable
+- Added inline suppressions — `// simplicity-gate: ignore` comments
+- Added auto-fix mode — applies replacements automatically
+- Added interactive mode — choice-based REJECTs with options
+- Added learning mode — tracks overrides, suggests custom tiers
+- Added multi-file awareness — scans codebase for patterns
+- Added dependency cost calculator — size, CVEs, transitive deps
 
 ### v3.0.0
 - Added auto-trigger rules — skill fires on every code generation, dependency addition, and architecture decision

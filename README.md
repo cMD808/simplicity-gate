@@ -9,12 +9,13 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.0.0-blue" alt="Version">
+  <img src="https://img.shields.io/badge/version-4.0.0-blue" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
   <img src="https://img.shields.io/badge/agents-12+-purple" alt="Agents">
-  <img src="https://img.shields.io/badge/tiers-7-orange" alt="Tiers">
-  <img src="https://img.shields.io/badge/auto--trigger-enabled-brightgreen" alt="Auto-Trigger">
-  <img src="https://img.shields.io/badge/severity--scoring-1--5-red" alt="Severity Scoring">
+  <img src="https://img.shields.io/badge/tiers-9-orange" alt="Tiers">
+  <img src="https://img.shields.io/badge/auto--fix-enabled-brightgreen" alt="Auto-Fix">
+  <img src="https://img.shields.io/badge/interactive--mode-enabled-brightgreen" alt="Interactive Mode">
+  <img src="https://img.shields.io/badge/learning--mode-enabled-brightgreen" alt="Learning Mode">
 </p>
 
 ---
@@ -39,6 +40,7 @@ AI agents instinctively reach for the most powerful tool available. That instinc
 
 | Tier | Power Level | Examples |
 |:----:|:------------|:---------|
+| 0 | Built-in APIs | `fetch()`, `structuredClone()`, `URL`, `Intl` |
 | 1 | Declarative markup | HTML, CSS, JSON Schema |
 | 2 | Declarative logic | CSS `:has()`, Jinja, YAML |
 | 3 | Standard utilities | `jq`, `grep`, `awk`, `curl` |
@@ -46,6 +48,7 @@ AI agents instinctively reach for the most powerful tool available. That instinc
 | 5 | High-level scripting | Python, Ruby, shell scripts |
 | 6 | Application frameworks | Express, Rails, Django |
 | 7 | Custom infrastructure | Kubernetes, service meshes |
+| 8 | External services | Zapier, IFTTT, n8n, Make |
 
 ---
 
@@ -282,7 +285,29 @@ tier_adjustments:
 thresholds:
   max_tier: 5
   escalation_threshold: 6
+settings:
+  auto_fix: true
+  interactive_mode: true
+  learning_mode: true
+  suppressions: true
+  multi_file_scan: true
+  dependency_cost: true
 ```
+
+---
+
+## What's New in v4.0
+
+| Feature | Description |
+|:--------|:------------|
+| Tier 0 | Built-in APIs (`fetch`, `structuredClone`, `URL`) — free, zero deps |
+| Tier 8 | External services (Zapier, IFTTT, n8n) — no-code > custom code |
+| Auto-Fix | Applies replacements automatically, not just suggestions |
+| Interactive Mode | Choice-based REJECTs — user picks from options |
+| Learning Mode | Tracks overrides, suggests custom tiers after 5+ decisions |
+| Multi-File Scan | Detects patterns across codebase, suggests consolidation |
+| Dependency Cost | Shows package size, CVEs, transitive deps before adding |
+| Inline Suppressions | `// simplicity-gate: ignore` to skip specific lines |
 
 ---
 
