@@ -1,11 +1,11 @@
 ---
 name: simplicity-gate
-version: "4.0.0"
+version: "4.1.0"
 description: >
   Evaluates tool/code proposals against the Rule of Least Power.
   Forces selection of the simplest viable tier. Blocks over-engineering.
   Auto-triggers on every code generation, dependency addition, and architecture decision.
-  v4: Auto-fix, interactive mode, inline suppressions, learning, multi-file awareness.
+  v4.1: 11 language tiers, quick-check mode, AST detection, security audit, bundle estimation.
 triggers:
   - tool_invocation
   - code_generation
@@ -29,9 +29,15 @@ settings:
   suppressions: true
   multi_file_scan: true
   dependency_cost: true
+  quick_check: true
+  cache_evaluations: true
+  early_termination: true
+  ast_detection: true
+  bundle_estimation: true
+  security_audit: true
 ---
 
-# Simplicity Gate v4.0
+# Simplicity Gate v4.1
 
 > Choose the least powerful tool that does the job.
 
@@ -250,6 +256,165 @@ DEPENDENCY COST: moment
 - Compare to native/stdlib alternative
 - If CVEs exist → REJECT with security note
 - If transitive deps > 10 → WARN about bloat
+
+---
+
+## Speed Optimizations
+
+### Quick-Check Mode
+
+For obvious violations, skip the full flowchart:
+
+```
+QUICK CHECK (< 100ms):
+├── Is it a framework for a one-liner?     → REJECT immediately
+├── Is it a runtime for a shell command?   → REJECT immediately
+├── Is it a database for a file read?      → REJECT immediately
+└── Is it a microservice for a script?     → REJECT immediately
+```
+
+**Quick-check patterns:**
+
+| Pattern | Verdict | Time |
+|:--------|:--------|:----:|
+| Express for `curl` task | REJECT | 50ms |
+| React for CSS toggle | REJECT | 50ms |
+| Python for `grep` task | REJECT | 50ms |
+| Docker for cron job | REJECT | 50ms |
+| Node.js for `jq` task | REJECT | 50ms |
+| `lodash.cloneDeep` for `structuredClone` | REJECT | 50ms |
+| `moment` for `Intl.DateTimeFormat` | REJECT | 50ms |
+| `axios` for `fetch` | REJECT | 50ms |
+
+### Cached Evaluations
+
+Cache common patterns to avoid re-evaluation:
+
+```yaml
+cache:
+  # Pattern → Verdict (instant lookup)
+  "express for curl": REJECT
+  "react for css toggle": REJECT
+  "python for grep": REJECT
+  "docker for cron": REJECT
+  "lodash for native": REJECT
+  "moment for intl": REJECT
+  "axios for fetch": REJECT
+  
+  # Cache TTL: 1 hour
+  # Max cache size: 1000 entries
+```
+
+### Early Termination
+
+Stop evaluating as soon as a match is found:
+
+```
+EARLY TERMINATION:
+├── Tier 0 match? → STOP, PASS
+├── Tier 1 match? → STOP, PASS
+├── Tier 2 match? → STOP, PASS
+├── Tier 3 match? → STOP, PASS
+└── No match by Tier 7? → ESCALATE
+```
+
+**Rule:** Never evaluate all 7 tiers if Tier 1 works. Stop at first match.
+
+---
+
+## Power Features
+
+### AST Pattern Detection
+
+Detect anti-patterns in proposed code:
+
+```
+AST PATTERNS DETECTED:
+├── JSON.parse(JSON.stringify())     → Use structuredClone()
+├── Array.reduce() for simple map    → Use .map()
+├── Manual deep clone                → Use structuredClone()
+├── require('lodash')                → Use native methods
+├── require('moment')                → Use Intl.DateTimeFormat
+├── require('axios')                 → Use fetch()
+├── setTimeout for intervals         → Use setInterval
+├── for...of with break              → Use .find() or .some()
+└── Manual retry logic               → Use AbortController + fetch
+```
+
+**Rule:** If AST pattern matches, auto-suggest native alternative.
+
+### Bundle Size Estimation
+
+Show impact before adding dependencies:
+
+```
+BUNDLE IMPACT:
+├── lodash: +73.8 KB gzipped
+├── moment: +72.0 KB gzipped
+├── axios: +5.3 KB gzipped
+├── express: +230 KB (server, not bundled)
+├── react: +42 KB gzipped
+├── zustand: +1.2 KB gzipped
+└── Total: +424.3 KB if all added
+
+NATIVE ALTERNATIVES:
+├── structuredClone: 0 KB (built-in)
+├── fetch: 0 KB (built-in)
+├── URL: 0 KB (built-in)
+├── Intl.DateTimeFormat: 0 KB (built-in)
+└── Total: 0 KB
+```
+
+### Security Audit Integration
+
+Check for known vulnerabilities before adding:
+
+```
+SECURITY CHECK: lodash@4.17.21
+├── CVE-2021-23337: Command Injection (High)
+├── CVE-2020-28500: ReDoS (Medium)
+└── Status: 2 vulnerabilities found
+
+RECOMMENDATION: Use native Array methods instead
+```
+
+### Performance Profiling Suggestions
+
+When a higher tier is justified, suggest profiling:
+
+```
+PERFORMANCE PROFILING:
+├── If Tier 6+ justified: Add console.time() markers
+├── If Tier 7 justified: Add APM (New Relic, Datadog)
+├── If bundle size matters: Run webpack-bundle-analyzer
+└── If runtime matters: Run clinic.js or py-spy
+```
+
+### Dependency Graph Visualization
+
+Show full dependency tree:
+
+```
+DEPENDENCY TREE: express
+├── express@4.18.2
+│   ├── body-parser@1.20.2
+│   │   ├── bytes@3.1.2
+│   │   ├── content-type@1.0.5
+│   │   ├── debug@2.6.9
+│   │   │ └── ms@2.0.0
+│   │   ├── depd@2.0.0
+│   │   ├── destroy@1.2.0
+│   │   ├── http-errors@2.0.0
+│   │   │ └── inherits@2.0.4
+│   │   ├── iconv-lite@0.4.24
+│   │   ├── on-finished@2.4.1
+│   │   ├── qs@6.11.0
+│   │   ├── raw-body@2.5.2
+│   │   └── safe-buffer@5.2.1
+│   └── ... (47 total transitive deps)
+
+ALTERNATIVE: curl (0 deps)
+```
 
 ---
 
@@ -581,6 +746,17 @@ Some languages have different tier capabilities:
 ```yaml
 language_tiers:
   javascript:
+    tier_0: "fetch, URL, structuredClone, Intl, crypto, AbortController"
+    tier_1: "CSS animations, HTML forms, Web APIs"
+    tier_2: "JSON, YAML, TOML"
+    tier_3: "npx, shell commands via child_process"
+    tier_4: "SQL via better-sqlite3, JSONPath"
+    tier_5: "TypeScript (with tsc)"
+    tier_6: "JavaScript (Node.js, Deno, Bun)"
+    tier_7: "Express, Fastify, NestJS"
+
+  typescript:
+    tier_0: "fetch, URL, structuredClone, Intl, crypto, AbortController"
     tier_1: "CSS animations, HTML forms, Web APIs"
     tier_2: "JSON, YAML, TOML"
     tier_3: "npx, shell commands via child_process"
@@ -590,6 +766,7 @@ language_tiers:
     tier_7: "Express, Fastify, NestJS"
 
   python:
+    tier_0: "urllib, json, pathlib, dataclasses, typing"
     tier_1: "CSS, HTML, Jinja2 templates"
     tier_2: "JSON, YAML, TOML"
     tier_3: "subprocess, os.system"
@@ -598,7 +775,48 @@ language_tiers:
     tier_6: "Python (standard)"
     tier_7: "Django, Flask, FastAPI"
 
+  java:
+    tier_0: "HttpClient, Files, Path, Record, Switch expressions"
+    tier_1: "Thymeleaf, JSP, HTML templates"
+    tier_2: "JSON (Jackson), YAML (SnakeYAML)"
+    tier_3: "ProcessBuilder, Runtime.exec"
+    tier_4: "JDBC, JPA queries"
+    tier_5: "Java (compiled, typed)"
+    tier_6: "Groovy, Kotlin scripting"
+    tier_7: "Spring Boot, Micronaut, Quarkus"
+
+  csharp:
+    tier_0: "HttpClient, System.Text.Json, LINQ, Records"
+    tier_1: "Razor, Blazor components"
+    tier_2: "JSON, YAML, XML"
+    tier_3: "Process.Start, Shell commands"
+    tier_4: "Entity Framework, LINQ to SQL"
+    tier_5: "C# (compiled, typed)"
+    tier_6: "IronPython, F# scripting"
+    tier_7: "ASP.NET Core, Minimal APIs"
+
+  php:
+    tier_0: "file_get_contents, json_encode, filter_var"
+    tier_1: "Blade templates, Twig"
+    tier_2: "JSON, YAML"
+    tier_3: "exec, shell_exec, passthru"
+    tier_4: "PDO, MySQLi queries"
+    tier_5: "PHP (compiled with opcache)"
+    tier_6: "PHP (standard)"
+    tier_7: "Laravel, Symfony, Slim"
+
+  ruby:
+    tier_0: "Net::HTTP, JSON, Pathname, OpenURI"
+    tier_1: "ERB, Slim, Haml templates"
+    tier_2: "JSON, YAML"
+    tier_3: "system, backticks, Open3"
+    tier_4: "ActiveRecord queries"
+    tier_5: "Ruby (compiled with YJIT)"
+    tier_6: "Ruby (standard)"
+    tier_7: "Rails, Sinatra, Hanami"
+
   go:
+    tier_0: "net/http, encoding/json, html/template, os"
     tier_1: "net/http, html/template"
     tier_2: "encoding/json, encoding/xml"
     tier_3: "os/exec"
@@ -608,6 +826,7 @@ language_tiers:
     tier_7: "gRPC, Kubernetes operator"
 
   rust:
+    tier_0: "reqwest, serde, tokio, std::fs"
     tier_1: "std::process, serde"
     tier_2: "serde_json, toml, yaml"
     tier_3: "std::process::Command"
@@ -615,6 +834,36 @@ language_tiers:
     tier_5: "Rust (standard)"
     tier_6: "Dynamic via WASM"
     tier_7: "Actix, Axum, Tonic"
+
+  swift:
+    tier_0: "URLSession, Codable, Combine, Foundation"
+    tier_1: "SwiftUI, UIKit"
+    tier_2: "JSON, YAML, PropertyList"
+    tier_3: "Process, shell commands"
+    tier_4: "Core Data, GRDB queries"
+    tier_5: "Swift (compiled, typed)"
+    tier_6: "SwiftScript (via swiftly)"
+    tier_7: "Vapor, Kitura"
+
+  kotlin:
+    tier_0: "kotlinx.serialization, coroutines, Flow"
+    tier_1: "Jetpack Compose, XML layouts"
+    tier_2: "JSON, YAML, TOML"
+    tier_3: "ProcessBuilder, Runtime.exec"
+    tier_4: "Exposed, Ktorm queries"
+    tier_5: "Kotlin (compiled, typed)"
+    tier_6: "Kotlin Scripting"
+    tier_7: "Ktor, Spring Boot, Micronaut"
+
+  scala:
+    tier_0: "scala.io, play-json, Cats"
+    tier_1: "Play templates, Twirl"
+    tier_2: "JSON, YAML, XML"
+    tier_3: "sys.process"
+    tier_4: "Slick, Doobie queries"
+    tier_5: "Scala (compiled, typed)"
+    tier_6: "Scala Scripting"
+    tier_7: "Play Framework, Akka HTTP, ZIO HTTP"
 ```
 
 ---
@@ -1024,9 +1273,21 @@ Check if curl (Tier 3) can handle the integration. Only escalate to Tier 6 if yo
 
 ## Changelog
 
+### v4.1.0
+- Added 7 new language tiers: TypeScript, Java, C#, PHP, Ruby, Swift, Kotlin, Scala
+- Added Tier 0 built-in APIs for all languages
+- Added Quick-Check Mode — skip full flowchart for obvious violations (< 100ms)
+- Added Cached Evaluations — instant lookup for common patterns
+- Added Early Termination — stop at first tier match
+- Added AST Pattern Detection — detect anti-patterns in code
+- Added Bundle Size Estimation — show impact before adding deps
+- Added Security Audit Integration — check CVEs before adding packages
+- Added Performance Profiling Suggestions — recommend tools when higher tier justified
+- Added Dependency Graph Visualization — show full transitive tree
+
 ### v4.0.0
-- Added Tier 0 (Built-in APIs) — fetch, URL, structuredClone, Intl, crypto
-- Added Tier 8 (External Services) — Zapier, IFTTT, n8n, Make, Airtable
+- Added Tier 0 (Built-in APIs) — fetch, structuredClone, URL, Intl
+- Added Tier 8 (External Services) — Zapier, IFTTT, n8n, Make
 - Added inline suppressions — `// simplicity-gate: ignore` comments
 - Added auto-fix mode — applies replacements automatically
 - Added interactive mode — choice-based REJECTs with options

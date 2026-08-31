@@ -9,12 +9,12 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-4.0.0-blue" alt="Version">
+  <img src="https://img.shields.io/badge/version-4.1.0-blue" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
   <img src="https://img.shields.io/badge/agents-12+-purple" alt="Agents">
-  <img src="https://img.shields.io/badge/tiers-9-orange" alt="Tiers">
+  <img src="https://img.shields.io/badge/languages-11-orange" alt="Languages">
+  <img src="https://img.shields.io/badge/quick--check-50ms-brightgreen" alt="Quick Check">
   <img src="https://img.shields.io/badge/auto--fix-enabled-brightgreen" alt="Auto-Fix">
-  <img src="https://img.shields.io/badge/interactive--mode-enabled-brightgreen" alt="Interactive Mode">
   <img src="https://img.shields.io/badge/learning--mode-enabled-brightgreen" alt="Learning Mode">
 </p>
 
@@ -651,18 +651,19 @@ settings:
 
 ---
 
-## What's New in v4.0
+## What's New in v4.1
 
 | Feature | Description |
 |:--------|:------------|
-| Tier 0 | Built-in APIs (`fetch`, `structuredClone`, `URL`) — free, zero deps |
-| Tier 8 | External services (Zapier, IFTTT, n8n) — no-code > custom code |
-| Auto-Fix | Applies replacements automatically, not just suggestions |
-| Interactive Mode | Choice-based REJECTs — user picks from options |
-| Learning Mode | Tracks overrides, suggests custom tiers after 5+ decisions |
-| Multi-File Scan | Detects patterns across codebase, suggests consolidation |
-| Dependency Cost | Shows package size, CVEs, transitive deps before adding |
-| Inline Suppressions | `// simplicity-gate: ignore` to skip specific lines |
+| 11 Languages | TypeScript, Java, C#, PHP, Ruby, Swift, Kotlin, Scala + Tier 0 for all |
+| Quick-Check | 50ms instant REJECT for obvious violations |
+| Cached Patterns | Instant lookup for common over-engineering |
+| Early Termination | Stop at first tier match, skip rest |
+| AST Detection | Find anti-patterns: `JSON.parse(JSON.stringify())`, lodash, moment, axios |
+| Bundle Estimation | Show KB impact before adding dependencies |
+| Security Audit | Check CVEs before adding packages |
+| Profiling Tips | Recommend tools when higher tier justified |
+| Dependency Tree | Show full transitive dependency graph |
 
 ---
 
