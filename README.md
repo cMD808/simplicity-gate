@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-5.0.0-blue" alt="Version">
+  <img src="https://img.shields.io/badge/version-6.0.0-blue" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
   <img src="https://img.shields.io/badge/agents-12+-purple" alt="Agents">
   <img src="https://img.shields.io/badge/languages-11-orange" alt="Languages">
@@ -18,6 +18,8 @@
   <img src="https://img.shields.io/badge/learning--mode-enabled-brightgreen" alt="Learning Mode">
   <img src="https://img.shields.io/badge/proactive--prevention-enabled-brightgreen" alt="Proactive Prevention">
   <img src="https://img.shields.io/badge/gamification-enabled-brightgreen" alt="Gamification">
+  <img src="https://img.shields.io/badge/real--time--review-enabled-brightgreen" alt="Real-Time Review">
+  <img src="https://img.shields.io/badge/autonomous--mode-enabled-brightgreen" alt="Autonomous Mode">
 </p>
 
 <br>
@@ -492,7 +494,7 @@ npx simplicity-gate eval <file>
 ```bash
 $ simplicity-gate eval examples/reformat-json.md
 
-⚡ SIMPLICITY GATE v5.0.0
+⚡ SIMPLICITY GATE v6.0.0
 
 File:      examples/reformat-json.md
 Tool detected: Node.js script
@@ -568,7 +570,7 @@ settings:
 
 ---
 
-## 🚀 What's New in v5.0
+## 🚀 What's New in v6.0
 
 <table>
   <tr>
@@ -576,36 +578,44 @@ settings:
     <th>What It Does</th>
   </tr>
   <tr>
-    <td><strong>🛡️ Proactive Write Prevention</strong></td>
-    <td>Blocks over-engineered code before it's written</td>
+    <td><strong>🔍 Real-Time Code Review</strong></td>
+    <td>Intercepts writes BEFORE they happen, evaluates in real-time</td>
   </tr>
   <tr>
-    <td><strong>💰 Real-World Cost Calculator</strong></td>
-    <td>Ties tier violations to actual cloud costs ($/month)</td>
+    <td><strong>📚 "Why Not" Database</strong></td>
+    <td>20+ real-world incidents proving why over-engineering fails</td>
   </tr>
   <tr>
-    <td><strong>📚 Community Pattern Library</strong></td>
-    <td>Growing database of anti-patterns → alternatives</td>
+    <td><strong>⚡ One-Click Fix</strong></td>
+    <td>CLI command that auto-applies simpler alternatives</td>
   </tr>
   <tr>
-    <td><strong>📊 Agent Behavior Profiling</strong></td>
-    <td>Tracks which agents over-engineer most</td>
+    <td><strong>🤖 Autonomous Mode</strong></td>
+    <td>Skill runs entirely without human intervention</td>
   </tr>
   <tr>
-    <td><strong>🎓 Interactive Teaching Mode</strong></td>
-    <td>Explains WHY simpler is better, not just WHAT</td>
+    <td><strong>🛡️ Pre-Write Hooks</strong></td>
+    <td>Intercepts file writes, edits, imports, and installs</td>
   </tr>
   <tr>
-    <td><strong>🏆 Team Gamification</strong></td>
-    <td>Simplicity leaderboard and achievements</td>
+    <td><strong>🔄 Severity-Based Actions</strong></td>
+    <td>Automatic response based on violation severity (1-5)</td>
   </tr>
   <tr>
-    <td><strong>🔄 Auto-Migration</strong></td>
-    <td>Scans codebase for old over-engineering</td>
+    <td><strong>🔒 Fix Safety Rails</strong></td>
+    <td>Backups, test requirements, max changes per session</td>
   </tr>
   <tr>
-    <td><strong>⚖️ Dependency Weight Reporter</strong></td>
-    <td>Real dependency costs before adding packages</td>
+    <td><strong>📊 Session Summaries</strong></td>
+    <td>Autonomous session reports with metrics and learnings</td>
+  </tr>
+  <tr>
+    <td><strong>📜 Fix History</strong></td>
+    <td>Complete audit trail of all auto-applied fixes</td>
+  </tr>
+  <tr>
+    <td><strong>⏪ Rollback Capability</strong></td>
+    <td>Revert any fix with one command</td>
   </tr>
 </table>
 

@@ -12,6 +12,56 @@
 
 ---
 
+## [6.0.0] — 2026-08-31
+
+### 🔍 Real-Time Code Review Integration
+
+- **Pre-Write Hook Triggers** — Intercepts file writes, edits, imports, and installs BEFORE they happen
+- **Severity-Based Actions** — Automatic response based on violation severity (1-5)
+- **Real-Time Evaluation** — Evaluates code in <100ms during write operations
+- **IDE Integration** — Works with VS Code, JetBrains, Terminal agents, Git hooks, CI/CD
+- **Prevention Matrix** — npm install, require/import, docker run, new endpoints intercepted
+
+### 📚 "Why Not" Database
+
+- **20+ Real-World Incidents** — Left-pad, event-stream, log4j, colors.js, faker.js, and more
+- **Searchable Database** — `simplicity-gate why-not <keyword>` to search incidents
+- **Pattern Matching** — Links rejected approaches to proven failures
+- **Community Contributions** — Teams can add their own over-engineering incidents
+- **CVE Tracking** — New vulnerabilities added automatically
+- **Deprecation Alerts** — Deprecated packages flagged with replacements
+
+### ⚡ One-Click Fix
+
+- **Auto-Apply Fixes** — `simplicity-gate fix <file>` applies simpler alternatives automatically
+- **Recursive Directory Fix** — `simplicity-gate fix src/ --recursive` fixes entire directories
+- **Dry Run Mode** — `--dry-run` previews fixes without applying
+- **Test Integration** — `--test` runs tests after applying fixes
+- **Commit Integration** — `--commit "message"` commits fixes automatically
+- **Fix Types** — replace-import, replace-function, remove-dependency, simplify-pattern, inline-function, remove-file
+- **Fix Safety** — Backups, test requirements, max changes per session, confirmation for large fixes
+- **Fix History** — Complete audit trail of all auto-applied fixes
+
+### 🤖 Autonomous Mode
+
+- **Fully Autonomous** — Skill runs entirely without human intervention
+- **Decision Matrix** — Severity ≤3 auto-fix, ≥4 block + require approval
+- **Session Summaries** — Autonomous session reports with metrics and learnings
+- **Safety Rails** — Max fixes per session, max lines per fix, test requirements
+- **Rollback Capability** — `simplicity-gate revert last` reverts any fix
+- **Override Learning** — Learns from human overrides to improve future decisions
+- **Metrics Tracking** — Tokens saved, deps prevented, lines prevented per session
+
+### ⚡ CLI Tool Updates
+
+- Added `fix` command — one-click auto-fix for files and directories
+- Added `why-not` command — search the "Why Not" database
+- Added `revert` command — rollback autonomous fixes
+- Updated all commands to v6.0.0
+- Updated benchmarks (408K evals/sec maintained)
+
+---
+
 ## [5.0.0] — 2026-08-31
 
 ### 🚀 Game-Changing Features

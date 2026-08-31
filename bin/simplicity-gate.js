@@ -207,7 +207,7 @@ function evalFile(filePath) {
 
   // Output
   console.log('');
-  console.log(`${C.bold}${C.cyan}⚡ SIMPLICITY GATE${C.reset} ${C.dim}v5.0.0${C.reset}`);
+  console.log(`${C.bold}${C.cyan}⚡ SIMPLICITY GATE${C.reset} ${C.dim}v6.0.0${C.reset}`);
   console.log(`${C.dim}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${C.reset}`);
   console.log('');
 
@@ -295,7 +295,7 @@ function scanDir(dir) {
   const elapsed = Number(process.hrtime.bigint() - start) / 1e6;
 
   console.log('');
-  console.log(`${C.bold}${C.cyan}⚡ SIMPLICITY GATE — SCAN${C.reset} ${C.dim}v5.0.0${C.reset}`);
+  console.log(`${C.bold}${C.cyan}⚡ SIMPLICITY GATE — SCAN${C.reset} ${C.dim}v6.0.0${C.reset}`);
   console.log(`${C.dim}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${C.reset}`);
   console.log('');
   console.log(`${C.bold}Directory:${C.reset} ${dir}`);
@@ -327,7 +327,7 @@ function scanDir(dir) {
 
 function showTiers() {
   console.log('');
-  console.log(`${C.bold}${C.cyan}⚡ SIMPLICITY GATE — TIER HIERARCHY${C.reset} ${C.dim}v5.0.0${C.reset}`);
+  console.log(`${C.bold}${C.cyan}⚡ SIMPLICITY GATE — TIER HIERARCHY${C.reset} ${C.dim}v6.0.0${C.reset}`);
   console.log(`${C.dim}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${C.reset}`);
   console.log('');
 
@@ -348,7 +348,7 @@ function showTiers() {
 
 function bench() {
   console.log('');
-  console.log(`${C.bold}${C.cyan}⚡ SIMPLICITY GATE — BENCHMARK${C.reset} ${C.dim}v5.0.0${C.reset}`);
+  console.log(`${C.bold}${C.cyan}⚡ SIMPLICITY GATE — BENCHMARK${C.reset} ${C.dim}v6.0.0${C.reset}`);
   console.log(`${C.dim}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${C.reset}`);
   console.log('');
 
@@ -421,7 +421,7 @@ import psutil`;
 
 function showHelp() {
   console.log('');
-  console.log(`${C.bold}${C.cyan}⚡ Simplicity Gate CLI${C.reset} ${C.dim}v5.0.0${C.reset}`);
+  console.log(`${C.bold}${C.cyan}⚡ Simplicity Gate CLI${C.reset} ${C.dim}v6.0.0${C.reset}`);
   console.log(`${C.dim}The Rule of Least Power enforcer for AI coding agents.${C.reset}`);
   console.log('');
   console.log(`${C.bold}Usage:${C.reset}`);

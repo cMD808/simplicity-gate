@@ -1,11 +1,13 @@
 ---
 name: simplicity-gate
-version: "5.0.0"
+version: "6.0.0"
 description: >
   Evaluates tool/code proposals against the Rule of Least Power.
   Forces selection of the simplest viable tier. Blocks over-engineering.
   Auto-triggers on every code generation, dependency addition, and architecture decision.
-  v5.0: Proactive write prevention, real-world cost calculator, community pattern library,
+  v6.0: Real-time code review integration, "Why Not" database of real-world incidents,
+  one-click auto-fix CLI, fully autonomous mode. Plus all v5.0 features:
+  proactive write prevention, real-world cost calculator, community pattern library,
   agent behavior profiling, interactive teaching mode, team gamification, auto-migration,
   dependency weight reporter. 11 language tiers, quick-check mode, AST detection.
 triggers:
@@ -26,6 +28,9 @@ triggers:
   - write_operation
   - file_edit
   - shell_command
+  - pre_write_hook
+  - code_review
+  - pull_request
 auto_trigger: true
 settings:
   auto_fix: true
@@ -48,9 +53,13 @@ settings:
   gamification: true
   auto_migration: true
   dependency_weight: true
+  real_time_review: true
+  why_not_database: true
+  one_click_fix: true
+  autonomous_mode: true
 ---
 
-# Simplicity Gate v5.0
+# Simplicity Gate v6.0
 
 > Choose the least powerful tool that does the job.
 
@@ -1219,6 +1228,473 @@ dependency_weight:
 
 ---
 
+## Real-Time Code Review Integration
+
+**The gate evaluates code BEFORE it's written, not after. Every write, edit, and import is intercepted and evaluated in real-time.**
+
+### How It Works
+
+```
+AGENT ATTEMPTS WRITE
+        │
+        ▼
+┌──────────────────────────────┐
+│ 1. INTERCEPT the write       │
+│    Capture: file, content,   │
+│    operation type            │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│ 2. EVALUATE against gate     │
+│    - Tier check              │
+│    - Severity score          │
+│    - Pattern detection       │
+│    - Dependency weight       │
+│    - Security audit          │
+└──────────────┬───────────────┘
+               │
+        ┌──────┴──────┐
+        │             │
+    SEVERITY      SEVERITY
+     ≤ 2            ≥ 3
+        │             │
+        ▼             ▼
+   ┌─────────┐  ┌──────────┐
+   │  ALLOW  │  │  BLOCK   │
+   │ + log   │  │ + auto-  │
+   │         │  │   fix    │
+   └─────────┘  └──────────┘
+```
+
+### Pre-Write Hook Triggers
+
+The gate intercepts these operations BEFORE they execute:
+
+| Operation | Interception Point | Action |
+|-----------|-------------------|--------|
+| `write(filePath, content)` | Before file write | Evaluate content for over-engineering |
+| `edit(filePath, ...)` | Before edit applied | Check if edit introduces higher tier |
+| `npm install <pkg>` | Before install | Block if package is unnecessary tier |
+| `import/require` | Before import | Check if built-in alternative exists |
+| `docker run` | Before container start | Check if native solution works |
+| `new Endpoint()` | Before creation | Evaluate if simpler pattern works |
+| `git commit` | Before commit | Scan staged files for violations |
+
+### Real-Time Evaluation Output
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ SIMPLICITY GATE — REAL-TIME REVIEW                          │
+├─────────────────────────────────────────────────────────────┤
+│ Operation:  File write → src/api/proxy.js                   │
+│ Content:    Express.js proxy server (47 lines)              │
+│ Detected:   HTTP proxy pattern                              │
+│                                                         │
+│ EVALUATION:                                                 │
+│   Tier 7 (Express) vs Tier 3 (curl)                        │
+│   Severity: 4/5 — CRITICAL                                  │
+│   Pattern:  Over-engineered HTTP proxy                      │
+│   CVEs:     0 (but 14 transitive deps)                      │
+│                                                         │
+│ VERDICT: ❌ BLOCKED                                         │
+│                                                         │
+│ WHY: curl can handle this exact use case.                   │
+│ This adds 14 dependencies for what a single                │
+│ command can do:                                             │
+│   curl -s -H "Authorization: Bearer $TOKEN" \             │
+│        https://api.example.com/data                         │
+│                                                         │
+│ HISTORY: Left-pad (2016) — 11 chars of code broke npm.     │
+│ event-stream (2018) — supply chain attack via unused dep.   │
+│                                                         │
+│ COST: ~2,400 tokens wasted | ~14 deps added                 │
+│ FIX: [APPLY] [OVERRIDE] [IGNORE]                           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Severity-Based Actions
+
+| Severity | Action | Agent Response |
+|----------|--------|----------------|
+| 1 (Minor) | Allow with note | Continue, log for review |
+| 2 (Moderate) | Allow with warning | Continue, show warning |
+| 3 (Serious) | Block, suggest fix | Must apply fix or override |
+| 4 (Critical) | Block, require approval | Cannot proceed without human approval |
+| 5 (Absurd) | Block, require redesign | Must redesign approach entirely |
+
+### Integration Points
+
+The real-time review integrates with:
+
+- **VS Code / Zed** — Shows inline warnings on hover
+- **JetBrains IDEs** — Inspection badges in gutter
+- **Terminal agents** — Blocks before write completes
+- **Git hooks** — Pre-commit scan blocks commits with violations
+- **CI/CD** — GitHub Action blocks PRs with violations
+
+---
+
+## "Why Not" Database
+
+**Every REJECT includes a real-world incident that proves why the rejected approach is dangerous. Humans remember stories, not rules.**
+
+### The Database
+
+| Anti-Pattern | Incident | Year | Impact | Lesson |
+|-------------|----------|------|--------|--------|
+| `left-pad` | 11 chars of code removed from npm, broke thousands of packages | 2016 | Global npm outage | Tiny deps can cause massive cascading failures |
+| `event-stream` | Malicious code injected via unused dependency, stole cryptocurrency | 2018 | $2M+ stolen | Every unused dep is a potential attack vector |
+| `log4j` | Remote code execution via logging library, affected millions of servers | 2021 | CVE-2021-44228 | Even "simple" deps can have catastrophic vulnerabilities |
+| `colors.js` | Maintainer intentionally broke millions of packages in protest | 2022 | Global CI failures | Single-point-of-failure in dependency chain |
+| `faker.js` | Same maintainer destroyed his own library, broke thousands of projects | 2022 | Global CI failures | Trusted deps can become untrusted overnight |
+| `ua-parser-js` | hijacked npm package installed cryptominer on 7M+ weekly downloads | 2021 | 7M+ affected | Popular ≠ safe |
+| `coa` / `rc` | Malicious code injection in popular packages, 10M+ weekly downloads | 2021 | 10M+ affected | Supply chain attacks are increasing |
+| `node-ipc` | Maintainer added protestware targeting specific countries | 2022 | Political controversy | Deps can have political motives |
+| `moment.js` | Officially deprecated, 68KB for what `Date` does natively | 2020 | 68KB wasted | Deprecated deps are security liabilities |
+| `request` | Officially deprecated, no security patches since 2019 | 2019 | Unpatched vulns | Deprecated = vulnerable |
+| `webpack` | 5-second cold starts for simple SPAs, Vite does it in 200ms | 2023 | 25x slower DX | Build tools can be over-engineered |
+| `Redux` | 47 files for a todo app, React state does it in 1 line | 2023 | 46 extra files | State management can be massively over-engineered |
+| `Mongoose` | Schema for a simple key-value store, SQLite does it natively | 2023 | 200KB+ added | ORMs can be over-engineered for simple data |
+| `Express` | 47-line proxy server for what curl does in 1 command | 2023 | 14 deps added | HTTP clients can be over-engineered |
+| `Docker` | Container for a cron job, native cron does it in 2 lines | 2023 | 200MB+ image | Containers can be over-engineered for simple scheduling |
+| `Kubernetes` | 15 YAML files for a static site, `npx serve` works | 2023 | 1000+ lines config | Orchestration can be over-engineered for simple serving |
+| `GraphQL` | 200-line schema for 3 fields, REST does it in 20 lines | 2023 | 180 extra lines | API layers can be over-engineered for simple data |
+| `Microservices` | 12 services for a CRUD app, monolith does it faster | 2023 | 12x complexity | Architecture can be over-engineered for simple apps |
+| `Redis` | In-memory cache for a 100-row table, `Map` does it in 1 line | 2023 | 200MB+ added | Caching can be over-engineered for small data |
+| `MongoDB` | Document DB for a relational dataset, SQLite does it natively | 2023 | 200MB+ added | Databases can be over-engineered for simple data |
+
+### How It Works
+
+```
+SIMPLICITY GATE — REJECT [Severity: 4]
+Proposed: Express.js (Tier 7) for API proxy
+
+WHY NOT?
+┌─────────────────────────────────────────────────────────────┐
+│ HISTORY: In 2023, a team built an Express.js proxy for      │
+│ a simple API转发. It added 14 dependencies, 2,400 tokens    │
+│ of code, and a 200MB Docker image. A curl command does      │
+│ the same thing in 1 command with 0 dependencies.            │
+│                                                             │
+│ The Express approach required:                              │
+│ - 47 lines of JavaScript                                    │
+│ - 14 npm packages                                           │
+│ - A Docker container (200MB)                                │
+│ - SSL certificate management                                │
+│ - Process monitoring (PM2)                                  │
+│                                                             │
+│ The curl approach requires:                                 │
+│ - 1 command                                                 │
+│ - 0 dependencies                                            │
+│ - 0 Docker                                                  │
+│ - 0 process management                                      │
+└─────────────────────────────────────────────────────────────┘
+
+RECOMMENDED: curl (Tier 3)
+  curl -s -H "Authorization: Bearer $TOKEN" https://api.example.com/data
+```
+
+### Database Updates
+
+The "Why Not" database grows over time:
+
+- **Community contributions** — Teams add their own over-engineering incidents
+- **CVE tracking** — New vulnerabilities added automatically
+- **Deprecation alerts** — Deprecated packages flagged with their replacement
+- **Migration stories** — Successful simplifications documented
+
+### Accessing the Database
+
+```bash
+# Search incidents by keyword
+simplicity-gate why-not express
+
+# Search by tier
+simplicity-gate why-not --tier 7
+
+# Search by year
+simplicity-gate why-not --year 2023
+
+# Add your own incident
+simplicity-gate why-not add \
+  --pattern "Redux for todo app" \
+  --incident "Team spent 2 weeks on Redux, React state took 2 hours" \
+  --lesson "State management scales with complexity, not with features"
+```
+
+---
+
+## One-Click Fix
+
+**Every REJECT includes a one-click fix that automatically applies the simpler alternative.**
+
+### How It Works
+
+```
+SIMPLICITY GATE — REJECT [Severity: 3]
+Proposed: moment.js (Tier 6) for date formatting
+Found in: src/utils/date.js (line 42)
+
+ONE-CLICK FIX AVAILABLE
+┌─────────────────────────────────────────────────────────────┐
+│ REplacing: moment().format('YYYY-MM-DD')                    │
+│ WITH:      new Date().toISOString().split('T')[0]          │
+│                                                         │
+│ Files affected: 3                                          │
+│ Lines changed: 3                                           │
+│ Dependencies removed: 1 (moment.js, 68KB)                  │
+│ Time to apply: < 1 second                                  │
+│                                                         │
+│ [APPLY FIX]  [PREVIEW]  [SKIP]                           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Fix Commands
+
+```bash
+# Apply the recommended fix for a specific file
+simplicity-gate fix src/utils/date.js
+
+# Apply all fixes in a directory
+simplicity-gate fix src/ --recursive
+
+# Preview fixes without applying
+simplicity-gate fix src/ --dry-run
+
+# Apply fixes and run tests
+simplicity-gate fix src/ --test
+
+# Apply fixes and commit
+simplicity-gate fix src/ --commit "refactor: simplify date handling"
+```
+
+### Fix Types
+
+| Fix Type | Description | Example |
+|----------|-------------|---------|
+| `replace-import` | Replace imported package with native | `moment` → `Date` |
+| `replace-function` | Replace function call with simpler | `_.get()` → `?.` |
+| `remove-dependency` | Remove unused dependency | Remove `left-pad` |
+| `simplify-pattern` | Replace complex pattern with simple | `Redux` → `useState` |
+| `inline-function` | Inline small utility function | `import { x } from 'lib'` → `const x = ...` |
+| `remove-file` | Delete unnecessary file | Remove `Dockerfile` for native cron |
+
+### Fix Safety
+
+```yaml
+# .simplicity-gate.yml
+fix_safety:
+  # Never auto-fix these patterns
+  never_fix:
+    - pattern: "production-database"
+      reason: "Requires manual review"
+    - pattern: "authentication-logic"
+      reason: "Security-sensitive"
+  
+  # Always create backup before fix
+  backup: true
+  
+  # Run tests after fix
+  test_after_fix: true
+  
+  # Max files to fix at once
+  max_files_per_fix: 10
+  
+  # Require confirmation for large fixes
+  confirm_above_lines: 50
+```
+
+### Fix History
+
+Every fix is logged for audit and learning:
+
+```json
+{
+  "fix_id": "fix-2024-01-15-001",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "file": "src/utils/date.js",
+  "original": "moment().format('YYYY-MM-DD')",
+  "replacement": "new Date().toISOString().split('T')[0]",
+  "tier_change": "Tier 6 → Tier 0",
+  "severity": 3,
+  "tokens_saved": 1200,
+  "deps_removed": 1,
+  "auto_applied": true,
+  "tests_passed": true
+}
+```
+
+---
+
+## Autonomous Mode
+
+**The skill runs entirely without human intervention. It evaluates, blocks, fixes, and learns — all automatically.**
+
+### How It Works
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ AUTONOMOUS MODE ACTIVE                                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│ 1. MONITOR    → Watch all agent operations                  │
+│ 2. EVALUATE   → Check every write against the gate          │
+│ 3. DECIDE     → Block/allow/fix automatically               │
+│ 4. ACT        → Apply fixes, prevent violations             │
+│ 5. LEARN      → Update patterns from decisions              │
+│ 6. REPORT     → Generate session summary                    │
+│                                                             │
+│ Human involvement: NONE (unless severity ≥ 4)               │
+│ Decision speed: < 100ms per evaluation                      │
+│ Fix application: < 1 second                                 │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Autonomous Decision Matrix
+
+| Severity | Action | Human Needed? |
+|----------|--------|:-------------:|
+| 1 | Allow + log | ❌ No |
+| 2 | Allow + warn | ❌ No |
+| 3 | Auto-fix + notify | ❌ No |
+| 4 | Block + require approval | ✅ Yes |
+| 5 | Block + require redesign | ✅ Yes |
+
+### Autonomous Workflow
+
+```
+AGENT STARTS WORK
+       │
+       ▼
+┌──────────────────┐
+│ EVALUATE proposal│ ◄──────────────────────┐
+└────────┬─────────┘                        │
+         │                                  │
+    ┌────┴────┐                             │
+    │         │                             │
+ SEVERITY  SEVERITY                         │
+  ≤ 3        ≥ 4                           │
+    │         │                             │
+    ▼         ▼                             │
+┌────────┐ ┌────────┐                      │
+│ AUTO   │ │ BLOCK  │                      │
+│ FIX    │ │ + ASK  │                      │
+└───┬────┘ └───┬────┘                      │
+    │          │                            │
+    │     ┌────┴────┐                       │
+    │     │         │                       │
+    │   APPROVED  DENIED                    │
+    │     │         │                       │
+    │     ▼         ▼                       │
+    │  ┌───────┐ ┌───────┐                 │
+    │  │ APPLY │ │ REJECT│                 │
+    │  └───┬───┘ └───────┘                 │
+    │      │                               │
+    ▼      ▼                               │
+┌──────────────────┐                       │
+│ CONTINUE WORK    │ ──────────────────────┘
+└──────────────────┘
+```
+
+### Autonomous Settings
+
+```yaml
+# .simplicity-gate.yml
+autonomous_mode:
+  enabled: true
+  
+  # Decision thresholds
+  auto_fix_threshold: 3      # Severity ≤ 3 = auto-fix
+  block_threshold: 4         # Severity ≥ 4 = block
+  
+  # Timeouts
+  evaluation_timeout_ms: 100
+  fix_timeout_ms: 1000
+  
+  # Safety rails
+  max_auto_fixes_per_session: 20
+  max_lines_changed_per_fix: 50
+  require_test_pass: true
+  
+  # Notifications
+  notify_on_fix: true
+  notify_on_block: true
+  notify_on_session_end: true
+  
+  # Learning
+  learn_from_overrides: true
+  update_patterns: true
+  suggest_custom_tiers: true
+  
+  # Reporting
+  session_summary: true
+  metrics_tracking: true
+  leaderboards: true
+```
+
+### Session Summary
+
+At the end of each autonomous session:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ AUTONOMOUS SESSION SUMMARY                                  │
+├─────────────────────────────────────────────────────────────┤
+│ Duration:        45 minutes                                 │
+│ Evaluations:     127                                        │
+│ Auto-fixes:      12 (severity 3)                            │
+│ Blocks:          2 (severity 4, human approved)             │
+│ Allowed:         113 (severity 1-2)                         │
+│                                                             │
+│ Tokens saved:    ~8,400                                     │
+│ Deps prevented:  14                                         │
+│ Lines prevented: ~340                                       │
+│                                                             │
+│ Top violations:                                             │
+│   1. lodash → native (5 times)                              │
+│   2. moment → Date (3 times)                                │
+│   3. Express → curl (2 times)                               │
+│                                                             │
+│ Agent performance:                                          │
+│   - build: 92% compliance (↑ from 78%)                     │
+│   - plan: 98% compliance                                   │
+│   - general: 85% compliance (↑ from 71%)                   │
+│                                                             │
+│ Patterns learned:                                           │
+│   - "JSON transform" always Tier 3 (jq)                    │
+│   - "Date format" always Tier 0 (native)                   │
+│   - "HTTP proxy" always Tier 3 (curl)                      │
+│                                                             │
+│ [EXPORT] [SHARE] [SETTINGS]                                │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Safety Rails
+
+Autonomous mode has built-in safety rails:
+
+1. **Max fixes per session** — Prevents runaway auto-fixing
+2. **Max lines per fix** — Prevents large rewrites without approval
+3. **Test requirement** — Fixes only apply if tests pass
+4. **Severity threshold** — High-severity issues always require human
+5. **Override tracking** — Every human override is logged and learned from
+6. **Rollback capability** — Any fix can be reverted with one command
+
+```bash
+# Revert the last autonomous fix
+simplicity-gate revert last
+
+# Revert all fixes in a session
+simplicity-gate revert session
+
+# Revert a specific fix by ID
+simplicity-gate revert fix-2024-01-15-001
+```
+
+---
+
 ## The Rule
 
 Before writing code or adding a dependency, evaluate your proposal against
@@ -2083,6 +2559,18 @@ Check if curl (Tier 3) can handle the integration. Only escalate to Tier 6 if yo
 - Added Team Gamification — simplicity leaderboard and achievements
 - Added Auto-Migration — scans codebase for old over-engineering
 - Added Dependency Weight Reporter — real dependency costs before adding packages
+
+### v6.0.0
+- Added Real-Time Code Review Integration — intercepts writes BEFORE they happen
+- Added "Why Not" Database — 20+ real-world incidents proving why over-engineering fails
+- Added One-Click Fix — CLI command that auto-applies simpler alternatives
+- Added Autonomous Mode — skill runs entirely without human intervention
+- Added Pre-Write Hook Triggers — intercepts file writes, edits, imports, installs
+- Added Severity-Based Actions — automatic response based on violation severity
+- Added Fix Safety Rails — backups, test requirements, max changes per session
+- Added Session Summaries — autonomous session reports with metrics and learnings
+- Added Fix History — complete audit trail of all auto-applied fixes
+- Added Rollback Capability — revert any fix with one command
 
 ### v4.1.0
 - Added 7 new language tiers: TypeScript, Java, C#, PHP, Ruby, Swift, Kotlin, Scala
