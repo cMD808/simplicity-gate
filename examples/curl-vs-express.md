@@ -1,12 +1,28 @@
-# curl vs Express for API Probing
+<h1 align="center">🌐 curl vs Express for API Probing</h1>
 
-> **Verdict: REJECT** — curl (Tier 3) replaces Express.js proxy (Tier 7).
+<p align="center">
+  <em>Express.js proxy vs curl — 40+ lines reduced to 1 line</em>
+</p>
 
-## The Task
+<p align="center">
+  <img src="https://img.shields.io/badge/verdict-REJECT-red" alt="Verdict: REJECT">
+  <img src="https://img.shields.io/badge/tier_gap-7→3-blue" alt="Tier Gap: 7→3">
+  <img src="https://img.shields.io/badge/lines_saved-59+-brightgreen" alt="Lines Saved: 59+">
+</p>
+
+<br>
+
+---
+
+## 📋 The Task
 
 Forward requests from an external API to your internal service, adding an authentication header.
 
-## Without Simplicity Gate
+<br>
+
+---
+
+## ❌ Without Simplicity Gate
 
 The agent scaffolds an Express.js application with middleware, CORS configuration, and request forwarding.
 
@@ -40,15 +56,38 @@ app.all('/api/proxy/*', async (req, res) => {
 app.listen(3000, () => console.log('Proxy running on port 3000'));
 ```
 
-| Metric | Value |
-|:-------|:------|
-| Lines of code | 40+ |
-| Dependencies | `express`, `axios`, `cors` |
-| Runtime required | Node.js (100+ MB) |
-| Install time | ~10 seconds |
-| Things that can break | CORS, middleware chain, port conflicts |
+<table>
+  <tr>
+    <th>Metric</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>Lines of code</td>
+    <td>40+</td>
+  </tr>
+  <tr>
+    <td>Dependencies</td>
+    <td><code>express</code>, <code>axios</code>, <code>cors</code></td>
+  </tr>
+  <tr>
+    <td>Runtime required</td>
+    <td>Node.js (100+ MB)</td>
+  </tr>
+  <tr>
+    <td>Install time</td>
+    <td>~10 seconds</td>
+  </tr>
+  <tr>
+    <td>Things that can break</td>
+    <td>CORS, middleware chain, port conflicts</td>
+  </tr>
+</table>
 
-## With Simplicity Gate
+<br>
+
+---
+
+## ✅ With Simplicity Gate
 
 The gate rejects the Express proxy. A cron job with curl handles the forwarding.
 
@@ -68,25 +107,53 @@ Or for real-time proxying without a full framework:
 socat TCP-LISTEN:8080,fork,reuseaddr EXEC:"curl -s -H 'Authorization: Bearer \$API_KEY' https://external-api.com"
 ```
 
-| Metric | Value |
-|:-------|:------|
-| Lines of code | 1 |
-| Dependencies | `curl` (already installed) |
-| Runtime required | bash (already present) |
-| Install time | 0 |
-| Things that can break | Almost nothing |
+<table>
+  <tr>
+    <th>Metric</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>Lines of code</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>Dependencies</td>
+    <td><code>curl</code> (already installed)</td>
+  </tr>
+  <tr>
+    <td>Runtime required</td>
+    <td>bash (already present)</td>
+  </tr>
+  <tr>
+    <td>Install time</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>Things that can break</td>
+    <td>Almost nothing</td>
+  </tr>
+</table>
 
-## When Express IS Justified
+<br>
+
+---
+
+## 🤔 When Express IS Justified
 
 If you need:
+
 - Complex request transformation (not just forwarding)
 - Multiple routing rules with middleware chains
 - WebSocket support
 - Request/response caching with invalidation logic
 
-Then Express (Tier 7) is the right choice. The gate evaluates the *actual requirements*, not the *assumed* complexity.
+> **Then Express (Tier 7) is the right choice. The gate evaluates the *actual requirements*, not the *assumed* complexity.**
 
-## Verdict
+<br>
+
+---
+
+## ⚖️ Verdict
 
 ```
 SIMPLICITY GATE — REJECT

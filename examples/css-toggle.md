@@ -1,11 +1,27 @@
-# Example: UI Toggle System — React vs CSS
+<h1 align="center">🎨 Example: UI Toggle System</h1>
 
-## Scenario
+<p align="center">
+  <em>React vs CSS — 120+ lines reduced to 13 lines</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/verdict-REJECT-red" alt="Verdict: REJECT">
+  <img src="https://img.shields.io/badge/tier_gap-6→1-blue" alt="Tier Gap: 6→1">
+  <img src="https://img.shields.io/badge/lines_saved-115+-brightgreen" alt="Lines Saved: 115+">
+</p>
+
+<br>
+
+---
+
+## 📋 Scenario
 
 An agent proposes building a React component with Zustand for state management
 to handle UI toggle states (active/inactive, expanded/collapsed, dark/light).
 
-## Proposal
+<br>
+
+## 📝 Proposal
 
 ```yaml
 proposal:
@@ -21,7 +37,11 @@ proposal:
     - "Persist state across page reloads"
 ```
 
-## Proposed Solution (Tier 6 — REJECTED)
+<br>
+
+---
+
+## ❌ Proposed Solution (Tier 6 — REJECTED)
 
 ```tsx
 // ToggleSystem.tsx — 120+ lines, requires React runtime
@@ -84,14 +104,40 @@ export const ToggleSystem = () => {
 };
 ```
 
-**Problems:**
-- Requires React runtime (40+ KB gzipped)
-- Requires Zustand + middleware
-- 120+ lines of TypeScript/JSX
-- React re-renders on every state change
-- Bundle size impact on page load
+### ⚠️ Problems
 
-## Recommended Solution (Tier 1+2 — PASS)
+<table>
+  <tr>
+    <th>Issue</th>
+    <th>Impact</th>
+  </tr>
+  <tr>
+    <td>Requires React runtime</td>
+    <td>40+ KB gzipped</td>
+  </tr>
+  <tr>
+    <td>Requires Zustand + middleware</td>
+    <td>Additional dependencies</td>
+  </tr>
+  <tr>
+    <td>120+ lines of TypeScript/JSX</td>
+    <td>High maintenance burden</td>
+  </tr>
+  <tr>
+    <td>React re-renders on every state change</td>
+    <td>Performance overhead</td>
+  </tr>
+  <tr>
+    <td>Bundle size impact on page load</td>
+    <td>Slower initial load</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+## ✅ Recommended Solution (Tier 1+2 — PASS)
 
 ```html
 <!-- index.html — Zero dependencies, zero runtime -->
@@ -143,15 +189,44 @@ html[data-theme="dark"] {
 }
 ```
 
-**Benefits:**
-- Zero React, zero dependencies
-- 3 lines of CSS for toggle logic
-- 10 lines of JS for theme persistence
-- No re-renders — pure CSS state changes
-- Browser-native `sessionStorage` for persistence
-- Works without JavaScript for basic toggles
+### ✨ Benefits
 
-## Verdict
+<table>
+  <tr>
+    <th>Benefit</th>
+    <th>Details</th>
+  </tr>
+  <tr>
+    <td>Zero React, zero dependencies</td>
+    <td>No build step required</td>
+  </tr>
+  <tr>
+    <td>3 lines of CSS for toggle logic</td>
+    <td>Pure declarative state</td>
+  </tr>
+  <tr>
+    <td>10 lines of JS for theme persistence</td>
+    <td>Built-in sessionStorage</td>
+  </tr>
+  <tr>
+    <td>No re-renders</td>
+    <td>Pure CSS state changes</td>
+  </tr>
+  <tr>
+    <td>Browser-native persistence</td>
+    <td>sessionStorage for theme</td>
+  </tr>
+  <tr>
+    <td>Works without JavaScript</td>
+    <td>Basic toggles are CSS-only</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+## ⚖️ Verdict
 
 ```
 ⚠️  SIMPLICITY GATE — DOWNGRADE RECOMMENDED
@@ -188,13 +263,18 @@ FUNCTIONAL REQUIREMENTS MET:
   ☑ Persist state across page reloads
 ```
 
-## When React IS Justified
+<br>
+
+---
+
+## 🤔 When React IS Justified
 
 React becomes the correct choice when:
+
 - The UI has **complex conditional rendering** (10+ branches)
 - Components need **server-side rendering** with hydration
 - State requires **cross-component synchronization** via context
 - The component is part of a **larger React application**
 - **Accessibility** requires complex ARIA state management
 
-For simple toggle states, always prefer CSS selectors and HTML attributes.
+> **For simple toggle states, always prefer CSS selectors and HTML attributes.**

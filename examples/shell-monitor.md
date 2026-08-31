@@ -1,11 +1,27 @@
-# Example: Disk Monitor — Python vs Shell
+<h1 align="center">💾 Example: Disk Monitor</h1>
 
-## Scenario
+<p align="center">
+  <em>Python vs Shell — 80+ lines reduced to 15 lines</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/verdict-REJECT-red" alt="Verdict: REJECT">
+  <img src="https://img.shields.io/badge/tier_gap-6→3-blue" alt="Tier Gap: 6→3">
+  <img src="https://img.shields.io/badge/lines_saved-79+-brightgreen" alt="Lines Saved: 79+">
+</p>
+
+<br>
+
+---
+
+## 📋 Scenario
 
 An agent proposes writing a Python script with `psutil` to monitor disk usage
 and send email alerts when usage exceeds 90%.
 
-## Proposal
+<br>
+
+## 📝 Proposal
 
 ```yaml
 proposal:
@@ -21,7 +37,11 @@ proposal:
     - "Run on cron schedule"
 ```
 
-## Proposed Solution (Tier 6 — CONDITIONAL)
+<br>
+
+---
+
+## ❌ Proposed Solution (Tier 6 — CONDITIONAL)
 
 ```python
 #!/usr/bin/env python3
@@ -71,13 +91,36 @@ if __name__ == '__main__':
     send_email(alerts)
 ```
 
-**Problems:**
-- Requires Python runtime (100+ MB installed)
-- Requires psutil dependency
-- 80+ lines of Python code
-- Runtime errors possible (network, permissions)
+### ⚠️ Problems
 
-## Recommended Solution (Tier 3 — RECOMMENDED)
+<table>
+  <tr>
+    <th>Issue</th>
+    <th>Impact</th>
+  </tr>
+  <tr>
+    <td>Requires Python runtime</td>
+    <td>100+ MB installed</td>
+  </tr>
+  <tr>
+    <td>Requires psutil dependency</td>
+    <td>Additional install step</td>
+  </tr>
+  <tr>
+    <td>80+ lines of Python code</td>
+    <td>High maintenance burden</td>
+  </tr>
+  <tr>
+    <td>Runtime errors possible</td>
+    <td>Network, permissions issues</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+## ✅ Recommended Solution (Tier 3 — RECOMMENDED)
 
 ```bash
 #!/bin/bash
@@ -104,15 +147,44 @@ df -h | awk 'NR>1 && int($5) > '"$THRESHOLD"' {print $6 " is at " $5}' | \
     --data "{\"text\":\"Disk Alert: {}\"}" "$WEBHOOK_URL"
 ```
 
-**Benefits:**
-- `df` and `awk` are pre-installed on all Unix systems
-- 15 lines vs. 80+
-- No Python runtime needed
-- No dependencies to install
-- Runs in milliseconds
-- Cron-ready out of the box
+### ✨ Benefits
 
-## Verdict
+<table>
+  <tr>
+    <th>Benefit</th>
+    <th>Details</th>
+  </tr>
+  <tr>
+    <td>Pre-installed on all Unix systems</td>
+    <td><code>df</code> and <code>awk</code> are always available</td>
+  </tr>
+  <tr>
+    <td>15 lines vs 80+</td>
+    <td>83% code reduction</td>
+  </tr>
+  <tr>
+    <td>No Python runtime needed</td>
+    <td>Zero install required</td>
+  </tr>
+  <tr>
+    <td>No dependencies to install</td>
+    <td>Zero external packages</td>
+  </tr>
+  <tr>
+    <td>Runs in milliseconds</td>
+    <td>~50ms execution time</td>
+  </tr>
+  <tr>
+    <td>Cron-ready out of the box</td>
+    <td>Direct shell execution</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+## ⚖️ Verdict
 
 ```
 ⚠️  SIMPLICITY GATE — DOWNGRADE RECOMMENDED
@@ -147,9 +219,14 @@ FUNCTIONAL REQUIREMENTS MET:
   ☑ Run on cron schedule
 ```
 
-## When Python IS Justified
+<br>
+
+---
+
+## 🤔 When Python IS Justified
 
 Python becomes the correct choice when:
+
 - The monitoring requires **complex alerting logic** (multiple channels, escalation)
 - You need **historical tracking** with database writes
 - The script requires **template rendering** for email bodies
@@ -157,20 +234,60 @@ Python becomes the correct choice when:
 - The monitoring is part of a **larger Python application**
 - Cross-platform support (Windows) is required
 
-For simple threshold-based alerts, always prefer shell pipelines.
+> **For simple threshold-based alerts, always prefer shell pipelines.**
 
-## Comparison Table
+<br>
 
-| Aspect | Python Script | Shell Pipeline |
-|--------|---------------|----------------|
-| Lines of Code | 80+ | 15 |
-| Runtime Required | Python 3.x | bash |
-| Dependencies | psutil, smtplib | None |
-| Install Size | 100+ MB | 0 |
-| Execution Time | ~500ms | ~50ms |
-| Error Handling | Manual | Pipefail |
-| Cron-ready | Needs wrapper | Direct |
-| Cross-platform | Yes | Unix only |
+---
 
-**Recommendation:** Use shell for Unix-only, simple monitoring. Use Python
-when you need cross-platform, complex logic, or integration with larger systems.
+## 📊 Comparison
+
+<table>
+  <tr>
+    <th>Aspect</th>
+    <th>Python Script</th>
+    <th>Shell Pipeline</th>
+  </tr>
+  <tr>
+    <td>Lines of Code</td>
+    <td>80+</td>
+    <td>15</td>
+  </tr>
+  <tr>
+    <td>Runtime Required</td>
+    <td>Python 3.x</td>
+    <td>bash</td>
+  </tr>
+  <tr>
+    <td>Dependencies</td>
+    <td>psutil, smtplib</td>
+    <td>None</td>
+  </tr>
+  <tr>
+    <td>Install Size</td>
+    <td>100+ MB</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>Execution Time</td>
+    <td>~500ms</td>
+    <td>~50ms</td>
+  </tr>
+  <tr>
+    <td>Error Handling</td>
+    <td>Manual</td>
+    <td>Pipefail</td>
+  </tr>
+  <tr>
+    <td>Cron-ready</td>
+    <td>Needs wrapper</td>
+    <td>Direct</td>
+  </tr>
+  <tr>
+    <td>Cross-platform</td>
+    <td>Yes</td>
+    <td>Unix only</td>
+  </tr>
+</table>
+
+> **Recommendation:** Use shell for Unix-only, simple monitoring. Use Python when you need cross-platform, complex logic, or integration with larger systems.

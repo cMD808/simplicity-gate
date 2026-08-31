@@ -1,12 +1,28 @@
-# CSS vs JavaScript for Form Validation
+<h1 align="center">✅ CSS vs JavaScript for Form Validation</h1>
 
-> **Verdict: REJECT** — HTML5 + CSS (Tier 1+2) replaces JavaScript validation (Tier 6).
+<p align="center">
+  <em>JavaScript validation vs HTML5 + CSS — 30+ lines reduced to 15 lines</em>
+</p>
 
-## The Task
+<p align="center">
+  <img src="https://img.shields.io/badge/verdict-REJECT-red" alt="Verdict: REJECT">
+  <img src="https://img.shields.io/badge/tier_gap-6→1-blue" alt="Tier Gap: 6→1">
+  <img src="https://img.shields.io/badge/lines_saved-35+-brightgreen" alt="Lines Saved: 35+">
+</p>
+
+<br>
+
+---
+
+## 📋 The Task
 
 Validate a registration form: email format, password minimum 8 characters, and required fields.
 
-## Without Simplicity Gate
+<br>
+
+---
+
+## ❌ Without Simplicity Gate
 
 The agent writes a JavaScript validation function with regex patterns and DOM manipulation.
 
@@ -35,15 +51,38 @@ function validateForm() {
 }
 ```
 
-| Metric | Value |
-|:-------|:------|
-| Lines of code | 30+ |
-| Dependencies | None (but adds JS runtime) |
-| Runtime required | Browser JS engine (already present) |
-| Validation timing | After submission (late) |
-| Accessible by default | No (custom error messages) |
+<table>
+  <tr>
+    <th>Metric</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>Lines of code</td>
+    <td>30+</td>
+  </tr>
+  <tr>
+    <td>Dependencies</td>
+    <td>None (but adds JS runtime)</td>
+  </tr>
+  <tr>
+    <td>Runtime required</td>
+    <td>Browser JS engine (already present)</td>
+  </tr>
+  <tr>
+    <td>Validation timing</td>
+    <td>After submission (late)</td>
+  </tr>
+  <tr>
+    <td>Accessible by default</td>
+    <td>No (custom error messages)</td>
+  </tr>
+</table>
 
-## With Simplicity Gate
+<br>
+
+---
+
+## ✅ With Simplicity Gate
 
 HTML5 has built-in validation attributes. CSS handles the visual feedback. No JavaScript needed.
 
@@ -71,19 +110,46 @@ HTML5 has built-in validation attributes. CSS handles the visual feedback. No Ja
 </style>
 ```
 
-| Metric | Value |
-|:-------|:------|
-| Lines of code | 15 |
-| Dependencies | None |
-| Runtime required | Browser (already present) |
-| Validation timing | Real-time (instant feedback) |
-| Accessible by default | Yes (browser-native error messages) |
+<table>
+  <tr>
+    <th>Metric</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>Lines of code</td>
+    <td>15</td>
+  </tr>
+  <tr>
+    <td>Dependencies</td>
+    <td>None</td>
+  </tr>
+  <tr>
+    <td>Runtime required</td>
+    <td>Browser (already present)</td>
+  </tr>
+  <tr>
+    <td>Validation timing</td>
+    <td>Real-time (instant feedback)</td>
+  </tr>
+  <tr>
+    <td>Accessible by default</td>
+    <td>Yes (browser-native error messages)</td>
+  </tr>
+</table>
 
-## Why This Works
+<br>
+
+---
+
+## 💡 Why This Works
 
 HTML5 form validation is a Tier 1 platform feature — the browser handles it natively. JavaScript validation is Tier 6 — reimplementing what the browser already does. The HTML5 version is also more accessible: screen readers announce native error messages, and the browser handles localization.
 
-## Verdict
+<br>
+
+---
+
+## ⚖️ Verdict
 
 ```
 SIMPLICITY GATE — REJECT

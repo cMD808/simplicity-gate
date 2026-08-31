@@ -1,60 +1,171 @@
-# Security Policy
+<p align="center">
+  <img src="assets/Gemini_Generated_Image_4d84p04d84p04d84-removebg-preview.png" alt="Simplicity Gate" width="200">
+</p>
 
-## Overview
+<h1 align="center">🔒 Security Policy</h1>
 
-Simplicity Gate is a markdown-based instruction set for AI agents. It does not execute code, access networks, or handle user data. The security surface is minimal.
+<p align="center">
+  <em>Simplicity Gate is a markdown-based instruction set for AI agents.</em><br>
+  <em>It does not execute code, access networks, or handle user data.</em><br>
+  <em>The security surface is minimal.</em>
+</p>
 
-## Scope
+<br>
 
-This project contains:
-- **Markdown files** (SKILL.md, README.md, examples) — agent instructions
-- **No executable code** — no scripts, no binaries, no runtime
-- **No dependencies** — no npm, pip, or package managers
-- **No network access** — no API calls, no telemetry
+---
 
-## What Simplicity Gate Does
+## 📋 Scope
+
+<table>
+  <tr>
+    <th>Contains</th>
+    <th>Does NOT Contain</th>
+  </tr>
+  <tr>
+    <td>✅ Markdown files (SKILL.md, README.md, examples)</td>
+    <td>❌ Executable code — no scripts, no binaries, no runtime</td>
+  </tr>
+  <tr>
+    <td>✅ Agent instructions</td>
+    <td>❌ Dependencies — no npm, pip, or package managers</td>
+  </tr>
+  <tr>
+    <td>✅ Configuration templates</td>
+    <td>❌ Network access — no API calls, no telemetry</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+## ⚡ What Simplicity Gate Does
 
 It tells AI agents to prefer simpler tools. When an agent reads the skill, it evaluates proposals against the tier hierarchy. The agent itself handles execution.
 
-## What Simplicity Gate Does NOT Do
+<br>
 
-- Execute code on your machine
-- Send data to external servers
-- Modify files without your explicit instruction
-- Access credentials, tokens, or secrets
-- Install packages or runtimes
+## 🚫 What Simplicity Gate Does NOT Do
 
-## Supply Chain
+<table>
+  <tr>
+    <th>Action</th>
+    <th>Status</th>
+  </tr>
+  <tr>
+    <td>Execute code on your machine</td>
+    <td>🚫 Never</td>
+  </tr>
+  <tr>
+    <td>Send data to external servers</td>
+    <td>🚫 Never</td>
+  </tr>
+  <tr>
+    <td>Modify files without your explicit instruction</td>
+    <td>🚫 Never</td>
+  </tr>
+  <tr>
+    <td>Access credentials, tokens, or secrets</td>
+    <td>🚫 Never</td>
+  </tr>
+  <tr>
+    <td>Install packages or runtimes</td>
+    <td>🚫 Never</td>
+  </tr>
+</table>
 
-This project has zero dependencies. There is no `package.json`, `requirements.txt`, or equivalent. The only external artifact is the MIT license file.
+<br>
 
-## Threat Model
+---
 
-| Threat | Risk | Mitigation |
-|--------|------|------------|
-| Malicious markdown injection | Low | Agents read markdown as instructions, not code. Standard markdown cannot execute. |
-| Social engineering via examples | Low | Examples show rejected (bad) patterns alongside recommended (good) patterns. |
-| Agent misuse of tier advice | Low | The gate restricts what agents do — it never enables new capabilities. |
-| Typo-squatting on repo name | Low | Users must explicitly copy SKILL.md into their agent config. |
+## 🔗 Supply Chain
 
-## Reporting a Vulnerability
+> **This project has zero dependencies.** There is no `package.json`, `requirements.txt`, or equivalent. The only external artifact is the MIT license file.
+
+<br>
+
+---
+
+## 🛡️ Threat Model
+
+<table>
+  <tr>
+    <th>Threat</th>
+    <th>Risk</th>
+    <th>Mitigation</th>
+  </tr>
+  <tr>
+    <td>Malicious markdown injection</td>
+    <td>🟢 Low</td>
+    <td>Agents read markdown as instructions, not code. Standard markdown cannot execute.</td>
+  </tr>
+  <tr>
+    <td>Social engineering via examples</td>
+    <td>🟢 Low</td>
+    <td>Examples show rejected (bad) patterns alongside recommended (good) patterns.</td>
+  </tr>
+  <tr>
+    <td>Agent misuse of tier advice</td>
+    <td>🟢 Low</td>
+    <td>The gate restricts what agents do — it never enables new capabilities.</td>
+  </tr>
+  <tr>
+    <td>Typo-squatting on repo name</td>
+    <td>🟢 Low</td>
+    <td>Users must explicitly copy SKILL.md into their agent config.</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+## 📨 Reporting a Vulnerability
 
 If you find a security issue:
 
-1. **Do not** open a public issue
-2. Email: [create an issue with `[SECURITY]` prefix](https://github.com/cMD808/simplicity-gate/issues/new?labels=security&title=%5BSECURITY%5D)
-3. Include:
+<br>
+
+> ⚠️ **Do NOT open a public issue.**
+
+<br>
+
+1. Create an issue with `[SECURITY]` prefix: [New Issue](https://github.com/cMD808/simplicity-gate/issues/new?labels=security&title=%5BSECURITY%5D)
+2. Include:
    - Description of the issue
    - Steps to reproduce
    - Potential impact
    - Suggested fix (if any)
 
-We will respond within 7 days.
+**Response time:** Within 7 days.
 
-## Agent Security Note
+<br>
+
+---
+
+## 🤖 Agent Security Note
 
 When using Simplicity Gate with an agent:
-- The agent still has access to your filesystem and tools
-- Simplicity Gate only constrains *which* tools the agent reaches for
-- It does not replace your agent's existing permission system
-- Review the agent's own security documentation for full threat coverage
+
+<table>
+  <tr>
+    <th>Consideration</th>
+    <th>Details</th>
+  </tr>
+  <tr>
+    <td>Filesystem access</td>
+    <td>The agent still has access to your filesystem and tools</td>
+  </tr>
+  <tr>
+    <td>Scope of gate</td>
+    <td>Simplicity Gate only constrains <em>which</em> tools the agent reaches for</td>
+  </tr>
+  <tr>
+    <td>Permission system</td>
+    <td>It does not replace your agent's existing permission system</td>
+  </tr>
+  <tr>
+    <td>Full coverage</td>
+    <td>Review the agent's own security documentation for full threat coverage</td>
+  </tr>
+</table>

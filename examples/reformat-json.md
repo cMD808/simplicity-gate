@@ -1,11 +1,27 @@
-# Example: JSON Reformatting — Node.js vs jq
+<h1 align="center">📄 Example: JSON Reformatting</h1>
 
-## Scenario
+<p align="center">
+  <em>Node.js vs jq — 40+ lines reduced to 1 line</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/verdict-REJECT-red" alt="Verdict: REJECT">
+  <img src="https://img.shields.io/badge/tier_gap-6→3-blue" alt="Tier Gap: 6→3">
+  <img src="https://img.shields.io/badge/lines_saved-39+-brightgreen" alt="Lines Saved: 39+">
+</p>
+
+<br>
+
+---
+
+## 📋 Scenario
 
 An agent proposes writing a Node.js script to convert a `config.json` file
 from v1 schema to v2 schema.
 
-## Proposal
+<br>
+
+## 📝 Proposal
 
 ```yaml
 proposal:
@@ -21,7 +37,11 @@ proposal:
     - "Write updated JSON file"
 ```
 
-## Proposed Solution (Tier 6 — REJECTED)
+<br>
+
+---
+
+## ❌ Proposed Solution (Tier 6 — REJECTED)
 
 ```javascript
 // convert-config.js — 40+ lines, requires Node.js runtime
@@ -44,13 +64,36 @@ delete converted.deprecated_field_2;
 fs.writeFileSync('config-v2.json', JSON.stringify(converted, null, 2));
 ```
 
-**Problems:**
-- Requires Node.js runtime (100+ MB installed)
-- Requires lodash dependency (400+ KB)
-- 40+ lines of imperative code
-- Runtime errors possible (missing keys, type issues)
+### ⚠️ Problems
 
-## Recommended Solution (Tier 3 — PASS)
+<table>
+  <tr>
+    <th>Issue</th>
+    <th>Impact</th>
+  </tr>
+  <tr>
+    <td>Requires Node.js runtime</td>
+    <td>100+ MB installed</td>
+  </tr>
+  <tr>
+    <td>Requires lodash dependency</td>
+    <td>400+ KB</td>
+  </tr>
+  <tr>
+    <td>40+ lines of imperative code</td>
+    <td>High maintenance burden</td>
+  </tr>
+  <tr>
+    <td>Runtime errors possible</td>
+    <td>Missing keys, type issues</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+## ✅ Recommended Solution (Tier 3 — PASS)
 
 ```bash
 # Single pipeline, zero runtime, zero dependencies
@@ -61,14 +104,40 @@ jq '{
 } | del(.deprecated_field_1, .deprecated_field_2)' config.json > config-v2.json
 ```
 
-**Benefits:**
-- `jq` is a single binary (often pre-installed)
-- 1 line of code
-- No runtime dependencies
-- Schema validation built-in
-- Deterministic output
+### ✨ Benefits
 
-## Verdict
+<table>
+  <tr>
+    <th>Benefit</th>
+    <th>Details</th>
+  </tr>
+  <tr>
+    <td>Single binary</td>
+    <td><code>jq</code> is often pre-installed</td>
+  </tr>
+  <tr>
+    <td>1 line of code</td>
+    <td>Read, transform, write in one pipeline</td>
+  </tr>
+  <tr>
+    <td>No runtime dependencies</td>
+    <td>No Node.js, no lodash</td>
+  </tr>
+  <tr>
+    <td>Schema validation built-in</td>
+    <td>Automatic type checking</td>
+  </tr>
+  <tr>
+    <td>Deterministic output</td>
+    <td>Same input = same output, always</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+## ⚖️ Verdict
 
 ```
 ⚠️  SIMPLICITY GATE — DOWNGRADE RECOMMENDED
@@ -107,13 +176,18 @@ FUNCTIONAL REQUIREMENTS MET:
   ☑ Write updated JSON file
 ```
 
-## When Node.js IS Justified
+<br>
+
+---
+
+## 🤔 When Node.js IS Justified
 
 Node.js becomes the correct choice when:
+
 - The transformation requires **external API calls** during conversion
 - The logic involves **complex conditional branching** (10+ branches)
 - The output requires **templating** with user-provided data
 - The process needs **error retry** with exponential backoff
 - The script is part of a **larger Node.js application**
 
-For pure data transformation, always prefer `jq`.
+> **For pure data transformation, always prefer `jq`.**

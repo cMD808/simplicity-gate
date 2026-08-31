@@ -1,12 +1,28 @@
-# Make vs npm Scripts for Build Automation
+<h1 align="center">🔨 Make vs npm Scripts for Build Automation</h1>
 
-> **Verdict: WARN** — Make (Tier 3) may replace npm scripts (Tier 6), but npm is often already present.
+<p align="center">
+  <em>npm scripts vs Make — context-dependent choice</em>
+</p>
 
-## The Task
+<p align="center">
+  <img src="https://img.shields.io/badge/verdict-WARN-orange" alt="Verdict: WARN">
+  <img src="https://img.shields.io/badge/tier_gap-6→3-blue" alt="Tier Gap: 6→3">
+  <img src="https://img.shields.io/badge/lines_saved-8+-brightgreen" alt="Lines Saved: 8+">
+</p>
+
+<br>
+
+---
+
+## 📋 The Task
 
 Automate a build pipeline: lint, test, build, and deploy.
 
-## Without Simplicity Gate
+<br>
+
+---
+
+## ❌ Without Simplicity Gate
 
 The agent creates a complex npm scripts configuration with multiple packages and a custom build script.
 
@@ -28,15 +44,38 @@ The agent creates a complex npm scripts configuration with multiple packages and
 }
 ```
 
-| Metric | Value |
-|:-------|:------|
-| Lines of code | 20+ config + deploy script |
-| Dependencies | `eslint`, `jest`, `typescript`, `webpack` |
-| Runtime required | Node.js (100+ MB) |
-| Install time | ~30 seconds |
-| Cache invalidation | Manual (npm cache) |
+<table>
+  <tr>
+    <th>Metric</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>Lines of code</td>
+    <td>20+ config + deploy script</td>
+  </tr>
+  <tr>
+    <td>Dependencies</td>
+    <td><code>eslint</code>, <code>jest</code>, <code>typescript</code>, <code>webpack</code></td>
+  </tr>
+  <tr>
+    <td>Runtime required</td>
+    <td>Node.js (100+ MB)</td>
+  </tr>
+  <tr>
+    <td>Install time</td>
+    <td>~30 seconds</td>
+  </tr>
+  <tr>
+    <td>Cache invalidation</td>
+    <td>Manual (npm cache)</td>
+  </tr>
+</table>
 
-## With Simplicity Gate
+<br>
+
+---
+
+## ✅ With Simplicity Gate
 
 Make is a Tier 3 build tool that's been standard on Unix for decades. It handles dependencies, caching, and parallel execution natively.
 
@@ -58,23 +97,65 @@ deploy: build
 ci: deploy
 ```
 
-| Metric | Value |
-|:-------|:------|
-| Lines of code | 15 |
-| Dependencies | `make` (already installed on Unix) |
-| Runtime required | None (binary already present) |
-| Install time | 0 |
-| Cache invalidation | Automatic (file timestamps) |
+<table>
+  <tr>
+    <th>Metric</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>Lines of code</td>
+    <td>15</td>
+  </tr>
+  <tr>
+    <td>Dependencies</td>
+    <td><code>make</code> (already installed on Unix)</td>
+  </tr>
+  <tr>
+    <td>Runtime required</td>
+    <td>None (binary already present)</td>
+  </tr>
+  <tr>
+    <td>Install time</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>Cache invalidation</td>
+    <td>Automatic (file timestamps)</td>
+  </tr>
+</table>
 
-## The Nuance
+<br>
 
-This is a WARN, not a REJECT, because:
+---
 
-1. **npm is likely already installed** — if your project uses Node.js, npm is present. Adding Make introduces a new tool.
-2. **Cross-platform** — Make works on Unix/macOS but needs WSL or GNU Make on Windows. npm scripts work everywhere.
-3. **Existing ecosystem** — if your team already knows npm, the switching cost may exceed the benefit.
+## ⚖️ The Nuance
 
-## Verdict
+This is a **WARN**, not a REJECT, because:
+
+<table>
+  <tr>
+    <th>Factor</th>
+    <th>Details</th>
+  </tr>
+  <tr>
+    <td><strong>npm is likely already installed</strong></td>
+    <td>If your project uses Node.js, npm is present. Adding Make introduces a new tool.</td>
+  </tr>
+  <tr>
+    <td><strong>Cross-platform</strong></td>
+    <td>Make works on Unix/macOS but needs WSL or GNU Make on Windows. npm scripts work everywhere.</td>
+  </tr>
+  <tr>
+    <td><strong>Existing ecosystem</strong></td>
+    <td>If your team already knows npm, the switching cost may exceed the benefit.</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+## 📋 Verdict
 
 ```
 SIMPLICITY GATE — WARN
@@ -84,13 +165,19 @@ Check:     Is npm already your project's runtime? If yes, npm scripts may be sim
            Is this a new project? If yes, Make is the lighter choice.
 ```
 
-## When npm Scripts WIN
+<br>
+
+---
+
+## 🏆 When npm Scripts WIN
 
 - Project already uses Node.js (npm is present)
 - Cross-platform support is required (Windows + macOS + Linux)
 - Team is deeply invested in the npm ecosystem
 
-## When Make WINS
+<br>
+
+## 🏆 When Make WINS
 
 - Project doesn't need Node.js for anything else
 - Build pipeline is complex with many interdependent steps

@@ -2,7 +2,7 @@
   <img src="assets/Gemini_Generated_Image_4d84p04d84p04d84-removebg-preview.png" alt="Simplicity Gate" width="300">
 </p>
 
-<h1 align="center">Simplicity Gate</h1>
+<h1 align="center">⚡ Simplicity Gate</h1>
 
 <p align="center">
   <em>The Rule of Least Power enforcer for AI coding agents.</em>
@@ -20,45 +20,132 @@
   <img src="https://img.shields.io/badge/gamification-enabled-brightgreen" alt="Gamification">
 </p>
 
+<br>
+
 <div align="center">
-  <a href="#the-problem">Problem</a> · <a href="#the-hierarchy">Hierarchy</a> · <a href="#installation">Install</a> · <a href="#how-it-works">How It Works</a> · <a href="#examples">Examples</a> · <a href="#configuration">Config</a>
+  <a href="#-the-problem">💡 Problem</a> · <a href="#-the-hierarchy">📊 Hierarchy</a> · <a href="#-installation">📦 Install</a> · <a href="#-how-it-works">⚙️ How It Works</a> · <a href="#-examples">📋 Examples</a> · <a href="#%EF%B8%8F-configuration">🛠 Config</a>
 </div>
 
----
-
-## The Problem
-
-AI agents instinctively reach for the most powerful tool available. That instinct is usually wrong.
-
-| You ask for... | The agent builds... | But this works... |
-|:---------------|:--------------------|:------------------|
-| Rename a JSON key | Node.js script + lodash | `jq` one-liner |
-| UI toggle state | React + Zustand | CSS `:has()` |
-| Disk monitoring | Python + psutil + cron | `df \| awk` |
-| API proxy | Nginx + Docker | `curl` + cron |
-| Log filtering | Python script | `grep` + `awk` |
-
-**More power = more complexity.** More dependencies. More things that break at 3 AM.
+<br>
 
 ---
 
-## The Hierarchy
+## 💡 The Problem
 
-| Tier | Power Level | Examples |
-|:----:|:------------|:---------|
-| 0 | Built-in APIs | `fetch()`, `structuredClone()`, `URL`, `Intl` |
-| 1 | Declarative markup | HTML, CSS, JSON Schema |
-| 2 | Declarative logic | CSS `:has()`, Jinja, YAML |
-| 3 | Standard utilities | `jq`, `grep`, `awk`, `curl` |
-| 4 | Query languages | SQL, GraphQL, SQLite |
-| 5 | High-level scripting | Python, Ruby, shell scripts |
-| 6 | Application frameworks | Express, Rails, Django |
-| 7 | Custom infrastructure | Kubernetes, service meshes |
-| 8 | External services | Zapier, IFTTT, n8n, Make |
+> **AI agents instinctively reach for the most powerful tool available. That instinct is usually wrong.**
+
+<table>
+  <tr>
+    <th>You ask for…</th>
+    <th>The agent builds…</th>
+    <th>But this works…</th>
+  </tr>
+  <tr>
+    <td>Rename a JSON key</td>
+    <td>Node.js script + lodash</td>
+    <td><code>jq</code> one-liner</td>
+  </tr>
+  <tr>
+    <td>UI toggle state</td>
+    <td>React + Zustand</td>
+    <td>CSS <code>:has()</code></td>
+  </tr>
+  <tr>
+    <td>Disk monitoring</td>
+    <td>Python + psutil + cron</td>
+    <td><code>df | awk</code></td>
+  </tr>
+  <tr>
+    <td>API proxy</td>
+    <td>Nginx + Docker</td>
+    <td><code>curl</code> + cron</td>
+  </tr>
+  <tr>
+    <td>Log filtering</td>
+    <td>Python script</td>
+    <td><code>grep</code> + <code>awk</code></td>
+  </tr>
+</table>
+
+<br>
+
+<p align="center">
+  <strong>More power = more complexity.</strong><br>
+  More dependencies. More things that break at 3 AM.
+</p>
+
+<br>
 
 ---
 
-## Installation
+## 📊 The Hierarchy
+
+<p align="center"><em>Choose the simplest tool that does the job.</em></p>
+
+<br>
+
+<table align="center">
+  <tr>
+    <th>Tier</th>
+    <th>Power Level</th>
+    <th>Examples</th>
+  </tr>
+  <tr>
+    <td align="center"><strong>0</strong></td>
+    <td>Built-in APIs</td>
+    <td><code>fetch()</code>, <code>structuredClone()</code>, <code>URL</code>, <code>Intl</code></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>1</strong></td>
+    <td>Declarative markup</td>
+    <td>HTML, CSS, JSON Schema</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>2</strong></td>
+    <td>Declarative logic</td>
+    <td>CSS <code>:has()</code>, Jinja, YAML</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>3</strong></td>
+    <td>Standard utilities</td>
+    <td><code>jq</code>, <code>grep</code>, <code>awk</code>, <code>curl</code></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>4</strong></td>
+    <td>Query languages</td>
+    <td>SQL, GraphQL, SQLite</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>5</strong></td>
+    <td>High-level scripting</td>
+    <td>Python, Ruby, shell scripts</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>6</strong></td>
+    <td>Application frameworks</td>
+    <td>Express, Rails, Django</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>7</strong></td>
+    <td>Custom infrastructure</td>
+    <td>Kubernetes, service meshes</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>8</strong></td>
+    <td>External services</td>
+    <td>Zapier, IFTTT, n8n, Make</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+## 📦 Installation
+
+<p align="center"><em>One command. Any agent. Instant simplicity enforcement.</em></p>
+
+<br>
 
 ### Quick Copy
 
@@ -94,7 +181,7 @@ cp SKILL.md .amazonq/rules/simplicity-gate.md
 ### Full Install Guides
 
 <details>
-<summary>Claude Code</summary>
+<summary><strong>Claude Code</strong></summary>
 
 ```bash
 mkdir -p ~/.claude/commands
@@ -104,7 +191,7 @@ cp SKILL.md ~/.claude/commands/simplicity-gate.md
 </details>
 
 <details>
-<summary>OpenCode</summary>
+<summary><strong>OpenCode</strong></summary>
 
 ```bash
 mkdir -p ~/.config/opencode/skills
@@ -114,7 +201,7 @@ cp SKILL.md ~/.config/opencode/skills/simplicity-gate.md
 </details>
 
 <details>
-<summary>Codex</summary>
+<summary><strong>Codex</strong></summary>
 
 ```bash
 mkdir -p ~/.codex/skills
@@ -124,7 +211,7 @@ cp SKILL.md ~/.codex/skills/simplicity-gate.md
 </details>
 
 <details>
-<summary>Aider</summary>
+<summary><strong>Aider</strong></summary>
 
 Add to your `.aider.conf.yml`:
 ```yaml
@@ -139,7 +226,7 @@ cp SKILL.md .aider/skills/simplicity-gate.md
 </details>
 
 <details>
-<summary>Cursor / Windsurf / Cline</summary>
+<summary><strong>Cursor / Windsurf / Cline</strong></summary>
 
 ```bash
 tail -n +52 SKILL.md > .cursorrules
@@ -149,7 +236,7 @@ tail -n +52 SKILL.md > .cursorrules
 </details>
 
 <details>
-<summary>Continue</summary>
+<summary><strong>Continue</strong></summary>
 
 Add to `~/.continue/config.json`:
 ```json
@@ -165,7 +252,7 @@ cp SKILL.md continue/skills/simplicity-gate.md
 </details>
 
 <details>
-<summary>GitHub Copilot</summary>
+<summary><strong>GitHub Copilot</strong></summary>
 
 ```bash
 mkdir -p .github/copilot-instructions
@@ -175,7 +262,7 @@ cp SKILL.md .github/copilot-instructions/simplicity-gate.md
 </details>
 
 <details>
-<summary>Roo Code</summary>
+<summary><strong>Roo Code</strong></summary>
 
 ```bash
 mkdir -p .roo/skills
@@ -185,7 +272,7 @@ cp SKILL.md .roo/skills/simplicity-gate.md
 </details>
 
 <details>
-<summary>Amazon Q</summary>
+<summary><strong>Amazon Q</strong></summary>
 
 ```bash
 mkdir -p .amazonq/rules
@@ -194,9 +281,15 @@ cp SKILL.md .amazonq/rules/simplicity-gate.md
 
 </details>
 
+<br>
+
 ---
 
-## How It Works
+## ⚙️ How It Works
+
+<p align="center"><em>From proposal to verdict in under 200ms.</em></p>
+
+<br>
 
 1. Agent proposes a solution
 2. Gate checks: project context → language tiers → dependency graph
@@ -234,110 +327,223 @@ Agent proposes solution
 
 ### Verdicts
 
-**PASS** — Appropriate tool selected:
-```
-PASS: jq selected (Tier 3) for JSON transformation
-Cost Savings: ~4,500 tokens saved
-```
+<table>
+  <tr>
+    <th>Verdict</th>
+    <th>Meaning</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><strong>PASS</strong></td>
+    <td>Appropriate tool selected</td>
+    <td><code>PASS: jq selected (Tier 3) for JSON transformation</code></td>
+  </tr>
+  <tr>
+    <td><strong>REJECT</strong></td>
+    <td>Over-engineered, use simpler alternative</td>
+    <td><code>REJECT: Express.js (Tier 7) for JSON rename — use jq (Tier 3)</code></td>
+  </tr>
+  <tr>
+    <td><strong>WARN</strong></td>
+    <td>Borderline, document justification</td>
+    <td><code>WARN: React (Tier 6) for simple toggle — CSS :has() (Tier 2) may suffice</code></td>
+  </tr>
+  <tr>
+    <td><strong>ESCALATE</strong></td>
+    <td>Requires human judgment</td>
+    <td><code>ESCALATE: Custom ORM (Tier 6) vs raw SQL (Tier 4) for complex queries</code></td>
+  </tr>
+</table>
 
-**REJECT** — Over-engineered, use simpler alternative:
-```
-REJECT: Express.js (Tier 7) for JSON rename — use jq (Tier 3)
-Severity: 4/5 (4-tier gap)
-Auto-fix: jq '{new_key: .old_key}' input.json > output.json
-Cost Savings: ~8,200 tokens saved
-```
+<br>
 
-**WARN** — Borderline, document justification:
-```
-WARN: React (Tier 6) for simple toggle — CSS :has() (Tier 2) may suffice
-Severity: 2/5
-Justification: [required]
-```
-
-**ESCALATE** — Requires human judgment:
-```
-ESCALATE: Custom ORM (Tier 6) vs raw SQL (Tier 4) for complex queries
-Test Plan: [required]
-```
+---
 
 <p align="center">
   <img src="assets/Gemini_Generated_Image_5rnseu5rnseu5rns-removebg-preview.png" alt="Simplicity Gate Examples" width="400">
 </p>
 
-<h2 align="center">Examples</h2>
+<h2 align="center">📋 Examples</h2>
 
-| # | Task | Without Gate | With Gate | Tier Gap | Lines Saved |
-|:-:|:-----|:-------------|:----------|:--------:|:-----------:|
-| 1 | JSON Reformat | Node.js + lodash | `jq` one-liner | 6→3 | 39+ |
-| 2 | UI Toggle | React + Zustand | CSS `:has()` | 6→1 | 115+ |
-| 3 | Disk Monitor | Python + psutil | `df` + `awk` | 6→3 | 79+ |
-| 4 | Data Query | Python + pandas | SQL | 6→4 | 22+ |
-| 5 | Form Validation | JavaScript | HTML5 + CSS | 6→1 | 35+ |
-| 6 | API Proxy | Express.js + axios | `curl` | 7→3 | 59+ |
-| 7 | Build Scripts | npm + eslint + jest | Makefile | 6→3 | 8+ |
+<p align="center"><em>Real-world scenarios where simpler wins.</em></p>
+
+<br>
+
+<table align="center">
+  <tr>
+    <th>#</th>
+    <th>Task</th>
+    <th>Without Gate</th>
+    <th>With Gate</th>
+    <th>Tier Gap</th>
+    <th>Lines Saved</th>
+  </tr>
+  <tr>
+    <td align="center">1</td>
+    <td>JSON Reformat</td>
+    <td>Node.js + lodash</td>
+    <td><code>jq</code> one-liner</td>
+    <td align="center">6→3</td>
+    <td align="center">39+</td>
+  </tr>
+  <tr>
+    <td align="center">2</td>
+    <td>UI Toggle</td>
+    <td>React + Zustand</td>
+    <td>CSS <code>:has()</code></td>
+    <td align="center">6→1</td>
+    <td align="center">115+</td>
+  </tr>
+  <tr>
+    <td align="center">3</td>
+    <td>Disk Monitor</td>
+    <td>Python + psutil</td>
+    <td><code>df</code> + <code>awk</code></td>
+    <td align="center">6→3</td>
+    <td align="center">79+</td>
+  </tr>
+  <tr>
+    <td align="center">4</td>
+    <td>Data Query</td>
+    <td>Python + pandas</td>
+    <td>SQL</td>
+    <td align="center">6→4</td>
+    <td align="center">22+</td>
+  </tr>
+  <tr>
+    <td align="center">5</td>
+    <td>Form Validation</td>
+    <td>JavaScript</td>
+    <td>HTML5 + CSS</td>
+    <td align="center">6→1</td>
+    <td align="center">35+</td>
+  </tr>
+  <tr>
+    <td align="center">6</td>
+    <td>API Proxy</td>
+    <td>Express.js + axios</td>
+    <td><code>curl</code></td>
+    <td align="center">7→3</td>
+    <td align="center">59+</td>
+  </tr>
+  <tr>
+    <td align="center">7</td>
+    <td>Build Scripts</td>
+    <td>npm + eslint + jest</td>
+    <td>Makefile</td>
+    <td align="center">6→3</td>
+    <td align="center">8+</td>
+  </tr>
+</table>
+
+<br>
 
 <p align="center">
-  <a href="examples/">Full code examples →</a>
+  <a href="examples/">📖 Full code examples →</a>
 </p>
+
+<br>
 
 ---
 
-<h2 align="center">Configuration</h2>
+## 🛠️ Configuration
 
-<p align="center">Customize behavior with a project-level config file.</p>
+<p align="center"><em>Customize behavior with a project-level config file.</em></p>
+
+<br>
 
 Create `.simplicity-gate.yml` in your project root:
 
 ```yaml
+# ──────────────────────────────────────────────
+# Simplicity Gate Configuration
+# ──────────────────────────────────────────────
+
+# Tools that always PASS (even if high-tier)
 allowed_tools:
-  - "express"           # Allow specific tools
+  - "express"
 
+# Tools that always REJECT (even if low-tier)
 blocked_tools:
-  - "kubernetes"        # Always reject
+  - "kubernetes"
 
+# Custom tier assignments for your tools
 tier_adjustments:
-  "my-project-tool": 3  # Custom tier assignment
+  "my-project-tool": 3
 
+# Tier thresholds
 thresholds:
   max_tier: 5
   escalation_threshold: 6
 
+# Feature toggles
 settings:
-  auto_fix: true
-  interactive_mode: true
-  learning_mode: true
-  suppressions: true
-  multi_file_scan: true
-  dependency_cost: true
-  proactive_prevention: true
-  real_world_costs: true
-  community_patterns: true
-  agent_profiling: true
-  teaching_mode: true
-  gamification: true
-  auto_migration: true
-  dependency_weight: true
+  auto_fix: true              # Include replacement code in REJECT verdicts
+  interactive_mode: true      # Ask before applying fixes
+  learning_mode: true         # Explain WHY, not just WHAT
+  suppressions: true          # Allow inline suppression comments
+  multi_file_scan: true       # Check across all project files
+  dependency_cost: true       # Show dependency weight in verdicts
+  proactive_prevention: true  # Block over-engineering before it's written
+  real_world_costs: true      # Show $/month impact of tier violations
+  community_patterns: true    # Use community anti-pattern database
+  agent_profiling: true       # Track which agents over-engineer
+  teaching_mode: true         # Interactive learning mode
+  gamification: true          # Simplicity leaderboard
+  auto_migration: true        # Scan codebase for old violations
+  dependency_weight: true     # Report real dependency costs
 ```
 
----
-
-<h2 align="center">What's New in v5.0</h2>
-
-| Feature | What It Does |
-|:--------|:-------------|
-| **Proactive Write Prevention** | Blocks over-engineered code before it's written |
-| **Real-World Cost Calculator** | Ties tier violations to actual cloud costs ($/month) |
-| **Community Pattern Library** | Growing database of anti-patterns → alternatives |
-| **Agent Behavior Profiling** | Tracks which agents over-engineer most |
-| **Interactive Teaching Mode** | Explains WHY simpler is better, not just WHAT |
-| **Team Gamification** | Simplicity leaderboard and achievements |
-| **Auto-Migration** | Scans codebase for old over-engineering |
-| **Dependency Weight Reporter** | Real dependency costs before adding packages |
+<br>
 
 ---
 
-<h2 align="center">FAQ</h2>
+## 🚀 What's New in v5.0
+
+<table>
+  <tr>
+    <th>Feature</th>
+    <th>What It Does</th>
+  </tr>
+  <tr>
+    <td><strong>🛡️ Proactive Write Prevention</strong></td>
+    <td>Blocks over-engineered code before it's written</td>
+  </tr>
+  <tr>
+    <td><strong>💰 Real-World Cost Calculator</strong></td>
+    <td>Ties tier violations to actual cloud costs ($/month)</td>
+  </tr>
+  <tr>
+    <td><strong>📚 Community Pattern Library</strong></td>
+    <td>Growing database of anti-patterns → alternatives</td>
+  </tr>
+  <tr>
+    <td><strong>📊 Agent Behavior Profiling</strong></td>
+    <td>Tracks which agents over-engineer most</td>
+  </tr>
+  <tr>
+    <td><strong>🎓 Interactive Teaching Mode</strong></td>
+    <td>Explains WHY simpler is better, not just WHAT</td>
+  </tr>
+  <tr>
+    <td><strong>🏆 Team Gamification</strong></td>
+    <td>Simplicity leaderboard and achievements</td>
+  </tr>
+  <tr>
+    <td><strong>🔄 Auto-Migration</strong></td>
+    <td>Scans codebase for old over-engineering</td>
+  </tr>
+  <tr>
+    <td><strong>⚖️ Dependency Weight Reporter</strong></td>
+    <td>Real dependency costs before adding packages</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+## ❓ FAQ
 
 <details>
 <summary><strong>What if my project already uses React?</strong></summary>
@@ -384,9 +590,11 @@ When a REJECT is issued, the gate provides a copy-pasteable replacement in the `
 
 </details>
 
+<br>
+
 ---
 
-<h2 align="center">Impact</h2>
+## 📈 Impact
 
 <table align="center">
   <tr>
@@ -405,10 +613,12 @@ When a REJECT is issued, the gate provides a copy-pasteable replacement in the `
   </tr>
 </table>
 
+<br>
+
 ---
 
 <p align="center">
-  <strong>Simplicity is the ultimate sophistication.</strong><br>
+  <em>✨ <strong>Simplicity is the ultimate sophistication.</strong> ✨</em><br>
   <sub>— Leonardo da Vinci</sub>
 </p>
 
