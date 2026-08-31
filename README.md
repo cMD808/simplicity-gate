@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/version-6.1.0-blue" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
   <img src="https://img.shields.io/badge/agents-12+-purple" alt="Agents">
-  <img src="https://img.shields.io/badge/languages-11-orange" alt="Languages">
+  <img src="https://img.shields.io/badge/languages-18-orange" alt="Languages">
   <img src="https://img.shields.io/badge/quick--check-50ms-brightgreen" alt="Quick Check">
   <img src="https://img.shields.io/badge/auto--fix-enabled-brightgreen" alt="Auto-Fix">
   <img src="https://img.shields.io/badge/learning--mode-enabled-brightgreen" alt="Learning Mode">
@@ -653,7 +653,7 @@ Minimal overhead. The gate adds ~200ms per evaluation. Token savings from avoidi
 
 <br>
 
-All languages. Language-specific tiers are configured for JavaScript, TypeScript, Python, Java, C#, PHP, Ruby, Go, Rust, Swift, Kotlin, and Scala out of the box. Add more in `.simplicity-gate.yml`.
+All languages. Language-specific tiers are configured for JavaScript, TypeScript, Python, Java, C#, PHP, Ruby, Go, Rust, Swift, Kotlin, Scala, C, C++, Dart, Elixir, Haskell, and Julia out of the box. Add more in `.simplicity-gate.yml`.
 
 </details>
 

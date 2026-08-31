@@ -429,19 +429,21 @@ Safety: auto-backup, test-after-fix, max 10 files per fix, confirmation for 50+ 
 ## The Rule
 
 Before writing code or adding a dependency, evaluate your proposal against
-this hierarchy. Start at Tier 1. Stop at the first tier that works.
+this hierarchy. Start at Tier 0. Stop at the first tier that works.
 
 ```
-Tier 1 — Platform Features     HTTP headers, CDN, CSS animations, HTML forms
-Tier 2 — Data Formats          JSON, YAML, TOML, XML, CSS, Markdown
-Tier 3 — Shell / CLI           grep, sed, awk, jq, yq, curl, find, xargs
-Tier 4 — Query Languages       SQL, GraphQL, XPath, CSS selectors
-Tier 5 — Static Scripting      TypeScript, Go, Rust (compiled, typed)
-Tier 6 — Dynamic Languages     Python, Node.js, Ruby (interpreted, mutable)
-Tier 7 — Microservices         Kubernetes, Docker, Express, Django
+Tier 0 — Built-in APIs         fetch, URL, structuredClone, Intl, AbortController, crypto.randomUUID, File System Access, Web Streams
+Tier 1 — Declarative Markup    HTML, CSS, JSON Schema, HTML forms, CSS animations
+Tier 2 — Declarative Logic     CSS :has(), Jinja, YAML conditions, XPath, CSS selectors
+Tier 3 — Standard Utilities    jq, grep, awk, sed, yq, curl, find, xargs, make, bash
+Tier 4 — Query Languages       SQL, GraphQL, SQLite, Prisma
+Tier 5 — High-level Scripting  Python, Ruby, Node.js, Perl, PHP
+Tier 6 — Application Frameworks Express, React, Django, axios, lodash, jest, webpack, Vite
+Tier 7 — Custom Infrastructure Kubernetes, Docker, Terraform, Nginx, Redis, Kafka
+Tier 8 — External Services     Zapier, n8n, Make, Airtable, Twilio, Stripe, SendGrid, Auth0
 ```
 
-**Start at Tier 1. Stop at the first tier that works.**
+**Start at Tier 0. Stop at the first tier that works.**
 
 ---
 
@@ -449,13 +451,15 @@ Tier 7 — Microservices         Kubernetes, Docker, Express, Django
 
 ```
 PROPOSAL → Check context → Check language tiers → Check dependency graph
-  → Tier 1 (platform feature)? → PASS
-  → Tier 2 (data format)? → PASS
-  → Tier 3 (shell/CLI)? → PASS
+  → Tier 0 (built-in API)? → PASS
+  → Tier 1 (declarative markup)? → PASS
+  → Tier 2 (declarative logic)? → PASS
+  → Tier 3 (standard utility)? → PASS
   → Tier 4 (query language)? → PASS
-  → Tier 5 (static scripting)? → PASS
-  → Tier 6 (dynamic language)? → PASS
-  → Tier 7 (orchestration)? → PASS
+  → Tier 5 (high-level scripting)? → PASS
+  → Tier 6 (application framework)? → PASS
+  → Tier 7 (custom infrastructure)? → PASS
+  → Tier 8 (external service)? → PASS
   → INSUFFICIENT → escalate to human
 ```
 
