@@ -261,96 +261,23 @@ Test Plan: [required]
 
 ---
 
+<p align="center">
+  <img src="assets/Gemini_Generated_Image_5rnseu5rnseu5rns-removebg-preview.png" alt="Simplicity Gate Examples" width="400">
+</p>
+
 ## Examples
 
-<details>
-<summary><strong>1. JSON Reformatting</strong> — Node.js vs jq</summary>
+| # | Task | Without Gate | With Gate | Tier Gap | Lines Saved |
+|:-:|:-----|:-------------|:----------|:--------:|:-----------:|
+| 1 | JSON Reformat | Node.js + lodash | `jq` one-liner | 6→3 | 39+ |
+| 2 | UI Toggle | React + Zustand | CSS `:has()` | 6→1 | 115+ |
+| 3 | Disk Monitor | Python + psutil | `df` + `awk` | 6→3 | 79+ |
+| 4 | Data Query | Python + pandas | SQL | 6→4 | 22+ |
+| 5 | Form Validation | JavaScript | HTML5 + CSS | 6→1 | 35+ |
+| 6 | API Proxy | Express.js + axios | `curl` | 7→3 | 59+ |
+| 7 | Build Scripts | npm + eslint + jest | Makefile | 6→3 | 8+ |
 
-**Without:** Node.js + lodash (40+ lines, Tier 6)
-**With:** `jq` one-liner (1 line, Tier 3)
-
-```bash
-jq '{new_key: .old_key}' input.json > output.json
-```
-
-</details>
-
-<details>
-<summary><strong>2. UI Toggle</strong> — React vs CSS</summary>
-
-**Without:** React + Zustand (120+ lines, Tier 6)
-**With:** CSS `:has()` (5 lines, Tier 1+2)
-
-```css
-.panel .content { display: none; }
-.panel:has(.toggle:checked) .content { display: block; }
-```
-
-</details>
-
-<details>
-<summary><strong>3. Disk Monitor</strong> — Python vs Shell</summary>
-
-**Without:** Python + psutil (80+ lines, Tier 6)
-**With:** `df` + `awk` pipeline (1 line, Tier 3)
-
-```bash
-df -h | awk 'NR>1 && int($5)>90 {print $6}'
-```
-
-</details>
-
-<details>
-<summary><strong>4. Data Queries</strong> — Python vs SQL</summary>
-
-**Without:** Python + pandas (30+ lines, Tier 6)
-**With:** SQL query (8 lines, Tier 4)
-
-```sql
-SELECT country, SUM(amount) as revenue
-FROM orders WHERE created_at > NOW() - INTERVAL '30 days'
-GROUP BY country ORDER BY revenue DESC LIMIT 10;
-```
-
-</details>
-
-<details>
-<summary><strong>5. Form Validation</strong> — JavaScript vs HTML5</summary>
-
-**Without:** JavaScript validation (40+ lines, Tier 6)
-**With:** HTML5 attributes (5 lines, Tier 1)
-
-```html
-<input type="email" required minlength="8" pattern="(?=.*\d)(?=.*[A-Z]).{8,}">
-```
-
-</details>
-
-<details>
-<summary><strong>6. API Proxy</strong> — Express vs curl</summary>
-
-**Without:** Express.js app (60+ lines, Tier 7)
-**With:** `curl` command (1 line, Tier 3)
-
-```bash
-curl -s -H "Authorization: Bearer $API_KEY" https://api.example.com/endpoint
-```
-
-</details>
-
-<details>
-<summary><strong>7. Build Automation</strong> — npm vs Make</summary>
-
-**Without:** npm scripts (20+ lines, Tier 6)
-**With:** Makefile (12 lines, Tier 3)
-
-```makefile
-lint:; eslint src/
-test:; jest --coverage
-build:; tsc && webpack
-```
-
-</details>
+> **Full code examples** → [examples/](examples/)
 
 ---
 
