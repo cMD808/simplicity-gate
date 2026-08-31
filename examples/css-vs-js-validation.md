@@ -14,17 +14,33 @@
 
 ---
 
-## 📋 The Task
+## 📋 Scenario
 
 Validate a registration form: email format, password minimum 8 characters, and required fields.
 
 <br>
 
+## 📝 Proposal
+
+```yaml
+proposal:
+  description: "Validate registration form fields"
+  proposed_tier: 6
+  proposed_tool: "JavaScript validation function"
+  language: "JavaScript"
+  dependencies: []
+  functional_requirements:
+    - "Validate email format"
+    - "Enforce minimum password length"
+    - "Check required fields"
+    - "Show error messages"
+```
+
+<br>
+
 ---
 
-## ❌ Without Simplicity Gate
-
-The agent writes a JavaScript validation function with regex patterns and DOM manipulation.
+## ❌ Proposed Solution (Tier 6 — REJECTED)
 
 ```javascript
 function validateForm() {
@@ -51,30 +67,28 @@ function validateForm() {
 }
 ```
 
+### ⚠️ Problems
+
 <table>
   <tr>
-    <th>Metric</th>
-    <th>Value</th>
+    <th>Issue</th>
+    <th>Impact</th>
   </tr>
   <tr>
-    <td>Lines of code</td>
-    <td>30+</td>
+    <td>30+ lines of JavaScript</td>
+    <td>High maintenance burden</td>
   </tr>
   <tr>
-    <td>Dependencies</td>
-    <td>None (but adds JS runtime)</td>
+    <td>Validation after submission</td>
+    <td>Late feedback, poor UX</td>
   </tr>
   <tr>
-    <td>Runtime required</td>
-    <td>Browser JS engine (already present)</td>
+    <td>Custom error messages</td>
+    <td>Not accessible by default</td>
   </tr>
   <tr>
-    <td>Validation timing</td>
-    <td>After submission (late)</td>
-  </tr>
-  <tr>
-    <td>Accessible by default</td>
-    <td>No (custom error messages)</td>
+    <td>Regex patterns to maintain</td>
+    <td>Error-prone, hard to read</td>
   </tr>
 </table>
 
@@ -82,9 +96,7 @@ function validateForm() {
 
 ---
 
-## ✅ With Simplicity Gate
-
-HTML5 has built-in validation attributes. CSS handles the visual feedback. No JavaScript needed.
+## ✅ Recommended Solution (Tier 1+2 — PASS)
 
 ```html
 <form>
@@ -110,40 +122,34 @@ HTML5 has built-in validation attributes. CSS handles the visual feedback. No Ja
 </style>
 ```
 
+### ✨ Benefits
+
 <table>
   <tr>
-    <th>Metric</th>
-    <th>Value</th>
+    <th>Benefit</th>
+    <th>Details</th>
   </tr>
   <tr>
-    <td>Lines of code</td>
-    <td>15</td>
+    <td>15 lines total</td>
+    <td>50% code reduction</td>
   </tr>
   <tr>
-    <td>Dependencies</td>
-    <td>None</td>
-  </tr>
-  <tr>
-    <td>Runtime required</td>
-    <td>Browser (already present)</td>
-  </tr>
-  <tr>
-    <td>Validation timing</td>
-    <td>Real-time (instant feedback)</td>
+    <td>Real-time validation</td>
+    <td>Instant feedback as user types</td>
   </tr>
   <tr>
     <td>Accessible by default</td>
-    <td>Yes (browser-native error messages)</td>
+    <td>Browser-native error messages</td>
+  </tr>
+  <tr>
+    <td>Zero JavaScript</td>
+    <td>Browser handles everything</td>
+  </tr>
+  <tr>
+    <td>Automatic localization</td>
+    <td>Browser translates error messages</td>
   </tr>
 </table>
-
-<br>
-
----
-
-## 💡 Why This Works
-
-HTML5 form validation is a Tier 1 platform feature — the browser handles it natively. JavaScript validation is Tier 6 — reimplementing what the browser already does. The HTML5 version is also more accessible: screen readers announce native error messages, and the browser handles localization.
 
 <br>
 
@@ -158,3 +164,66 @@ Use instead: HTML5 required/minlength/pattern + CSS :invalid (Tier 1+2)
 Why:         Browser-native validation is real-time, accessible, and requires no code.
 Command:     Add validation attributes to your HTML form elements.
 ```
+
+<br>
+
+---
+
+## 🤔 When JavaScript IS Justified
+
+JavaScript validation becomes the correct choice when:
+
+- Validation requires **server-side checks** (email uniqueness, password strength against DB)
+- You need **complex cross-field validation** (password confirmation, date ranges)
+- The form uses **dynamic fields** added/removed by JavaScript
+- You need **custom error UI** beyond browser defaults
+- The validation is part of a **larger SPA** with state management
+
+> **For simple form validation, always prefer HTML5 attributes and CSS.**
+
+<br>
+
+---
+
+## 📊 Comparison
+
+<table>
+  <tr>
+    <th>Aspect</th>
+    <th>JavaScript</th>
+    <th>HTML5 + CSS</th>
+  </tr>
+  <tr>
+    <td>Lines of Code</td>
+    <td>30+</td>
+    <td>15</td>
+  </tr>
+  <tr>
+    <td>Validation Timing</td>
+    <td>After submission</td>
+    <td>Real-time</td>
+  </tr>
+  <tr>
+    <td>Accessible</td>
+    <td>No (custom messages)</td>
+    <td>Yes (browser-native)</td>
+  </tr>
+  <tr>
+    <td>Dependencies</td>
+    <td>JS runtime (implicit)</td>
+    <td>None</td>
+  </tr>
+  <tr>
+    <td>Localized</td>
+    <td>No (manual)</td>
+    <td>Yes (automatic)</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+<p align="center">
+  <a href="../README.md">← Back to README</a>
+</p>

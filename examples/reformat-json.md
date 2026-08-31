@@ -191,3 +191,11 @@ Node.js becomes the correct choice when:
 - The script is part of a **larger Node.js application**
 
 > **For pure data transformation, always prefer `jq`.**
+
+<br>
+
+---
+
+<p align="center">
+  <a href="../README.md">← Back to README</a>
+</p>

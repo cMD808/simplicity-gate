@@ -291,3 +291,11 @@ Python becomes the correct choice when:
 </table>
 
 > **Recommendation:** Use shell for Unix-only, simple monitoring. Use Python when you need cross-platform, complex logic, or integration with larger systems.
+
+<br>
+
+---
+
+<p align="center">
+  <a href="../README.md">← Back to README</a>
+</p>

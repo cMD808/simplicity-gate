@@ -23,7 +23,7 @@
 <br>
 
 <div align="center">
-  <a href="#-the-problem">💡 Problem</a> · <a href="#-the-hierarchy">📊 Hierarchy</a> · <a href="#-installation">📦 Install</a> · <a href="#-how-it-works">⚙️ How It Works</a> · <a href="#-examples">📋 Examples</a> · <a href="#%EF%B8%8F-configuration">🛠 Config</a>
+  <a href="#-the-problem">💡 Problem</a> · <a href="#-the-hierarchy">📊 Hierarchy</a> · <a href="#-installation">📦 Install</a> · <a href="#-how-it-works">⚙️ How It Works</a> · <a href="#-examples">📋 Examples</a> · <a href="#-cli">🖥️ CLI</a> · <a href="#%EF%B8%8F-configuration">🛠 Config</a>
 </div>
 
 <br>
@@ -446,6 +446,76 @@ Agent proposes solution
 
 ---
 
+## 🖥️ CLI
+
+<p align="center"><em>Light, fast, zero-dependency command-line tool.</em></p>
+
+<br>
+
+### Install
+
+```bash
+# Via npm
+npm install -g simplicity-gate
+
+# Or via npx (no install)
+npx simplicity-gate eval <file>
+```
+
+### Commands
+
+<table>
+  <tr>
+    <th>Command</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>simplicity-gate eval &lt;file&gt;</code></td>
+    <td>Evaluate a file's proposal against the tier hierarchy</td>
+  </tr>
+  <tr>
+    <td><code>simplicity-gate scan [dir]</code></td>
+    <td>Scan directory for over-engineering patterns</td>
+  </tr>
+  <tr>
+    <td><code>simplicity-gate tiers</code></td>
+    <td>Show the tier hierarchy</td>
+  </tr>
+  <tr>
+    <td><code>simplicity-gate bench</code></td>
+    <td>Self-benchmark (~400K evals/sec)</td>
+  </tr>
+</table>
+
+### Example
+
+```bash
+$ simplicity-gate eval examples/reformat-json.md
+
+⚡ SIMPLICITY GATE v5.0.0
+
+File:      examples/reformat-json.md
+Tool detected: Node.js script
+Tier:        Tier 6 — Application frameworks
+
+⚠  ANTI-PATTERNS DETECTED: 3
+
+  [CRITICAL] Tier 6 → use Tier 0
+    Use native JS methods or jq for data transforms
+
+  [MEDIUM] Tier 5 → use Tier 3
+    Use jq for JSON transformations
+
+  [MEDIUM] Tier 5 → use Tier 3
+    Use jq . for pretty-printing
+
+Evaluated in 1.0ms
+```
+
+<br>
+
+---
+
 ## 🛠️ Configuration
 
 <p align="center"><em>Customize behavior with a project-level config file.</em></p>
@@ -625,7 +695,7 @@ When a REJECT is issued, the gate provides a copy-pasteable replacement in the `
 <br>
 
 <p align="center">
-  <a href="CONTRIBUTING.md">Contributing</a> · <a href="SECURITY.md">Security</a> · <a href="LICENSE">License (MIT)</a>
+  <a href="CONTRIBUTING.md">Contributing</a> · <a href="SECURITY.md">Security</a> · <a href="CHANGELOG.md">Changelog</a> · <a href="LICENSE">License (MIT)</a>
 </p>
 
 <p align="center">

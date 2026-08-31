@@ -169,3 +169,18 @@ When using Simplicity Gate with an agent:
     <td>Review the agent's own security documentation for full threat coverage</td>
   </tr>
 </table>
+
+<br>
+
+---
+
+<p align="center">
+  <em>✨ <strong>Simplicity is the ultimate sophistication.</strong> ✨</em><br>
+  <sub>— Leonardo da Vinci</sub>
+</p>
+
+<br>
+
+<p align="center">
+  <a href="README.md">← Back to README</a> · <a href="CONTRIBUTING.md">Contributing</a> · <a href="CHANGELOG.md">Changelog</a> · <a href="LICENSE">License (MIT)</a>
+</p>

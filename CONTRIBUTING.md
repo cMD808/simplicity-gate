@@ -133,3 +133,18 @@ To test with an agent:
 ## 📄 License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
+
+<br>
+
+---
+
+<p align="center">
+  <em>✨ <strong>Simplicity is the ultimate sophistication.</strong> ✨</em><br>
+  <sub>— Leonardo da Vinci</sub>
+</p>
+
+<br>
+
+<p align="center">
+  <a href="README.md">← Back to README</a> · <a href="SECURITY.md">Security</a> · <a href="CHANGELOG.md">Changelog</a> · <a href="LICENSE">License (MIT)</a>
+</p>

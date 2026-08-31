@@ -14,17 +14,34 @@
 
 ---
 
-## 📋 The Task
+## 📋 Scenario
 
 Automate a build pipeline: lint, test, build, and deploy.
 
 <br>
 
+## 📝 Proposal
+
+```yaml
+proposal:
+  description: "Automate build pipeline with lint, test, build, deploy"
+  proposed_tier: 6
+  proposed_tool: "npm scripts with multiple devDependencies"
+  language: "JSON/Shell"
+  dependencies: ["eslint", "jest", "typescript", "webpack"]
+  functional_requirements:
+    - "Lint source code"
+    - "Run tests with coverage"
+    - "Build TypeScript + bundle"
+    - "Deploy to production"
+    - "Run all steps in sequence"
+```
+
+<br>
+
 ---
 
-## ❌ Without Simplicity Gate
-
-The agent creates a complex npm scripts configuration with multiple packages and a custom build script.
+## ❌ Proposed Solution (Tier 6 — WARN)
 
 ```json
 {
@@ -44,30 +61,28 @@ The agent creates a complex npm scripts configuration with multiple packages and
 }
 ```
 
+### ⚠️ Problems
+
 <table>
   <tr>
-    <th>Metric</th>
-    <th>Value</th>
+    <th>Issue</th>
+    <th>Impact</th>
   </tr>
   <tr>
-    <td>Lines of code</td>
-    <td>20+ config + deploy script</td>
+    <td>20+ lines of config</td>
+    <td>Verbose configuration</td>
   </tr>
   <tr>
-    <td>Dependencies</td>
-    <td><code>eslint</code>, <code>jest</code>, <code>typescript</code>, <code>webpack</code></td>
+    <td>4 devDependencies</td>
+    <td>~30s install time</td>
   </tr>
   <tr>
-    <td>Runtime required</td>
-    <td>Node.js (100+ MB)</td>
+    <td>Manual cache invalidation</td>
+    <td>Rebuilds unchanged files</td>
   </tr>
   <tr>
-    <td>Install time</td>
-    <td>~30 seconds</td>
-  </tr>
-  <tr>
-    <td>Cache invalidation</td>
-    <td>Manual (npm cache)</td>
+    <td>Linear execution</td>
+    <td>No parallel builds</td>
   </tr>
 </table>
 
@@ -75,9 +90,7 @@ The agent creates a complex npm scripts configuration with multiple packages and
 
 ---
 
-## ✅ With Simplicity Gate
-
-Make is a Tier 3 build tool that's been standard on Unix for decades. It handles dependencies, caching, and parallel execution natively.
+## ✅ Recommended Solution (Tier 3 — WARN)
 
 ```makefile
 .PHONY: lint test build deploy ci
@@ -97,32 +110,48 @@ deploy: build
 ci: deploy
 ```
 
+### ✨ Benefits
+
 <table>
   <tr>
-    <th>Metric</th>
-    <th>Value</th>
+    <th>Benefit</th>
+    <th>Details</th>
   </tr>
   <tr>
-    <td>Lines of code</td>
-    <td>15</td>
+    <td>15 lines</td>
+    <td>25% fewer lines</td>
   </tr>
   <tr>
-    <td>Dependencies</td>
-    <td><code>make</code> (already installed on Unix)</td>
+    <td>Automatic caching</td>
+    <td>File timestamps determine rebuilds</td>
   </tr>
   <tr>
-    <td>Runtime required</td>
-    <td>None (binary already present)</td>
+    <td>Dependency tracking</td>
+    <td>Make knows build order</td>
   </tr>
   <tr>
-    <td>Install time</td>
-    <td>0</td>
+    <td>Parallel execution</td>
+    <td>Independent targets run concurrently</td>
   </tr>
   <tr>
-    <td>Cache invalidation</td>
-    <td>Automatic (file timestamps)</td>
+    <td>Zero install</td>
+    <td>Already on Unix/macOS</td>
   </tr>
 </table>
+
+<br>
+
+---
+
+## ⚖️ Verdict
+
+```
+SIMPLICITY GATE — WARN
+Proposed:  npm scripts with multiple devDependencies (Tier 6)
+Note:      Make (Tier 3) can handle build pipelines with automatic caching.
+Check:     Is npm already your project's runtime? If yes, npm scripts may be simpler.
+           Is this a new project? If yes, Make is the lighter choice.
+```
 
 <br>
 
@@ -155,20 +184,6 @@ This is a **WARN**, not a REJECT, because:
 
 ---
 
-## 📋 Verdict
-
-```
-SIMPLICITY GATE — WARN
-Proposed:  npm scripts with multiple devDependencies (Tier 6)
-Note:      Make (Tier 3) can handle build pipelines with automatic caching.
-Check:     Is npm already your project's runtime? If yes, npm scripts may be simpler.
-           Is this a new project? If yes, Make is the lighter choice.
-```
-
-<br>
-
----
-
 ## 🏆 When npm Scripts WIN
 
 - Project already uses Node.js (npm is present)
@@ -183,3 +198,60 @@ Check:     Is npm already your project's runtime? If yes, npm scripts may be sim
 - Build pipeline is complex with many interdependent steps
 - You want automatic caching based on file timestamps
 - You're on Unix/macOS only
+
+<br>
+
+---
+
+## 📊 Comparison
+
+<table>
+  <tr>
+    <th>Aspect</th>
+    <th>npm Scripts</th>
+    <th>Make</th>
+  </tr>
+  <tr>
+    <td>Lines of Code</td>
+    <td>20+ config + deploy script</td>
+    <td>15</td>
+  </tr>
+  <tr>
+    <td>Runtime Required</td>
+    <td>Node.js (100+ MB)</td>
+    <td>None (binary)</td>
+  </tr>
+  <tr>
+    <td>Dependencies</td>
+    <td>eslint, jest, typescript, webpack</td>
+    <td>make (pre-installed)</td>
+  </tr>
+  <tr>
+    <td>Install Time</td>
+    <td>~30 seconds</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>Cache Invalidation</td>
+    <td>Manual</td>
+    <td>Automatic (timestamps)</td>
+  </tr>
+  <tr>
+    <td>Parallel Builds</td>
+    <td>No</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Cross-platform</td>
+    <td>Yes</td>
+    <td>Unix/macOS (WSL on Windows)</td>
+  </tr>
+</table>
+
+<br>
+
+---
+
+<p align="center">
+  <a href="../README.md">← Back to README</a>
+</p>

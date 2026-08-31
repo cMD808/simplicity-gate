@@ -1,0 +1,41 @@
+{
+  "name": "simplicity-gate",
+  "version": "5.0.0",
+  "description": "The Rule of Least Power enforcer for AI coding agents",
+  "keywords": [
+    "simplicity",
+    "least-power",
+    "ai-agents",
+    "code-review",
+    "anti-pattern",
+    "over-engineering",
+    "developer-tools"
+  ],
+  "author": "cMD808",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cMD808/simplicity-gate.git"
+  },
+  "homepage": "https://github.com/cMD808/simplicity-gate#readme",
+  "bugs": {
+    "url": "https://github.com/cMD808/simplicity-gate/issues"
+  },
+  "bin": {
+    "simplicity-gate": "./bin/simplicity-gate.js"
+  },
+  "files": [
+    "bin/",
+    "SKILL.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "test": "node bin/simplicity-gate.js eval examples/reformat-json.md",
+    "bench": "node bin/simplicity-gate.js bench",
+    "scan": "node bin/simplicity-gate.js scan ./examples"
+  }
+}

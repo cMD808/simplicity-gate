@@ -278,3 +278,11 @@ React becomes the correct choice when:
 - **Accessibility** requires complex ARIA state management
 
 > **For simple toggle states, always prefer CSS selectors and HTML attributes.**
+
+<br>
+
+---
+
+<p align="center">
+  <a href="../README.md">← Back to README</a>
+</p>

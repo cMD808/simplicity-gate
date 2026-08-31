@@ -163,3 +163,11 @@ Why:         Simple request forwarding doesn't need a web framework.
              curl handles HTTP natively with zero dependencies.
 Command:     Use curl for scheduled syncs or socat for real-time proxying.
 ```
+
+<br>
+
+---
+
+<p align="center">
+  <a href="../README.md">← Back to README</a>
+</p>
