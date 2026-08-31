@@ -1,6 +1,6 @@
 ---
 name: simplicity-gate
-version: "2.0.0"
+version: "2.1.0"
 description: >
   Evaluates tool/code proposals against the Rule of Least Power.
   Forces selection of the simplest viable tier. Blocks over-engineering.
@@ -9,6 +9,8 @@ triggers:
   - code_generation
   - dependency_addition
   - refactoring_proposal
+  - framework_selection
+  - architecture_decision
 ---
 
 # Simplicity Gate
@@ -29,6 +31,38 @@ Tier 5 — Static Scripting      TypeScript, Go, Rust (compiled, typed)
 Tier 6 — Dynamic Languages     Python, Node.js, Ruby (interpreted, mutable)
 Tier 7 — Microservices         Kubernetes, Docker, Express, Django
 ```
+
+## Decision Flowchart
+
+```
+PROPOSAL RECEIVED
+       │
+       ▼
+Can a platform feature handle it?  ─── YES ──▶ Tier 1 (PASS)
+       │ NO
+       ▼
+Can a data format express it?      ─── YES ──▶ Tier 2 (PASS)
+       │ NO
+       ▼
+Can a shell command transform it?  ─── YES ──▶ Tier 3 (PASS)
+       │ NO
+       ▼
+Can a query language solve it?     ─── YES ──▶ Tier 4 (PASS)
+       │ NO
+       ▼
+Can a compiled script do it?       ─── YES ──▶ Tier 5 (PASS)
+       │ NO
+       ▼
+Can an interpreted language?       ─── YES ──▶ Tier 6 (PASS)
+       │ NO
+       ▼
+Does it need orchestration?        ─── YES ──▶ Tier 7 (PASS)
+       │ NO
+       ▼
+  INSUFFICIENT — escalate to human
+```
+
+**Never skip tiers without justification.**
 
 ## How to Evaluate
 
@@ -81,11 +115,12 @@ These are non-negotiable. Violating them triggers REJECT.
 | PASS      | Lowest viable tier chosen. Proceed.                     |
 | REJECT    | A lower tier works. Must downgrade before proceeding.   |
 | WARN      | Current tier works, but a lower tier is worth checking. |
+| ESCALATE  | Disagreement on tier — needs human judgment.            |
 
 ### PASS Format
 
 ```
-✅ SIMPLICITY GATE — PASS
+SIMPLICITY GATE — PASS
 Tool:     <tool>
 Tier:     <N> — <tier name>
 Why:      <why this is the lowest viable tier>
@@ -94,23 +129,45 @@ Why:      <why this is the lowest viable tier>
 ### REJECT Format
 
 ```
-⚠️ SIMPLICITY GATE — REJECT
+SIMPLICITY GATE — REJECT
 Proposed:  <tool> (Tier <N>)
 Use instead: <alternative> (Tier <M>)
 Why:       <1-2 sentences>
 Command:   <exact command/code to use instead>
 ```
 
-### ESCALATE Format (if you disagree with REJECT)
+### WARN Format
 
 ```
-ESCALATION
+SIMPLICITY GATE — WARN
+Proposed:  <tool> (Tier <N>)
+Note:      <lower tier> (Tier <M>) may work for <specific requirement>
+Check:     <what to verify before proceeding>
+```
+
+### ESCALATE Format
+
+```
+SIMPLICITY GATE — ESCALATE
 Reason:     <why higher tier is needed>
 Evidence:   <specific requirement that exceeds lower tier>
 Override:   <what you want to do anyway>
 ```
 
 Escalation is logged but requires human approval.
+
+## Rules Quick Reference
+
+```
+No unnecessary runtimes?                    → Check if shell/CLI works
+No unnecessary dependencies?                → Check if stdlib/Unix tools work
+No code for data problems?                  → Check if jq/sed/awk/CSS works
+No microservices for single-machine?        → Check if cron/local process works
+No frameworks for plain solutions?          → Check if simple script works
+Schema before code?                         → Check if JSON Schema/CSS works
+Text processing before programming?         → Check if grep/sed/awk works
+Compile-time over runtime?                  → Check if static analysis works
+```
 
 ## Examples
 
@@ -124,7 +181,7 @@ Escalation is logged but requires human approval.
 
 **Verdict:**
 ```
-⚠️ REJECT
+SIMPLICITY GATE — REJECT
 Proposed:  Node.js script (Tier 6)
 Use instead: jq (Tier 3)
 Why:       jq renames keys and removes fields in one pipeline.
@@ -141,7 +198,7 @@ Command:   jq '{new_key: .old_key} | del(.deprecated)' input.json > output.json
 
 **Verdict:**
 ```
-⚠️ REJECT
+SIMPLICITY GATE — REJECT
 Proposed:  React + useReducer + Zustand (Tier 6)
 Use instead: CSS :has() + hidden checkboxes (Tier 1+2)
 Why:       CSS handles toggle state without JavaScript.
@@ -158,36 +215,59 @@ Command:   .panel:has(.toggle:checked) .content { display: block; }
 
 **Verdict (simple case):**
 ```
-⚠️ REJECT
+SIMPLICITY GATE — REJECT
 Proposed:  Python script (Tier 6)
 Use instead: df + awk + mail (Tier 3)
-Command:   df -h | awk 'NR>1 && int($5)>90 {print $6}' | xargs -I{} echo "Alert: {}" | mail -s "Disk Alert" admin@example.com
+Command:   df -h | awk 'NR>1 && int($5)>90 {print $6}' | \
+           xargs -I{} echo "Alert: {}" | mail -s "Disk Alert" admin@example.com
 ```
 
 **Verdict (complex case):**
 ```
-✅ PASS
+SIMPLICITY GATE — PASS
 Tool:     Python script (Tier 6)
 Why:      Requires retry logic, template rendering, and multi-recipient
           routing — features that exceed shell pipeline expressiveness.
 ```
 
-## Quick Reference
+### Example 4: YAML Config Validation → WARN
 
-```
-Can a platform feature handle it?        → Tier 1
-Can a data format express it?            → Tier 2
-Can a shell command transform it?        → Tier 3
-Can a query language solve it?           → Tier 4
-Can a compiled script do it?             → Tier 5
-Can an interpreted language do it?       → Tier 6
-Does it need orchestration?              → Tier 7
+**Proposal:** Write a Python script with pyyaml to validate a YAML config file.
 
-Start at Tier 1. Stop at the first that works.
-Never skip tiers without justification.
-Prefer built-ins over dependencies.
-Prefer data formats over code.
+**Analysis:**
+- Tier 6 (Python): Can do it. Runtime + dependency.
+- Tier 3 (yq): Can do it. Single command, no runtime.
+- Tier 2 (Schema): Can express the rules but can't execute validation alone.
+
+**Verdict:**
 ```
+SIMPLICITY GATE — WARN
+Proposed:  Python + pyyaml (Tier 6)
+Note:      yq (Tier 3) can validate structure with fewer dependencies.
+Check:     Does the validation require logic beyond structural checks?
+```
+
+## Edge Cases
+
+### "But my project already uses [Tier 6]"
+
+If the project is already running a Tier 6 runtime, reusing it for a new task is not adding an unnecessary runtime — it's using what exists. The gate evaluates *new* additions, not existing infrastructure.
+
+### "The shell version is less readable"
+
+Readability is not a tier. The gate optimizes for fewer dependencies and less runtime, not readability. If the shell version is correct, use it. Document it.
+
+### "I need error handling"
+
+Error handling does not automatically justify a higher tier. Shell pipelines have `set -euo pipefail`. `jq` has `--exit-status`. Check if the lower tier's error handling is sufficient before escalating.
+
+### "Cross-platform support"
+
+If you need Windows support, Tier 3 shell commands may not work. Tier 5 (compiled) or Tier 6 (interpreted) may be necessary. Document this in the ESCALATE verdict.
+
+### "Performance matters"
+
+If performance is a measured, documented requirement (not a vague preference), Tier 5 (compiled) may be justified. The gate does not block performance — it blocks *assumed* performance needs.
 
 ## Agent Integration
 
@@ -208,3 +288,18 @@ into your agent's instruction file:
 
 No special syntax needed — just markdown. Any agent that reads files
 can use this skill.
+
+## Changelog
+
+### v2.1.0
+- Added decision flowchart
+- Added WARN and ESCALATE verdict formats
+- Added edge cases section
+- Added quick reference for rules
+- Improved examples with analysis steps
+- Expanded agent integration table
+
+### v2.0.0
+- Initial release with 7-tier hierarchy
+- 8 non-negotiable rules
+- PASS/REJECT verdict system
