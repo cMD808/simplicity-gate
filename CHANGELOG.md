@@ -12,6 +12,29 @@
 
 ---
 
+## [6.1.0] — 2026-08-31
+
+### 🏗️ Structural Improvements
+
+- **Removed Duplicates** — Cleaned up duplicate "The Rule" and "How to Evaluate" sections
+- **Quick-Reference Card** — Added single-page cheat sheet with tiers, verdicts, severity, CLI commands
+- **Expanded Language Support** — Added 7 new languages: C, C++, Dart, Elixir, Haskell, Julia
+- **Skill Chaining** — Shows how Simplicity Gate chains with build, plan, refactor-agent, security-warden, test-strategist
+- **Decision Confidence** — Every verdict includes a confidence score (0-100%)
+- **AI Anti-Patterns** — 8 common AI over-engineering patterns with evaluation adjustments
+
+### 📚 Expanded Data
+
+- **Why-Not Database** — Added 11 new real-world incidents (Babel, ESLint, Jenkins, Terraform, Kafka, Elasticsearch, Jest, Webpack, Prisma, Storybook)
+- **Community Patterns** — Added 6 new patterns (webpack→Vite, jest→node assert, eslint→Prettier, prisma→raw SQL, redux→useState, docker dev→native tools)
+
+### 🔧 Polish
+
+- **Tightened Rules** — Each rule now has tables showing "Don't Use" vs "Use Instead"
+- **Conflict Resolution** — Priority order: Security > Performance > Team convention > The Rule > Simplicity
+- **Pattern Submission** — Added format template and verification process
+- **New Edge Cases** — 6 new edge cases (AI over-engineering, linting config, browser+Node.js, real-time, performance, shell speed)
+
 ## [6.0.0] — 2026-08-31
 
 ### 🔍 Real-Time Code Review Integration

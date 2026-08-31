@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-6.0.0-blue" alt="Version">
+  <img src="https://img.shields.io/badge/version-6.1.0-blue" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
   <img src="https://img.shields.io/badge/agents-12+-purple" alt="Agents">
   <img src="https://img.shields.io/badge/languages-11-orange" alt="Languages">
@@ -494,7 +494,7 @@ npx simplicity-gate eval <file>
 ```bash
 $ simplicity-gate eval examples/reformat-json.md
 
-⚡ SIMPLICITY GATE v6.0.0
+⚡ SIMPLICITY GATE v6.1.0
 
 File:      examples/reformat-json.md
 Tool detected: Node.js script

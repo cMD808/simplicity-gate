@@ -1,10 +1,11 @@
 ---
 name: simplicity-gate
-version: "6.0.0"
+version: "6.1.0"
 description: >
   Evaluates tool/code proposals against the Rule of Least Power.
   Forces selection of the simplest viable tier. Blocks over-engineering.
   Auto-triggers on every code generation, dependency addition, and architecture decision.
+  v6.1: Structural improvements, expanded databases, tightened rules.
   v6.0: Real-time code review integration, "Why Not" database of real-world incidents,
   one-click auto-fix CLI, fully autonomous mode. Plus all v5.0 features:
   proactive write prevention, real-world cost calculator, community pattern library,
@@ -688,6 +689,128 @@ community_patterns:
         CMD ["/script.sh"]
       after: |
         0 * * * * /path/to/script.sh
+
+  - id: "webpack-vite"
+    name: "Webpack → Vite"
+    anti_pattern: "Webpack for bundling modern JS"
+    alternative: "Vite (25x faster)"
+    tier_gap: 1
+    tokens_saved: 2000
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        // webpack.config.js (50+ lines)
+        module.exports = {
+          entry: './src/index.js',
+          output: { filename: 'bundle.js' },
+          module: { rules: [{ test: /\.js$/, use: 'babel-loader' }] },
+          plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
+          devServer: { port: 3000 }
+        }
+      after: |
+        // vite.config.js (3 lines)
+        import { defineConfig } from 'vite'
+        export default defineConfig({ server: { port: 3000 } })
+
+  - id: "jest-assert"
+    name: "Jest → Node assert"
+    anti_pattern: "Jest for simple utility testing"
+    alternative: "node:assert"
+    tier_gap: 6
+    tokens_saved: 1500
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        const assert = require('assert');
+        test('adds', () => { expect(1 + 1).toBe(2); });
+        // Requires: jest, babel-jest, 200MB+ node_modules
+      after: |
+        const assert = require('node:assert');
+        assert.strictEqual(1 + 1, 2, 'adds');
+        // Zero dependencies
+
+  - id: "eslint-custom-prettier"
+    name: "Custom ESLint Rules → Prettier"
+    anti_pattern: "500-line ESLint config for formatting"
+    alternative: "Prettier"
+    tier_gap: 1
+    tokens_saved: 3000
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        // .eslintrc.js (500+ lines)
+        module.exports = {
+          rules: {
+            'indent': ['error', 2],
+            'quotes': ['error', 'single'],
+            'semi': ['error', 'always'],
+            'max-len': ['error', { code: 100 }],
+            // ... 200 more formatting rules
+          }
+        }
+      after: |
+        // .prettierrc (4 lines)
+        { "semi": true, "singleQuote": true, "tabWidth": 2 }
+
+  - id: "prisma-raw-sql"
+    name: "Prisma → Raw SQL"
+    anti_pattern: "Prisma ORM for simple SQLite"
+    alternative: "better-sqlite3 or raw SQL"
+    tier_gap: 3
+    tokens_saved: 2500
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        // schema.prisma
+        model User { id Int @id; name String; email String }
+        // migration.sql
+        // seed.ts
+        // Generated client (10MB+)
+      after: |
+        const db = require('better-sqlite3')('app.db');
+        db.exec('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, email TEXT)');
+
+  - id: "redux-zustand"
+    name: "Redux → useState/useContext"
+    anti_pattern: "Redux for a simple todo app"
+    alternative: "React useState + useContext"
+    tier_gap: 2
+    tokens_saved: 4000
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        // store.js, reducers.js, actions.js, types.js, selectors.js
+        import { createSlice, configureStore } from '@reduxjs/toolkit';
+        // 47 files for a todo app
+      after: |
+        const [todos, setTodos] = useState([]);
+        // 1 file, 5 lines
+
+  - id: "docker-dev-environment"
+    name: "Docker Dev → Native Tools"
+    anti_pattern: "Docker Compose for local development"
+    alternative: "Native package manager + docker for prod only"
+    tier_gap: 4
+    tokens_saved: 3000
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        # docker-compose.yml (50+ lines)
+        version: '3'
+        services:
+          app: { build: ., ports: ["3000:3000"], volumes: [...] }
+          db: { image: postgres, environment: [...] }
+          redis: { image: redis }
+      after: |
+        # Install locally:
+        brew install postgresql redis
+        # Or: apt install postgresql redis-server
 ```
 
 **Pattern library rules:**
@@ -698,6 +821,43 @@ community_patterns:
 - Patterns are verified by maintainers
 - Top patterns are featured in Quick-Check
 - Patterns are searchable by anti-pattern name
+
+### Pattern Submission Format
+
+To contribute a pattern, use this template:
+
+```yaml
+- id: "descriptive-kebab-case-id"
+  name: "Short Name: Anti-Pattern → Alternative"
+  anti_pattern: "Exact description of what to avoid"
+  alternative: "Exact description of what to use instead"
+  tier_gap: <number>           # Proposed tier - Alternative tier
+  tokens_saved: <number>       # Estimated token savings
+  contributed_by: "your-github-handle"
+  verified: false              # Set true after maintainer review
+  language: "javascript"       # optional: language-specific pattern
+  context: "when this applies" # optional: specific context
+  examples:
+    before: |
+      # Code showing the anti-pattern
+    after: |
+      # Code showing the simpler alternative
+  why_not: |
+    # Optional: real-world incident that proves this pattern
+```
+
+### Pattern Verification
+
+```
+PATTERN SUBMISSION REVIEW:
+├── ID uniqueness?          ✓ unique
+├── Before code valid?      ✓ valid syntax
+├── After code valid?       ✓ valid syntax
+├── Tier gap accurate?      ✓ gap of 4 confirmed
+├── Token savings realistic? ✓ estimated 2,500 tokens
+├── No duplicates?          ✓ no matching patterns
+└── VERDICT: ACCEPTED — added to community library
+```
 
 **Pattern matching:**
 
@@ -1363,6 +1523,16 @@ The real-time review integrates with:
 | `Microservices` | 12 services for a CRUD app, monolith does it faster | 2023 | 12x complexity | Architecture can be over-engineered for simple apps |
 | `Redis` | In-memory cache for a 100-row table, `Map` does it in 1 line | 2023 | 200MB+ added | Caching can be over-engineered for small data |
 | `MongoDB` | Document DB for a relational dataset, SQLite does it natively | 2023 | 200MB+ added | Databases can be over-engineered for simple data |
+| `Babel` | Transpiling modern JS for browsers that support it natively | 2023 | 30s build time | Transpilation can be unnecessary |
+| `ESLint (custom rules)` | 500-line ESLint config for basic style, Prettier does it | 2023 | 500 lines config | Linting can be over-configured |
+| `Jenkins` | Full CI server for running 3 shell scripts, GitHub Actions suffices | 2023 | $500/mo server | CI can be over-provisioned |
+| `Terraform` | IaC for a single static site on S3, AWS CLI works | 2023 | 200 lines HCL | IaC can be over-engineered for simple infra |
+| `Kafka` | Event streaming for a notification system, webhooks work | 2023 | 3-node cluster | Messaging can be over-provisioned |
+| `Elasticsearch` | Full-text search for 1000 documents, `grep -r` works | 2023 | 1GB+ cluster | Search can be over-engineered for small datasets |
+| `Jest` | Full test framework for 50 lines of utility code, assert works | 2023 | 200MB node_modules | Testing can be over-frameworked |
+| `Webpack` | Bundler for a 3-file static site, no bundler needed | 2023 | 5s cold start | Build tools can be unnecessary for simple projects |
+| `Prisma` | ORM for a 3-table SQLite database, raw SQL works | 2023 | 10MB+ added | ORMs can be over-engineered for simple schemas |
+| `Storybook` | Component gallery for a 10-component app, README works | 2023 | 500MB+ added | Documentation tools can be over-engineered |
 
 ### How It Works
 
@@ -1373,7 +1543,7 @@ Proposed: Express.js (Tier 7) for API proxy
 WHY NOT?
 ┌─────────────────────────────────────────────────────────────┐
 │ HISTORY: In 2023, a team built an Express.js proxy for      │
-│ a simple API转发. It added 14 dependencies, 2,400 tokens    │
+│ a simple API proxy. It added 14 dependencies, 2,400 tokens    │
 │ of code, and a 200MB Docker image. A curl command does      │
 │ the same thing in 1 command with 0 dependencies.            │
 │                                                             │
@@ -2141,6 +2311,66 @@ language_tiers:
     tier_5: "Scala (compiled, typed)"
     tier_6: "Scala Scripting"
     tier_7: "Play Framework, Akka HTTP, ZIO HTTP"
+
+  c:
+    tier_0: "libc, POSIX APIs, stdio, dirent"
+    tier_1: "ncurses, GTK"
+    tier_2: "JSON (cJSON), YAML (libyaml)"
+    tier_3: "popen, system, exec"
+    tier_4: "SQLite C API"
+    tier_5: "C (compiled, manual memory)"
+    tier_6: "C with FFI bindings"
+    tier_7: "libmicrohttpd, nginx modules"
+
+  cpp:
+    tier_0: "std::filesystem, std::optional, std::format, ranges"
+    tier_1: "Qt, wxWidgets"
+    tier_2: "nlohmann/json, yaml-cpp"
+    tier_3: "popen, std::system"
+    tier_4: "SQLiteCpp, soci"
+    tier_5: "C++ (compiled, typed)"
+    tier_6: "C++ with scripting (ChaiScript)"
+    tier_7: "Crow, Drogon, oat++"
+
+  dart:
+    tier_0: "dart:io, dart:convert, dart:async"
+    tier_1: "Flutter widgets"
+    tier_2: "JSON, YAML"
+    tier_3: "Process.run, io"
+    tier_4: "sqflite, drift queries"
+    tier_5: "Dart (compiled, typed)"
+    tier_6: "Dart scripting"
+    tier_7: "Shelf, Aqueduct, Dart Frog"
+
+  elixir:
+    tier_0: "Enum, File, Path, Jason, Date"
+    tier_1: "HEEx templates, LiveView"
+    tier_2: "JSON, YAML, TOML"
+    tier_3: "System.cmd, :os.cmd"
+    tier_4: "Ecto queries"
+    tier_5: "Elixir (compiled, typed via specs)"
+    tier_6: "Elixir scripting"
+    tier_7: "Phoenix, Bandit"
+
+  haskell:
+    tier_0: "base, bytestring, text, aeson, filepath"
+    tier_1: "Lucid, Yesod templates"
+    tier_2: "JSON (aeson), YAML, XML"
+    tier_3: "System.Process, Shell commands"
+    tier_4: "Persistent, Esqueleto queries"
+    tier_5: "Haskell (compiled, strongly typed)"
+    tier_6: "GHCi scripting"
+    tier_7: "Servant, Yesod, Warp"
+
+  julia:
+    tier_0: "Base, JSON3, Downloads, HTTP"
+    tier_1: "Genie templates, Pluto notebooks"
+    tier_2: "JSON, YAML, TOML, CSV"
+    tier_3: "run, pipeline, read"
+    tier_4: "SQLite.jl, Query.jl"
+    tier_5: "Julia (compiled, typed)"
+    tier_6: "Julia scripting"
+    tier_7: "Genie, Franklin, Oxygen"
 ```
 
 ---
@@ -2227,69 +2457,148 @@ jobs:
 
 ---
 
-## The Rule
-
-Before writing code or adding a dependency, evaluate your proposal against
-this hierarchy. Start at Tier 1. Stop at the first tier that works.
+## Quick-Reference Card
 
 ```
-Tier 1 — Platform Features     HTTP headers, CDN, CSS animations, HTML forms
-Tier 2 — Data Formats          JSON, YAML, TOML, XML, CSS, Markdown
-Tier 3 — Shell / CLI           grep, sed, awk, jq, yq, curl, find, xargs
-Tier 4 — Query Languages       SQL, GraphQL, XPath, CSS selectors
-Tier 5 — Static Scripting      TypeScript, Go, Rust (compiled, typed)
-Tier 6 — Dynamic Languages     Python, Node.js, Ruby (interpreted, mutable)
-Tier 7 — Microservices         Kubernetes, Docker, Express, Django
+┌─────────────────────────────────────────────────────────────────┐
+│ SIMPLICITY GATE — QUICK REFERENCE                                │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  THE RULE: Start at Tier 1. Stop at first match.                 │
+│                                                                   │
+│  Tier 0  Built-in APIs      fetch, structuredClone, Intl        │
+│  Tier 1  Platform Features  CSS, HTML, Web APIs                 │
+│  Tier 2  Data Formats       JSON, YAML, TOML, XML               │
+│  Tier 3  Shell / CLI        grep, sed, awk, jq, curl            │
+│  Tier 4  Query Languages    SQL, GraphQL, XPath                 │
+│  Tier 5  Static Scripting   TypeScript, Go, Rust                 │
+│  Tier 6  Dynamic Languages  Python, Node.js, Ruby                │
+│  Tier 7  Microservices      Kubernetes, Docker, Express          │
+│  Tier 8  External Services  Zapier, IFTTT, n8n, Make            │
+│                                                                   │
+│  VERDICTS:  PASS (proceed) | REJECT (downgrade)                  │
+│             WARN (check) | ESCALATE (need human)                  │
+│                                                                   │
+│  SEVERITY:  1=minor  2=moderate  3=serious                       │
+│             4=critical  5=absurd                                 │
+│                                                                   │
+│  QUICK-CHECK (< 100ms):                                          │
+│    Framework for one-liner?     → REJECT                         │
+│    Runtime for shell command?   → REJECT                         │
+│    Database for file read?      → REJECT                         │
+│    Microservice for script?     → REJECT                         │
+│                                                                   │
+│  AUTONOMOUS:  severity ≤ 3 = auto-fix | ≥ 4 = block + ask       │
+│                                                                   │
+│  SUPPRESS:   // simplicity-gate: ignore                          │
+│              // sg-ignore                                         │
+│              (max 3 per file)                                     │
+│                                                                   │
+│  CLI:        simplicity-gate eval <code>                          │
+│              simplicity-gate fix <file>                           │
+│              simplicity-gate scan <dir>                           │
+│              simplicity-gate why-not <keyword>                    │
+│              simplicity-gate tiers                                │
+│              simplicity-gate bench                                │
+└─────────────────────────────────────────────────────────────────┘
 ```
-
-**Start at Tier 1. Stop at the first tier that works.**
-
-## How to Evaluate
-
-1. **State the problem** — what needs to happen?
-2. **Check project context** — what's already installed?
-3. **Check language tiers** — any language-specific overrides?
-4. **Check dependency graph** — does the dependency already exist?
-5. **Check Tier 1** — can a platform feature handle it?
-6. **Check Tier 2** — can a data format express it?
-7. **Check Tier 3** — can a shell command transform it?
-8. **Check Tier 4** — can a query language solve it?
-9. **Check Tier 5** — can a compiled script do it?
-10. **Check Tier 6** — can an interpreted language do it?
-11. **Check Tier 7** — does it need orchestration?
-
-Stop at the first tier that satisfies ALL functional requirements.
-If you skip a tier, explain why.
 
 ## Rules
 
 These are non-negotiable. Violating them triggers REJECT.
 
-```
-1. NO UNNECESSARY RUNTIMES
-   Don't add Node.js/Python/Ruby when shell commands or data formats work.
+### Rule 1: No Unnecessary Runtimes
 
-2. NO UNNECESSARY DEPENDENCIES
-   Don't add a package when stdlib, a Unix utility, or a platform feature works.
+Don't add Node.js/Python/Ruby when shell commands or data formats work.
 
-3. NO CODE FOR DATA PROBLEMS
-   Don't write scripts to transform/filter/reformat when jq, sed, awk, or CSS works.
+| Task | Don't Use | Use Instead |
+|------|-----------|-------------|
+| Transform JSON | Node.js script | `jq` |
+| Filter logs | Python script | `grep` + `awk` |
+| Rename files | Node.js script | `mv` or `rename` |
+| Monitor disk | Python + psutil | `df` + `awk` |
+| Send email | Node.js + nodemailer | `mail` command |
+| Parse CSV | Python + pandas | `awk -F','` |
 
-4. NO MICROSERVICES FOR SINGLE-MACHINE PROBLEMS
-   Don't add containers/orchestration when a local process or cron job works.
+**Exception:** If the project already uses the runtime AND the task is complex enough to justify it.
 
-5. NO FRAMEWORKS FOR PLAIN SOLUTIONS
-   Don't reach for Express/Flask/Django when a simple script or static file works.
+### Rule 2: No Unnecessary Dependencies
 
-6. SCHEMA BEFORE CODE
-   If a JSON Schema, YAML schema, or CSS can enforce it — write the schema, not code.
+Don't add a package when stdlib, a Unix utility, or a platform feature works.
 
-7. TEXT PROCESSING BEFORE PROGRAMMING
-   If grep/sed/awk/jq can transform it — use the pipeline, not a script.
+| Don't Use | Use Instead | Why |
+|-----------|-------------|-----|
+| `lodash` | Native Array methods | `.map()`, `.filter()`, `.reduce()` are built-in |
+| `moment` | `Intl.DateTimeFormat` | Built into every modern runtime |
+| `axios` | `fetch()` | Built into Node.js 18+ and all browsers |
+| `uuid` | `crypto.randomUUID()` | Built into Node.js 19+ and all browsers |
+| `express` for proxy | `curl` or `http` module | One command vs 14 dependencies |
+| `nodemailer` | `mail` command | Built into Unix systems |
 
-8. COMPILE-TIME OVER RUNTIME
-   If static analysis can catch the error — prefer it over runtime validation.
-```
+### Rule 3: No Code for Data Problems
+
+Don't write scripts to transform/filter/reformat when jq, sed, awk, or CSS works.
+
+| Data Problem | Don't Write | Use Instead |
+|--------------|-------------|-------------|
+| Rename JSON keys | Node.js script | `jq '{new: .old}'` |
+| Filter CSV rows | Python script | `awk '$3 > 100'` |
+| Extract values | JavaScript | `jq '.items[].name'` |
+| Sort data | Script | `sort` or `jq 'sort_by(.date)'` |
+| Validate JSON | Custom validator | `jq empty` |
+| Show/hide UI | React component | CSS `:has()` + checkbox |
+
+### Rule 4: No Microservices for Single-Machine Problems
+
+Don't add containers/orchestration when a local process or cron job works.
+
+| Don't Use | Use Instead |
+|-----------|-------------|
+| Docker for cron job | System `crontab` |
+| Kubernetes for static site | `npx serve` or nginx |
+| Docker Compose for dev | Native package manager |
+| Microservices for CRUD | Monolith with modules |
+
+### Rule 5: No Frameworks for Plain Solutions
+
+Don't reach for Express/Flask/Django when a simple script or static file works.
+
+| Don't Use | Use Instead |
+|-----------|-------------|
+| Express for API proxy | `curl` command |
+| Flask for simple form | HTML `<form action="mailto:...">` |
+| Django for blog | Static HTML + GitHub Pages |
+| React for toggle | CSS `:has()` + checkbox |
+
+### Rule 6: Schema Before Code
+
+If a JSON Schema, YAML schema, or CSS can enforce it — write the schema, not code.
+
+| Don't Use | Use Instead |
+|-----------|-------------|
+| Custom validation script | JSON Schema |
+| CSS-in-JS for styling | Plain CSS |
+| TypeScript types for simple objects | JSDoc comments |
+
+### Rule 7: Text Processing Before Programming
+
+If grep/sed/awk/jq can transform it — use the pipeline, not a script.
+
+| Don't Use | Use Instead |
+|-----------|-------------|
+| Python for log parsing | `grep` + `awk` + `sed` |
+| Node.js for text replacement | `sed 's/old/new/g'` |
+| Script for word count | `wc -l` |
+
+### Rule 8: Compile-Time Over Runtime
+
+If static analysis can catch the error — prefer it over runtime validation.
+
+| Don't Use | Use Instead |
+|-----------|-------------|
+| Runtime type checking | TypeScript compile-time types |
+| Runtime linting | ESLint in CI |
+| Runtime schema validation | JSON Schema at build time |
 
 ## Verdicts
 
@@ -2362,6 +2671,139 @@ Schema before code?                         → Check if JSON Schema/CSS works
 Text processing before programming?         → Check if grep/sed/awk works
 Compile-time over runtime?                  → Check if static analysis works
 ```
+
+## Skill Chaining
+
+Simplicity Gate works alongside other skills. Chain them for maximum effectiveness:
+
+```
+CHAINS:
+
+Code Generation:
+  [1] simplicity-gate (evaluate) ──→ [2] build (write code) ──→ [3] quality-gate (verify)
+
+Refactoring:
+  [1] simplicity-gate (scan) ──→ [2] refactor-agent (apply) ──→ [3] self-verify (test)
+
+Architecture:
+  [1] simplicity-gate (evaluate) ──→ [2] plan (review) ──→ [3] build (implement)
+
+Security:
+  [1] simplicity-gate (check deps) ──→ [2] security-warden (scan) ──→ [3] build (fix)
+
+Testing:
+  [1] simplicity-gate (auto-fix) ──→ [2] test-strategist (add tests) ──→ [3] self-verify (run)
+```
+
+**Chaining rules:**
+- Simplicity Gate runs FIRST — block over-engineering before any code is written
+- If gate says REJECT, do not proceed to build/plan until resolved
+- If gate says PASS, proceed with confidence
+- If gate says ESCALATE, resolve with human before proceeding
+- Security-warden always runs after dependency changes
+
+---
+
+## Decision Confidence
+
+Every verdict includes a confidence score (0-100%) indicating how certain the gate is about its decision.
+
+| Confidence | Level | Meaning |
+|:----------:|-------|---------|
+| 95-100% | Certain | Clear anti-pattern, well-established alternative |
+| 80-94% | High | Strong evidence, minor edge cases possible |
+| 60-79% | Medium | Reasonable judgment, context-dependent |
+| 40-59% | Low | Insufficient data, human review recommended |
+| <40% | Unknown | Cannot determine, escalate to human |
+
+**How confidence is calculated:**
+
+```
+CONFIDENCE FACTORS:
+├── Pattern match strength      (0-30 pts)  — known anti-pattern = 30
+├── Alternative availability    (0-25 pts)  — exact alternative = 25
+├── Historical data             (0-20 pts)  — many past evaluations = 20
+├── Community verification      (0-15 pts)  — community pattern = 15
+└── Language-specific knowledge (0-10 pts)  — language tier data = 10
+```
+
+**Confidence in verdicts:**
+
+```
+SIMPLICITY GATE — REJECT [Severity: 3] [Confidence: 92%]
+Proposed:    Express.js (Tier 7) for API proxy
+Use instead: curl (Tier 3)
+Why:         curl handles HTTP requests without a runtime.
+Confidence:  92% — well-established pattern, exact alternative exists
+```
+
+**Confidence rules:**
+- Below 60%: Add "RECOMMEND: Verify with team" to verdict
+- Below 40%: Auto-ESCALATE regardless of severity
+- Confidence improves over time as more evaluations are recorded
+- Community-verified patterns always score 80%+ confidence
+
+---
+
+## AI Agent Anti-Patterns
+
+AI coding agents have specific over-engineering tendencies. This section addresses them directly.
+
+### Common AI Over-Engineering Patterns
+
+| Pattern | Why AI Does It | Gate Response |
+|---------|---------------|---------------|
+| "Let me create a full Express server" | Training data has many Express examples | REJECT: curl/http module simpler |
+| "I'll add Redux for state management" | React ecosystem bias in training | REJECT: useState/useContext simpler |
+| "Let me set up a Docker container" | Docker appears in many tutorials | REJECT: native cron/scripts simpler |
+| "I'll use a microservices architecture" | Enterprise patterns in training data | REJECT: monolith for simple apps |
+| "Let me add TypeScript for type safety" | Type safety is over-recommended | WARN: JS sufficient for small scripts |
+| "I'll create a custom build pipeline" | Build tool examples are common | REJECT: make/npm scripts simpler |
+| "Let me add a logging library" | Winston/Pino appear frequently | REJECT: console.log for simple needs |
+| "I'll use an ORM for database access" | ORM examples dominate tutorials | REJECT: raw SQL/SQLite simpler |
+
+### AI-Specific Evaluation Adjustments
+
+```yaml
+ai_agent_overrides:
+  # When AI suggests a framework, apply stricter evaluation
+  framework_stricter: true
+  # When AI suggests a library, check if native exists first
+  library_native_check: true
+  # When AI suggests architecture patterns, question necessity
+  architecture_question: true
+  # When AI adds "just in case" code, reject it
+  no_just_in_case: true
+```
+
+### AI Teaching Patterns
+
+When the gate catches an AI over-engineering, include a specific lesson:
+
+```
+AI TEACHING MOMENT:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Agent: "I'll create an Express server to handle the API proxy."
+
+WHY THE AI THOUGHT THIS:
+AI agents are trained on code that includes many web frameworks.
+Express appears in ~40% of Node.js projects in training data.
+This creates a bias toward reaching for Express even when unnecessary.
+
+THE CORRECT THINKING:
+1. What does the task need? → Make HTTP requests
+2. What's the simplest tool? → curl (one command)
+3. Does curl satisfy all requirements? → Yes
+4. Why would I use Express? → No valid reason
+
+LESSON:
+When an AI suggests a framework, ask: "Can a command-line tool do this?"
+If yes, use the command-line tool. Frameworks are for complex routing,
+middleware, and long-running servers — not for simple HTTP requests.
+```
+
+---
 
 ## Examples
 
@@ -2548,6 +2990,44 @@ One-off scripts still follow the hierarchy. If jq can do it, use jq — even for
 **"I need to integrate with an API"**
 Check if curl (Tier 3) can handle the integration. Only escalate to Tier 6 if you need persistent connections, connection pooling, or complex retry logic.
 
+**"AI agents always over-engineer — should I disable the gate?"**
+No. The gate exists precisely because AI agents over-engineer. Use the AI Agent Anti-Patterns section to apply stricter evaluation to AI suggestions. The gate is your safeguard, not your obstacle.
+
+**"My project has a strict linting/eslint config that requires certain patterns"**
+If your ESLint config enforces a pattern that the gate rejects, add an override in `.simplicity-gate.yml`. The gate defers to team-agreed conventions when documented.
+
+**"I need to support both browser and Node.js"**
+The gate evaluates each environment separately. A Tier 0 browser API (fetch) may coexist with a Tier 6 Node.js script. The gate blocks unnecessary additions, not cross-platform compatibility.
+
+**"My task requires real-time updates (WebSocket, SSE)"**
+WebSocket handling justifies Tier 6 (ws library) or Tier 7 (Socket.io). The gate does not block real-time requirements — it blocks assuming you need real-time when polling (Tier 3) would work.
+
+**"The shell version is too slow for my data size"**
+If you have measured data showing shell is too slow (not assumed), escalate with benchmark data. The gate respects measured performance over assumed performance.
+
+## Conflict Resolution
+
+When rules conflict, follow this priority order:
+
+```
+CONFLICT RESOLUTION:
+1. Security  → Always wins. CVE = REJECT regardless of other factors.
+2. Measured performance → If benchmarked, higher tier may be justified.
+3. Team convention → If documented in .simplicity-gate.yml, defer to team.
+4. The Rule   → Lowest tier that satisfies ALL functional requirements.
+5. Simplicity → When in doubt, choose the simpler option.
+```
+
+**Common conflicts:**
+
+| Conflict | Resolution |
+|----------|------------|
+| "Shell is slow" vs "Node.js is heavy" | Measure first. If shell is <1s, keep shell. |
+| "Team uses Express" vs "curl works" | Allow Express if documented in overrides. |
+| "Performance needed" vs "No benchmarks" | ESCALATE — requires measured evidence. |
+| "Cross-platform" vs "Shell commands" | Tier 5 (TypeScript) may be justified for cross-platform. |
+| "Type safety" vs "Over-engineering" | Tier 5 (TypeScript) for production code, Tier 6 (JS) for scripts. |
+
 ## Changelog
 
 ### v5.0.0
@@ -2571,6 +3051,18 @@ Check if curl (Tier 3) can handle the integration. Only escalate to Tier 6 if yo
 - Added Session Summaries — autonomous session reports with metrics and learnings
 - Added Fix History — complete audit trail of all auto-applied fixes
 - Added Rollback Capability — revert any fix with one command
+- Removed duplicate "The Rule" and "How to Evaluate" sections
+- Added Quick-Reference Card (single-page cheat sheet)
+- Added 7 new languages: C, C++, Dart, Elixir, Haskell, Julia
+- Added Skill Chaining (chains with build, plan, refactor-agent, security-warden, test-strategist)
+- Added Decision Confidence scoring (0-100%)
+- Added AI Agent Anti-Patterns section (8 patterns + adjustments)
+- Added Conflict Resolution priority order
+- Added 6 new edge cases
+- Added Pattern Submission Format and Verification process
+- Expanded "Why Not" database with 11 new incidents
+- Expanded Community Pattern Library with 6 new patterns
+- Tightened Rules section with tables and examples for each rule
 
 ### v4.1.0
 - Added 7 new language tiers: TypeScript, Java, C#, PHP, Ruby, Swift, Kotlin, Scala
