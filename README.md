@@ -259,13 +259,11 @@ ESCALATE: Custom ORM (Tier 6) vs raw SQL (Tier 4) for complex queries
 Test Plan: [required]
 ```
 
----
-
 <p align="center">
   <img src="assets/Gemini_Generated_Image_5rnseu5rnseu5rns-removebg-preview.png" alt="Simplicity Gate Examples" width="400">
 </p>
 
-## Examples
+<h2 align="center">Examples</h2>
 
 | # | Task | Without Gate | With Gate | Tier Gap | Lines Saved |
 |:-:|:-----|:-------------|:----------|:--------:|:-----------:|
@@ -277,24 +275,32 @@ Test Plan: [required]
 | 6 | API Proxy | Express.js + axios | `curl` | 7→3 | 59+ |
 | 7 | Build Scripts | npm + eslint + jest | Makefile | 6→3 | 8+ |
 
-> **Full code examples** → [examples/](examples/)
+<p align="center">
+  <a href="examples/">Full code examples →</a>
+</p>
 
 ---
 
-## Configuration
+<h2 align="center">Configuration</h2>
 
-Create `.simplicity-gate.yml` in your project root to override defaults:
+<p align="center">Customize behavior with a project-level config file.</p>
+
+Create `.simplicity-gate.yml` in your project root:
 
 ```yaml
 allowed_tools:
-  - "express"  # Allow specific tools
+  - "express"           # Allow specific tools
+
 blocked_tools:
-  - "kubernetes"  # Always reject
+  - "kubernetes"        # Always reject
+
 tier_adjustments:
   "my-project-tool": 3  # Custom tier assignment
+
 thresholds:
   max_tier: 5
   escalation_threshold: 6
+
 settings:
   auto_fix: true
   interactive_mode: true
@@ -306,66 +312,103 @@ settings:
 
 ---
 
-## What's New in v4.1
+<h2 align="center">What's New in v4.1</h2>
 
-| Feature | Description |
-|:--------|:------------|
-| 11 Languages | TypeScript, Java, C#, PHP, Ruby, Swift, Kotlin, Scala + Tier 0 for all |
-| Quick-Check | 50ms instant REJECT for obvious violations |
-| Cached Patterns | Instant lookup for common over-engineering |
-| Early Termination | Stop at first tier match, skip rest |
-| AST Detection | Find anti-patterns: `JSON.parse(JSON.stringify())`, lodash, moment, axios |
-| Bundle Estimation | Show KB impact before adding dependencies |
-| Security Audit | Check CVEs before adding packages |
-| Profiling Tips | Recommend tools when higher tier justified |
-| Dependency Tree | Show full transitive dependency graph |
-
----
-
-## FAQ
-
-**Q: What if my project already uses React?**
-A: The gate checks project context first. If React is already installed, using it for new components may PASS even if a simpler alternative exists.
-
-**Q: Can I override a REJECT?**
-A: Yes. Use `ESCALATE` to request human review, or add the tool to `allowed_tools` in `.simplicity-gate.yml`.
-
-**Q: Does this slow down the agent?**
-A: Minimal overhead. The gate adds ~200ms per evaluation. Token savings from avoiding over-engineering far outweigh the cost.
-
-**Q: What languages are supported?**
-A: All languages. Language-specific tiers are configured for JavaScript, Python, Go, and Rust out of the box. Add more in `.simplicity-gate.yml`.
+| Feature | What It Does |
+|:--------|:-------------|
+| **11 Languages** | TypeScript, Java, C#, PHP, Ruby, Swift, Kotlin, Scala + Tier 0 for all |
+| **Quick-Check** | 50ms instant REJECT for obvious violations |
+| **Cached Patterns** | Instant lookup for common over-engineering |
+| **Early Termination** | Stop at first tier match, skip rest |
+| **AST Detection** | Find anti-patterns: `JSON.parse(JSON.stringify())`, lodash, moment, axios |
+| **Bundle Estimation** | Show KB impact before adding dependencies |
+| **Security Audit** | Check CVEs before adding packages |
+| **Profiling Tips** | Recommend tools when higher tier justified |
+| **Dependency Tree** | Show full transitive dependency graph |
 
 ---
 
-## Impact
+<h2 align="center">FAQ</h2>
 
-| Metric | Value |
-|:-------|:------|
-| Avg token savings per REJECT | ~6,000 |
-| Avg complexity reduction | 70% |
-| Avg dependency reduction | 80% |
+<details>
+<summary><strong>What if my project already uses React?</strong></summary>
+
+<br>
+
+The gate checks project context first. If React is already installed, using it for new components may PASS even if a simpler alternative exists. The goal is preventing unnecessary additions, not forcing removal.
+
+</details>
+
+<details>
+<summary><strong>Can I override a REJECT?</strong></summary>
+
+<br>
+
+Yes. Use `ESCALATE` to request human review, or add the tool to `allowed_tools` in `.simplicity-gate.yml`. You can also use inline suppression: `// simplicity-gate: suppress`
+
+</details>
+
+<details>
+<summary><strong>Does this slow down the agent?</strong></summary>
+
+<br>
+
+Minimal overhead. The gate adds ~200ms per evaluation. Token savings from avoiding over-engineering far outweigh the cost.
+
+</details>
+
+<details>
+<summary><strong>What languages are supported?</strong></summary>
+
+<br>
+
+All languages. Language-specific tiers are configured for JavaScript, TypeScript, Python, Java, C#, PHP, Ruby, Go, Rust, Swift, Kotlin, and Scala out of the box. Add more in `.simplicity-gate.yml`.
+
+</details>
+
+<details>
+<summary><strong>How does auto-fix work?</strong></summary>
+
+<br>
+
+When a REJECT is issued, the gate provides a copy-pasteable replacement in the `--- AUTO-FIX ---` block. The agent can apply it directly or you can use it manually.
+
+</details>
 
 ---
 
-## Examples
+<h2 align="center">Impact</h2>
 
-- [examples/](examples/) — Full walkthroughs with before/after code
+<table align="center">
+  <tr>
+    <td align="center" width="33%">
+      <h1>~6K</h1>
+      <p>Tokens Saved<br>per REJECT</p>
+    </td>
+    <td align="center" width="33%">
+      <h1>70%</h1>
+      <p>Complexity<br>Reduction</p>
+    </td>
+    <td align="center" width="33%">
+      <h1>80%</h1>
+      <p>Dependency<br>Reduction</p>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## Contributing
+<p align="center">
+  <strong>Simplicity is the ultimate sophistication.</strong><br>
+  <sub>— Leonardo da Vinci</sub>
+</p>
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+<br>
 
----
+<p align="center">
+  <a href="CONTRIBUTING.md">Contributing</a> · <a href="SECURITY.md">Security</a> · <a href="LICENSE">License (MIT)</a>
+</p>
 
-## Security
-
-See [SECURITY.md](SECURITY.md).
-
----
-
-## License
-
-MIT
+<p align="center">
+  <sub>Built for AI agents that ship production code.</sub>
+</p>
