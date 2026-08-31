@@ -1,21 +1,35 @@
 # Simplicity Gate
 
-> The Rule of Least Power enforcer for AI agents.
+<p align="center">
+  <strong>The Rule of Least Power enforcer for AI agents.</strong><br>
+  Stop over-engineering. Start at the lowest tier. Ship less code.
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
+  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome-brightgreen.svg" alt="PRs Welcome"></a>
+  <a href="SKILL.md"><img src="https://img.shields.io/badge/Skill-v2.1.0-orange.svg" alt="Skill Version"></a>
+</p>
 
 ---
 
-## The Problem
+## Why This Exists
 
-AI agents default to the most powerful tool available. Need to rename a JSON key? They reach for Node.js. Want a UI toggle? They scaffold a React component with Zustand. Need a cron job? They spin up Docker containers.
+AI agents are trained on best practices from large codebases. Their instinct is to reach for the most robust, most powerful tool available. That instinct is usually wrong.
 
-**More power means more complexity.** More dependencies, more runtime, more things that break.
+| You ask for... | The agent builds... | But this works... |
+|----------------|--------------------|--------------------|
+| Rename a JSON key | Node.js script + lodash | `jq` one-liner |
+| UI toggle state | React + Zustand + useReducer | CSS `:has()` selector |
+| Disk monitoring | Python + psutil + cron | `df \| awk` pipeline |
+| Config validation | Express middleware | JSON Schema |
+| API proxy | Nginx + Docker | `curl` + cron |
 
-## The Solution
+**More power means more complexity.** More dependencies to install. More runtime to manage. More things that break at 3 AM.
 
-Simplicity Gate evaluates every tool and code proposal against a 7-tier power hierarchy. It forces agents to **start at the lowest tier** and **stop at the first tier that works**.
+Simplicity Gate forces agents to evaluate every proposal against a 7-tier power hierarchy before writing a single line of code.
+
+## The Hierarchy
 
 ```
 Tier 1 — Platform Features     HTTP headers, CDN, CSS animations, HTML forms
@@ -31,57 +45,54 @@ Tier 7 — Microservices         Kubernetes, Docker, Express, Django
 
 ## Quick Start
 
-Copy the rules from [`SKILL.md`](SKILL.md) into your agent's instruction file:
+Copy [`SKILL.md`](SKILL.md) into your agent's instruction file. That's it.
 
-| Agent         | Config File                                  |
-|---------------|----------------------------------------------|
-| Claude Code   | `CLAUDE.md`                                  |
-| OpenCode      | `.opencode/skills/simplicity-gate.md`         |
-| Codex         | `CODEX.md` or instructions config            |
-| Aider         | `.aider.conf.yml` or `--read` a markdown file |
-| Cursor        | `.cursorrules`                               |
-| Windsurf      | `.windsurfrules`                             |
-| Cline         | `.clinerules`                                |
-| Continue      | `.continue/config.json`                      |
-| Copilot       | `.github/copilot-instructions.md`            |
+<table>
+<tr><th>Agent</th><th>Config File</th><th>How to Install</th></tr>
+<tr><td><strong>Claude Code</strong></td><td><code>CLAUDE.md</code></td><td>Copy SKILL.md contents into CLAUDE.md in your project root</td></tr>
+<tr><td><strong>OpenCode</strong></td><td><code>.opencode/skills/simplicity-gate.md</code></td><td>Place file in .opencode/skills/ directory</td></tr>
+<tr><td><strong>Codex</strong></td><td><code>CODEX.md</code></td><td>Copy SKILL.md contents into CODEX.md in your project root</td></tr>
+<tr><td><strong>Aider</strong></td><td><code>--read SKILL.md</code></td><td>Pass flag or add to .aider.conf.yml</td></tr>
+<tr><td><strong>Cursor</strong></td><td><code>.cursorrules</code></td><td>Copy SKILL.md contents into .cursorrules</td></tr>
+<tr><td><strong>Windsurf</strong></td><td><code>.windsurfrules</code></td><td>Copy SKILL.md contents into .windsurfrules</td></tr>
+<tr><td><strong>Cline</strong></td><td><code>.clinerules</code></td><td>Copy SKILL.md contents into .clinerules</td></tr>
+<tr><td><strong>Continue</strong></td><td><code>.continue/config.json</code></td><td>Add rules to your Continue config</td></tr>
+<tr><td><strong>GitHub Copilot</strong></td><td><code>.github/copilot-instructions.md</code></td><td>Copy SKILL.md contents into that file</td></tr>
+<tr><td><strong>Roo Code</strong></td><td><code>.roo/rules/simplicity-gate.md</code></td><td>Place file in .roo/rules/ directory</td></tr>
+<tr><td><strong>Cline (VS Code)</strong></td><td><code>.clinerules</code></td><td>Copy SKILL.md contents into .clinerules</td></tr>
+<tr><td><strong>Amazon Q</strong></td><td><code>.amazonq/rules/simplicity-gate.md</code></td><td>Place file in .amazonq/rules/ directory</td></tr>
+</table>
 
-No special syntax — just markdown. Any agent that reads files can use this.
+**No special syntax required.** Simplicity Gate is plain markdown. Any agent that reads files can use it.
+
+## How It Works
+
+When your agent proposes a solution, Simplicity Gate evaluates it:
+
+```
+PROPOSAL: "Write a Node.js script to rename JSON keys"
+
+Simplicity Gate checks:
+  Tier 1 — Can HTTP/HTML handle this?          → No
+  Tier 2 — Can a data format express this?     → No
+  Tier 3 — Can a shell command transform this? → Yes
+
+VERDICT: REJECT
+  Proposed:  Node.js script (Tier 6)
+  Use instead: jq (Tier 3)
+  Command:   jq '{new_key: .old_key}' input.json > output.json
+```
 
 ## Verdicts
 
-| Verdict   | Meaning                                                 |
-|-----------|---------------------------------------------------------|
-| `PASS`    | Lowest viable tier chosen. Proceed.                     |
-| `REJECT`  | A lower tier works. Must downgrade before proceeding.   |
-| `WARN`    | Current tier works, but a lower tier is worth checking. |
+| Verdict | Meaning | Action Required |
+|---------|---------|-----------------|
+| `PASS` | Lowest viable tier chosen | Proceed with implementation |
+| `REJECT` | A lower tier works | Must downgrade before proceeding |
+| `WARN` | Lower tier may work | Check if simpler option suffices |
+| `ESCALATE` | Needs human judgment | Present justification for review |
 
-### Example: JSON Reformatting
-
-**Proposal:** Write a Node.js script to rename keys in a JSON file.
-
-```
-SIMPLICITY GATE — REJECT
-Proposed:     Node.js script (Tier 6)
-Use instead:  jq (Tier 3)
-Why:          jq renames keys and removes fields in one pipeline.
-Command:      jq '{new_key: .old_key} | del(.deprecated)' input.json > output.json
-```
-
-### Example: UI Toggle
-
-**Proposal:** Build a React component with `useReducer` for toggle states.
-
-```
-SIMPLICITY GATE — REJECT
-Proposed:     React + useReducer + Zustand (Tier 6)
-Use instead:  CSS :has() + hidden checkboxes (Tier 1+2)
-Why:          CSS handles toggle state without JavaScript.
-Command:      .panel:has(.toggle:checked) .content { display: block; }
-```
-
-### Example: Disk Monitor (Complex)
-
-**Proposal:** Python script with retry logic, templates, and multi-recipient routing.
+### PASS
 
 ```
 SIMPLICITY GATE — PASS
@@ -90,64 +101,90 @@ Why:      Requires retry logic, template rendering, and multi-recipient
           routing — features that exceed shell pipeline expressiveness.
 ```
 
-## Rules
+### REJECT
 
-These are non-negotiable. Violating them triggers REJECT.
+```
+SIMPLICITY GATE — REJECT
+Proposed:  Node.js script (Tier 6)
+Use instead: jq (Tier 3)
+Why:       jq renames keys and removes fields in one pipeline.
+Command:   jq '{new_key: .old_key} | del(.deprecated)' input.json > output.json
+```
 
-| # | Rule | Why |
-|---|------|-----|
-| 1 | **No unnecessary runtimes** | Don't add Node.js/Python when shell commands work |
-| 2 | **No unnecessary dependencies** | Don't add packages when stdlib or Unix utilities work |
-| 3 | **No code for data problems** | Don't write scripts when jq, sed, awk, or CSS works |
-| 4 | **No microservices for single-machine problems** | Don't add containers when a cron job works |
-| 5 | **No frameworks for plain solutions** | Don't reach for Express/Flask when a simple script works |
-| 6 | **Schema before code** | If JSON Schema or CSS can enforce it, write the schema |
-| 7 | **Text processing before programming** | If grep/sed/awk can transform it, use the pipeline |
-| 8 | **Compile-time over runtime** | If static analysis can catch the error, prefer it |
+### WARN
 
-## Examples
+```
+SIMPLICITY GATE — WARN
+Proposed:  Python + pyyaml (Tier 6)
+Note:      yq (Tier 3) can validate structure with fewer dependencies.
+Check:     Does the validation require logic beyond structural checks?
+```
 
-See the [`examples/`](examples/) directory for full walkthroughs:
+## The Rules
 
-| Example | Tiers Compared | Verdict |
-|---------|---------------|---------|
-| [CSS Toggle](examples/css-toggle.md) | React (Tier 6) vs CSS + HTML (Tier 1+2) | REJECT |
-| [JSON Reformat](examples/reformat-json.md) | Node.js (Tier 6) vs jq (Tier 3) | REJECT |
-| [Disk Monitor](examples/shell-monitor.md) | Python (Tier 6) vs Shell (Tier 3) | PASS (if justified) |
+Non-negotiable. Violating them triggers REJECT.
+
+| # | Rule | Violation Example | Correct Approach |
+|---|------|-------------------|------------------|
+| 1 | **No unnecessary runtimes** | Adding Node.js for JSON processing | Use `jq` |
+| 2 | **No unnecessary dependencies** | Installing lodash for `_.get()` | Use native access |
+| 3 | **No code for data problems** | Writing a script to filter CSV | Use `awk` or `cut` |
+| 4 | **No microservices for single-machine** | Docker for a cron job | Use `crontab` |
+| 5 | **No frameworks for plain solutions** | Express for a static file server | Use `python -m http.server` |
+| 6 | **Schema before code** | JavaScript form validation | Use JSON Schema |
+| 7 | **Text processing before programming** | Python for log parsing | Use `grep`/`sed`/`awk` |
+| 8 | **Compile-time over runtime** | Runtime type checking | Use TypeScript or Go |
 
 ## When Higher Tiers Are Justified
 
-The gate is not anti-complexity — it's anti-unnecessary-complexity. Higher tiers pass when:
+This is not anti-complexity. It is anti-unnecessary-complexity.
 
 | Tier | Justified When |
 |------|----------------|
-| **5** (Static Scripting) | Type safety is critical, performance matters, or the logic is complex |
-| **6** (Dynamic Languages) | External API calls, retry logic, templates, or integration with larger systems |
-| **7** (Microservices) | Multi-service orchestration, independent scaling, or polyglot teams |
+| **5** (Static) | Type safety is critical, performance is measured and documented, or logic is inherently complex |
+| **6** (Dynamic) | External API calls during execution, retry logic, template rendering, or integration with existing runtime |
+| **7** (Microservices) | Multi-service orchestration, independent scaling requirements, or polyglot team constraints |
+
+## Examples
+
+Full walkthroughs in [`examples/`](examples/):
+
+| Example | Proposed | Recommended | Verdict | Files |
+|---------|----------|-------------|---------|-------|
+| JSON Reformatting | Node.js + lodash (T6) | `jq` (T3) | REJECT | [`reformat-json.md`](examples/reformat-json.md) |
+| UI Toggle | React + Zustand (T6) | CSS `:has()` (T1+2) | REJECT | [`css-toggle.md`](examples/css-toggle.md) |
+| Disk Monitor | Python + psutil (T6) | `df \| awk` (T3) | PASS* | [`shell-monitor.md`](examples/shell-monitor.md) |
+
+*\*PASS when retry logic, templates, or multi-recipient routing are required.*
 
 ## Project Structure
 
 ```
 simplicity-gate/
-├── SKILL.md              ← The skill (agents read this)
-├── README.md             ← This file
-├── CONTRIBUTING.md       ← How to contribute
-├── SECURITY.md           ← Security policy
-├── LICENSE               ← MIT
-└── examples/             ← Walkthrough examples
-    ├── css-toggle.md
-    ├── reformat-json.md
-    └── shell-monitor.md
+├── SKILL.md              The skill definition — copy this to your agent
+├── README.md             This file
+├── CONTRIBUTING.md       Contribution guidelines
+├── SECURITY.md           Security policy
+├── LICENSE               MIT License
+└── examples/
+    ├── css-toggle.md     React vs CSS toggle implementation
+    ├── reformat-json.md  Node.js vs jq JSON transformation
+    └── shell-monitor.md  Python vs shell disk monitoring
 ```
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. PRs that add new examples, improve verdict logic, or expand agent compatibility are welcome.
+Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+
+- Adding new examples
+- Expanding agent compatibility
+- Improving verdict logic
+- Reporting false PASS/REJECT verdicts
 
 ## Security
 
-See [SECURITY.md](SECURITY.md) for the security policy.
+Simplicity Gate is plain markdown. It does not execute code, access networks, or handle data. See [SECURITY.md](SECURITY.md) for details.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT License. See [LICENSE](LICENSE).

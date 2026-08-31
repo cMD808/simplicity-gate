@@ -17,6 +17,28 @@ triggers:
 
 > Choose the least powerful tool that does the job.
 
+## Installation
+
+Copy this file (or its contents) to your agent's config:
+
+| Agent | Config Location | Command |
+|-------|----------------|---------|
+| **Claude Code** | `CLAUDE.md` | Copy contents below into `CLAUDE.md` in project root |
+| **OpenCode** | `.opencode/skills/simplicity-gate.md` | Place this file as-is |
+| **Codex** | `CODEX.md` | Copy contents below into `CODEX.md` in project root |
+| **Aider** | `--read SKILL.md` or `.aider.conf.yml` | Pass `--read SKILL.md` or add to config |
+| **Cursor** | `.cursorrules` | Copy contents below into `.cursorrules` |
+| **Windsurf** | `.windsurfrules` | Copy contents below into `.windsurfrules` |
+| **Cline** | `.clinerules` | Copy contents below into `.clinerules` |
+| **Continue** | `.continue/config.json` | Add rules to your Continue config |
+| **GitHub Copilot** | `.github/copilot-instructions.md` | Copy contents below into that file |
+| **Roo Code** | `.roo/rules/simplicity-gate.md` | Place this file in `.roo/rules/` |
+| **Amazon Q** | `.amazonq/rules/simplicity-gate.md` | Place this file in `.amazonq/rules/` |
+
+**For agents that don't support YAML frontmatter:** Copy everything below the `---` line. The frontmatter is optional metadata — the rules below are the actual skill.
+
+---
+
 ## The Rule
 
 Before writing code or adding a dependency, evaluate your proposal against
@@ -32,31 +54,33 @@ Tier 6 — Dynamic Languages     Python, Node.js, Ruby (interpreted, mutable)
 Tier 7 — Microservices         Kubernetes, Docker, Express, Django
 ```
 
+**Start at Tier 1. Stop at the first tier that works.**
+
 ## Decision Flowchart
 
 ```
 PROPOSAL RECEIVED
        │
        ▼
-Can a platform feature handle it?  ─── YES ──▶ Tier 1 (PASS)
+Can a platform feature handle it?  ─── YES ──▶ PASS (Tier 1)
        │ NO
        ▼
-Can a data format express it?      ─── YES ──▶ Tier 2 (PASS)
+Can a data format express it?      ─── YES ──▶ PASS (Tier 2)
        │ NO
        ▼
-Can a shell command transform it?  ─── YES ──▶ Tier 3 (PASS)
+Can a shell command transform it?  ─── YES ──▶ PASS (Tier 3)
        │ NO
        ▼
-Can a query language solve it?     ─── YES ──▶ Tier 4 (PASS)
+Can a query language solve it?     ─── YES ──▶ PASS (Tier 4)
        │ NO
        ▼
-Can a compiled script do it?       ─── YES ──▶ Tier 5 (PASS)
+Can a compiled script do it?       ─── YES ──▶ PASS (Tier 5)
        │ NO
        ▼
-Can an interpreted language?       ─── YES ──▶ Tier 6 (PASS)
+Can an interpreted language?       ─── YES ──▶ PASS (Tier 6)
        │ NO
        ▼
-Does it need orchestration?        ─── YES ──▶ Tier 7 (PASS)
+Does it need orchestration?        ─── YES ──▶ PASS (Tier 7)
        │ NO
        ▼
   INSUFFICIENT — escalate to human
@@ -110,12 +134,12 @@ These are non-negotiable. Violating them triggers REJECT.
 
 ## Verdicts
 
-| Verdict   | Meaning                                                 |
-|-----------|---------------------------------------------------------|
-| PASS      | Lowest viable tier chosen. Proceed.                     |
-| REJECT    | A lower tier works. Must downgrade before proceeding.   |
-| WARN      | Current tier works, but a lower tier is worth checking. |
-| ESCALATE  | Disagreement on tier — needs human judgment.            |
+| Verdict | Meaning | Action |
+|---------|---------|--------|
+| PASS | Lowest viable tier chosen | Proceed |
+| REJECT | A lower tier works | Must downgrade |
+| WARN | Lower tier may work | Check first |
+| ESCALATE | Needs human judgment | Present justification |
 
 ### PASS Format
 
@@ -154,7 +178,7 @@ Evidence:   <specific requirement that exceeds lower tier>
 Override:   <what you want to do anyway>
 ```
 
-Escalation is logged but requires human approval.
+Escalation requires human approval.
 
 ## Rules Quick Reference
 
@@ -171,7 +195,7 @@ Compile-time over runtime?                  → Check if static analysis works
 
 ## Examples
 
-### Example 1: Node.js for JSON Reformatting → REJECT
+### Node.js for JSON Reformatting → REJECT
 
 **Proposal:** Write a Node.js script to rename keys in a JSON file.
 
@@ -188,13 +212,13 @@ Why:       jq renames keys and removes fields in one pipeline.
 Command:   jq '{new_key: .old_key} | del(.deprecated)' input.json > output.json
 ```
 
-### Example 2: React State Machine → REJECT
+### React State Machine → REJECT
 
 **Proposal:** Build a React component with useReducer for UI toggles.
 
 **Analysis:**
-- Tier 6 (React): Can do it. Full runtime + state management library.
-- Tier 1+2 (CSS + HTML): Can do it. `:has()` + checkboxes + `data-*` attributes.
+- Tier 6 (React): Full runtime + state management library.
+- Tier 1+2 (CSS + HTML): `:has()` + checkboxes + `data-*` attributes.
 
 **Verdict:**
 ```
@@ -205,15 +229,9 @@ Why:       CSS handles toggle state without JavaScript.
 Command:   .panel:has(.toggle:checked) .content { display: block; }
 ```
 
-### Example 3: Python Disk Monitor → PASS (if justified)
+### Python Disk Monitor → REJECT (simple) / PASS (complex)
 
-**Proposal:** Python script to monitor disk usage and email alerts.
-
-**Analysis:**
-- Tier 3 (shell): `df | awk` handles disk check. `mail` sends alert.
-- Tier 6 (Python): Needed if retry logic, templates, multi-recipient routing.
-
-**Verdict (simple case):**
+**Simple case:**
 ```
 SIMPLICITY GATE — REJECT
 Proposed:  Python script (Tier 6)
@@ -222,7 +240,7 @@ Command:   df -h | awk 'NR>1 && int($5)>90 {print $6}' | \
            xargs -I{} echo "Alert: {}" | mail -s "Disk Alert" admin@example.com
 ```
 
-**Verdict (complex case):**
+**Complex case (retry logic, templates, multi-recipient):**
 ```
 SIMPLICITY GATE — PASS
 Tool:     Python script (Tier 6)
@@ -230,14 +248,9 @@ Why:      Requires retry logic, template rendering, and multi-recipient
           routing — features that exceed shell pipeline expressiveness.
 ```
 
-### Example 4: YAML Config Validation → WARN
+### YAML Config Validation → WARN
 
-**Proposal:** Write a Python script with pyyaml to validate a YAML config file.
-
-**Analysis:**
-- Tier 6 (Python): Can do it. Runtime + dependency.
-- Tier 3 (yq): Can do it. Single command, no runtime.
-- Tier 2 (Schema): Can express the rules but can't execute validation alone.
+**Proposal:** Write a Python script with pyyaml to validate a YAML config.
 
 **Verdict:**
 ```
@@ -249,45 +262,20 @@ Check:     Does the validation require logic beyond structural checks?
 
 ## Edge Cases
 
-### "But my project already uses [Tier 6]"
+**"My project already uses Tier 6"**
+The gate evaluates *new* additions, not existing infrastructure. Reusing an installed runtime is not adding an unnecessary runtime.
 
-If the project is already running a Tier 6 runtime, reusing it for a new task is not adding an unnecessary runtime — it's using what exists. The gate evaluates *new* additions, not existing infrastructure.
+**"The shell version is less readable"**
+Readability is not a tier. The gate optimizes for fewer dependencies and less runtime. If the shell version is correct, use it. Document it.
 
-### "The shell version is less readable"
+**"I need error handling"**
+Shell pipelines have `set -euo pipefail`. `jq` has `--exit-status`. Check if the lower tier's error handling is sufficient before escalating.
 
-Readability is not a tier. The gate optimizes for fewer dependencies and less runtime, not readability. If the shell version is correct, use it. Document it.
+**"Cross-platform support"**
+If you need Windows, Tier 3 shell commands may not work. Tier 5 or 6 may be necessary. Document this in the ESCALATE verdict.
 
-### "I need error handling"
-
-Error handling does not automatically justify a higher tier. Shell pipelines have `set -euo pipefail`. `jq` has `--exit-status`. Check if the lower tier's error handling is sufficient before escalating.
-
-### "Cross-platform support"
-
-If you need Windows support, Tier 3 shell commands may not work. Tier 5 (compiled) or Tier 6 (interpreted) may be necessary. Document this in the ESCALATE verdict.
-
-### "Performance matters"
-
-If performance is a measured, documented requirement (not a vague preference), Tier 5 (compiled) may be justified. The gate does not block performance — it blocks *assumed* performance needs.
-
-## Agent Integration
-
-This skill works with any agent that reads markdown. Copy the rules above
-into your agent's instruction file:
-
-| Agent         | File                                          |
-|---------------|-----------------------------------------------|
-| Claude Code   | `CLAUDE.md` or `.claude/settings.json`          |
-| OpenCode      | `.opencode/skills/simplicity-gate.md`           |
-| Codex         | `CODEX.md` or instructions config              |
-| Aider         | `.aider.conf.yml` or `--read` a markdown file   |
-| Cursor        | `.cursorrules`                                 |
-| Windsurf      | `.windsurfrules`                               |
-| Cline         | `.clinerules`                                  |
-| Continue      | `.continue/config.json`                        |
-| Copilot       | `.github/copilot-instructions.md`              |
-
-No special syntax needed — just markdown. Any agent that reads files
-can use this skill.
+**"Performance matters"**
+If performance is a measured, documented requirement (not a vague preference), Tier 5 may be justified. The gate does not block performance — it blocks *assumed* performance needs.
 
 ## Changelog
 
@@ -295,9 +283,10 @@ can use this skill.
 - Added decision flowchart
 - Added WARN and ESCALATE verdict formats
 - Added edge cases section
-- Added quick reference for rules
+- Added rules quick reference
+- Expanded agent integration (Roo Code, Amazon Q, Cline VS Code)
+- Added installation instructions per agent
 - Improved examples with analysis steps
-- Expanded agent integration table
 
 ### v2.0.0
 - Initial release with 7-tier hierarchy
