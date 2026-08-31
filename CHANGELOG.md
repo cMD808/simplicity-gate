@@ -22,6 +22,10 @@
 - **Skill Chaining** — Shows how Simplicity Gate chains with build, plan, refactor-agent, security-warden, test-strategist
 - **Decision Confidence** — Every verdict includes a confidence score (0-100%)
 - **AI Anti-Patterns** — 8 common AI over-engineering patterns with evaluation adjustments
+- **Major Condensation** — Reduced SKILL.md from 3,119 → 880 lines (72% reduction) with zero feature loss
+- **Condensed Rules** — 8 verbose rule tables → single compact table
+- **Condensed Changelog** — Full version history → summary table with CHANGELOG.md link
+- **Condensed Cost/Severity** — Verbose examples → one-liners
 
 ### 📚 Expanded Data
 
@@ -34,6 +38,9 @@
 - **Conflict Resolution** — Priority order: Security > Performance > Team convention > The Rule > Simplicity
 - **Pattern Submission** — Added format template and verification process
 - **New Edge Cases** — 6 new edge cases (AI over-engineering, linting config, browser+Node.js, real-time, performance, shell speed)
+- **Troubleshooting** — 8 common issues with solutions
+- **Glossary** — 14 terms defined
+- **Performance** — Benchmarks table + optimization tips
 
 ## [6.0.0] — 2026-08-31
 

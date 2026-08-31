@@ -570,7 +570,7 @@ settings:
 
 ---
 
-## 🚀 What's New in v6.0
+## 🚀 What's New in v6.1
 
 <table>
   <tr>
@@ -578,12 +578,16 @@ settings:
     <th>What It Does</th>
   </tr>
   <tr>
+    <td><strong>📦 Condensed Skill</strong></td>
+    <td>From 3,119 → 880 lines — 72% reduction with zero feature loss</td>
+  </tr>
+  <tr>
     <td><strong>🔍 Real-Time Code Review</strong></td>
     <td>Intercepts writes BEFORE they happen, evaluates in real-time</td>
   </tr>
   <tr>
     <td><strong>📚 "Why Not" Database</strong></td>
-    <td>20+ real-world incidents proving why over-engineering fails</td>
+    <td>30+ real-world incidents proving why over-engineering fails</td>
   </tr>
   <tr>
     <td><strong>⚡ One-Click Fix</strong></td>
@@ -598,24 +602,16 @@ settings:
     <td>Intercepts file writes, edits, imports, and installs</td>
   </tr>
   <tr>
-    <td><strong>🔄 Severity-Based Actions</strong></td>
-    <td>Automatic response based on violation severity (1-5)</td>
+    <td><strong>📖 Glossary</strong></td>
+    <td>14 terms defined for quick reference</td>
   </tr>
   <tr>
-    <td><strong>🔒 Fix Safety Rails</strong></td>
-    <td>Backups, test requirements, max changes per session</td>
+    <td><strong>🔧 Troubleshooting</strong></td>
+    <td>8 common issues with solutions</td>
   </tr>
   <tr>
-    <td><strong>📊 Session Summaries</strong></td>
-    <td>Autonomous session reports with metrics and learnings</td>
-  </tr>
-  <tr>
-    <td><strong>📜 Fix History</strong></td>
-    <td>Complete audit trail of all auto-applied fixes</td>
-  </tr>
-  <tr>
-    <td><strong>⏪ Rollback Capability</strong></td>
-    <td>Revert any fix with one command</td>
+    <td><strong>⏱️ Performance Benchmarks</strong></td>
+    <td>Quick-Check <100ms, Cached <10ms, Full eval <500ms</td>
   </tr>
 </table>
 
