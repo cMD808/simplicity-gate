@@ -259,15 +259,370 @@ Test Plan: [required]
 
 ## Examples
 
-| Scenario | Proposed | Simplest | Verdict |
-|:---------|:---------|:---------|:--------|
-| [JSON Rename](examples/reformat-json.md) | Node.js + lodash | `jq` | REJECT |
-| [UI Toggle](examples/css-toggle.md) | React + Zustand | CSS `:has()` | REJECT |
-| [Disk Monitor](examples/shell-monitor.md) | Python + psutil | `df \| awk` | REJECT |
-| [SQL vs Python](examples/sql-vs-python.md) | Python + pandas | SQL | REJECT |
-| [CSS Validation](examples/css-vs-js-validation.md) | JavaScript | HTML5 + CSS | REJECT |
-| [curl vs Express](examples/curl-vs-express.md) | Express.js | `curl` | REJECT |
-| [Make vs npm](examples/make-vs-npm.md) | npm scripts | Make | WARN |
+### 1. JSON Reformatting — Node.js vs jq
+
+**Scenario:** Agent proposes a Node.js script to rename keys in a JSON file.
+
+<details>
+<summary><strong>Without Simplicity Gate</strong> (Tier 6 — REJECTED)</summary>
+
+```javascript
+const fs = require('fs');
+const _ = require('lodash');
+
+const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+const converted = {};
+_.forEach(config, (value, key) => {
+  converted[key.replace('old_', 'new_')] = value;
+});
+delete converted.deprecated_field;
+fs.writeFileSync('config.json', JSON.stringify(converted, null, 2));
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 40+ |
+| Dependencies | `lodash`, `fs` |
+| Runtime | Node.js (100+ MB) |
+
+</details>
+
+<details>
+<summary><strong>With Simplicity Gate</strong> (Tier 3 — PASS)</summary>
+
+```bash
+jq '{new_database_host: .old_db_host, new_api_key: .old_api_key} | del(.deprecated)' \
+  config.json > config-new.json && mv config-new.json config.json
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 1 |
+| Dependencies | None |
+| Runtime | None |
+
+</details>
+
+---
+
+### 2. UI Toggle — React vs CSS
+
+**Scenario:** Agent proposes React + Zustand for UI toggle states.
+
+<details>
+<summary><strong>Without Simplicity Gate</strong> (Tier 6 — REJECTED)</summary>
+
+```tsx
+import React, { useReducer } from 'react';
+import { create } from 'zustand';
+
+const useStore = create<ToggleState>()((set) => ({
+  isActive: false,
+  isExpanded: false,
+  theme: 'light',
+  dispatch: (action) => set((state) => {
+    switch (action.type) {
+      case 'TOGGLE_ACTIVE': return { isActive: !state.isActive };
+      case 'TOGGLE_EXPAND': return { isExpanded: !state.isExpanded };
+      case 'SET_THEME': return { theme: action.payload };
+    }
+  }),
+}));
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 120+ |
+| Dependencies | `react`, `zustand` |
+| Bundle | 40+ KB gzipped |
+
+</details>
+
+<details>
+<summary><strong>With Simplicity Gate</strong> (Tier 1+2 — PASS)</summary>
+
+```html
+<label class="toggle">
+  <input type="checkbox" class="toggle-input">
+  <span class="toggle-label">Show Panel</span>
+</label>
+<div class="panel">
+  <div class="content">Hidden content</div>
+</div>
+```
+
+```css
+.panel .content { display: none; }
+.panel:has(.toggle:checked) .content { display: block; }
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 5 |
+| Dependencies | None |
+| Bundle | 0 KB |
+
+</details>
+
+---
+
+### 3. Disk Monitor — Python vs Shell
+
+**Scenario:** Agent proposes Python + psutil for disk monitoring.
+
+<details>
+<summary><strong>Without Simplicity Gate</strong> (Tier 6 — REJECTED)</summary>
+
+```python
+import psutil
+import smtplib
+
+def check_disk():
+    usage = psutil.disk_usage('/')
+    if usage.percent > 90:
+        send_alert(f"Disk usage at {usage.percent}%")
+
+def send_alert(message):
+    # ... email logic ...
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 80+ |
+| Dependencies | `psutil`, `smtplib` |
+| Runtime | Python (50+ MB) |
+
+</details>
+
+<details>
+<summary><strong>With Simplicity Gate</strong> (Tier 3 — PASS)</summary>
+
+```bash
+df -h | awk 'NR>1 && int($5)>90 {print $6}' | xargs -I{} echo "Alert: {}" | mail -s "Disk Alert" admin@example.com
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 1 |
+| Dependencies | None |
+| Runtime | None |
+
+</details>
+
+---
+
+### 4. SQL vs Python for Data Queries
+
+**Scenario:** Agent proposes Python + pandas for database queries.
+
+<details>
+<summary><strong>Without Simplicity Gate</strong> (Tier 6 — REJECTED)</summary>
+
+```python
+import psycopg2
+import pandas as pd
+
+conn = psycopg2.connect("dbname=mydb user=admin")
+query = """
+    SELECT country, customer_id, SUM(amount) as revenue
+    FROM orders
+    WHERE created_at > NOW() - INTERVAL '30 days'
+    GROUP BY country, customer_id
+    ORDER BY revenue DESC
+    LIMIT 10
+"""
+df = pd.read_sql(query, conn)
+print(df.to_string())
+conn.close()
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 30+ |
+| Dependencies | `psycopg2`, `pandas` |
+| Runtime | Python (50+ MB) |
+
+</details>
+
+<details>
+<summary><strong>With Simplicity Gate</strong> (Tier 4 — PASS)</summary>
+
+```sql
+SELECT country, customer_id, SUM(amount) as revenue
+FROM orders
+WHERE created_at > NOW() - INTERVAL '30 days'
+GROUP BY country, customer_id
+ORDER BY revenue DESC
+LIMIT 10;
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 8 |
+| Dependencies | None |
+| Runtime | SQL engine (already present) |
+
+</details>
+
+---
+
+### 5. Form Validation — JavaScript vs HTML5
+
+**Scenario:** Agent proposes JavaScript validation for forms.
+
+<details>
+<summary><strong>Without Simplicity Gate</strong> (Tier 6 — REJECTED)</summary>
+
+```javascript
+function validateForm() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const errors = [];
+
+  if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
+    errors.push('Invalid email');
+  if (password.length < 8)
+    errors.push('Password too short');
+
+  return errors.length === 0;
+}
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 40+ |
+| Dependencies | None |
+| Runtime | Browser JS |
+
+</details>
+
+<details>
+<summary><strong>With Simplicity Gate</strong> (Tier 1+2 — PASS)</summary>
+
+```html
+<form>
+  <input type="email" required placeholder="Email">
+  <input type="password" required minlength="8"
+         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+         title="Must contain uppercase, lowercase, and number">
+  <button type="submit">Register</button>
+</form>
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 5 |
+| Dependencies | None |
+| Runtime | Browser native |
+
+</details>
+
+---
+
+### 6. API Proxy — Express vs curl
+
+**Scenario:** Agent proposes Express.js for API proxying.
+
+<details>
+<summary><strong>Without Simplicity Gate</strong> (Tier 7 — REJECTED)</summary>
+
+```javascript
+const express = require('express');
+const axios = require('axios');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+
+app.all('/api/proxy/*', async (req, res) => {
+  const response = await axios({
+    method: req.method,
+    url: `https://external-api.com${req.path}`,
+    headers: { Authorization: `Bearer ${process.env.API_KEY}` }
+  });
+  res.json(response.data);
+});
+
+app.listen(3000);
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 60+ |
+| Dependencies | `express`, `axios`, `cors` |
+| Runtime | Node.js (100+ MB) |
+
+</details>
+
+<details>
+<summary><strong>With Simplicity Gate</strong> (Tier 3 — PASS)</summary>
+
+```bash
+curl -s -H "Authorization: Bearer $API_KEY" \
+  "https://external-api.com/endpoint" | jq '.'
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 1 |
+| Dependencies | None |
+| Runtime | None |
+
+</details>
+
+---
+
+### 7. Build Automation — npm vs Make
+
+**Scenario:** Agent proposes npm scripts for build pipeline.
+
+<details>
+<summary><strong>Without Simplicity Gate</strong> (Tier 6 — WARN)</summary>
+
+```json
+{
+  "scripts": {
+    "lint": "eslint src/",
+    "test": "jest --coverage",
+    "build": "tsc && webpack --mode production",
+    "ci": "npm run lint && npm run test && npm run build"
+  }
+}
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 20+ |
+| Dependencies | `eslint`, `jest`, `typescript`, `webpack` |
+| Runtime | Node.js |
+
+</details>
+
+<details>
+<summary><strong>With Simplicity Gate</strong> (Tier 3 — WARN)</summary>
+
+```makefile
+.PHONY: lint test build ci
+
+lint:
+	eslint src/
+
+test:
+	jest --coverage
+
+build:
+	tsc && webpack --mode production
+
+ci: lint test build
+```
+
+| Metric | Value |
+|:-------|:------|
+| Lines | 12 |
+| Dependencies | Make (usually pre-installed) |
+| Runtime | None |
+
+</details>
 
 ---
 
