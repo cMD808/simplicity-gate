@@ -273,6 +273,18 @@ Every verdict includes monthly/annual cost comparison (AWS/GCP/Azure pricing + $
 | `prisma-raw-sql` | Prisma ORM for SQLite | raw SQL | 3 | 2,500 |
 | `redux-zustand` | Redux for todo app | useState + useContext | 2 | 4,000 |
 | `docker-dev` | Docker Compose for dev | Native package manager | 4 | 3,000 |
+| `nextjs-static` | Next.js for static site | npx serve / Vite + static | 4 | 4,000 |
+| `supabase-sqlite` | Supabase for simple local DB | SQLite + raw SQL | 4 | 3,000 |
+| `tailwind-css` | Tailwind for 5 CSS rules | Native CSS variables | 2 | 1,500 |
+| `trpc-rest` | tRPC for 3 endpoints | REST + fetch | 2 | 2,000 |
+| `authjs-simple` | NextAuth for email/password only | Native crypto + cookies | 3 | 2,500 |
+| `vercel-func` | Vercel Functions for cron | GitHub Actions + curl | 4 | 1,500 |
+| `prisma-sqlite` | Prisma for 3-table SQLite | better-sqlite3 / raw SQL | 3 | 2,000 |
+| `axios-instance` | axios instance for 1 endpoint | fetch + helper | 5 | 1,000 |
+| `zustand-props` | Zustand for 2 props | useState + Context | 4 | 1,500 |
+| `graphql-simple` | GraphQL for 5 fields | REST + query params | 4 | 2,000 |
+| `k8s-static` | Kubernetes for static site | Static hosting (Netlify/Vercel) | 5 | 5,000 |
+| `redis-cache` | Redis for <1000 rows | In-memory Map + TTL | 4 | 2,000 |
 
 Contributions via PR with before/after code + token savings. Verified by maintainers.
 
@@ -426,7 +438,7 @@ Safety: auto-backup, test-after-fix, max 10 files per fix, confirmation for 50+ 
 
 ---
 
-## The Rule
+## The Rule (with Decision Flowchart)
 
 Before writing code or adding a dependency, evaluate your proposal against
 this hierarchy. Start at Tier 0. Stop at the first tier that works.
@@ -443,14 +455,9 @@ Tier 7 — Custom Infrastructure Kubernetes, Docker, Terraform, Nginx, Redis, Ka
 Tier 8 — External Services     Zapier, n8n, Make, Airtable, Twilio, Stripe, SendGrid, Auth0
 ```
 
-**Start at Tier 0. Stop at the first tier that works.**
-
----
-
-## Decision Flowchart
-
+**Flowchart:**
 ```
-PROPOSAL → Check context → Check language tiers → Check dependency graph
+PROPOSAL → Context → Language Tiers → Dependency Graph
   → Tier 0 (built-in API)? → PASS
   → Tier 1 (declarative markup)? → PASS
   → Tier 2 (declarative logic)? → PASS
@@ -460,10 +467,10 @@ PROPOSAL → Check context → Check language tiers → Check dependency graph
   → Tier 6 (application framework)? → PASS
   → Tier 7 (custom infrastructure)? → PASS
   → Tier 8 (external service)? → PASS
-  → INSUFFICIENT → escalate to human
+  → INSUFFICIENT → ESCALATE
 ```
 
-**Never skip tiers without justification.**
+**Start at Tier 0. Stop at the first tier that works. Never skip tiers without justification.**
 
 ---
 
@@ -633,6 +640,150 @@ jobs:
 **Autonomous:** severity ≤3 = auto-fix | ≥4 = block + ask
 **Suppress:** `// simplicity-gate: ignore` or `// sg-ignore` (max 3/file)
 **CLI:** `simplicity-gate eval <code>` | `fix <file>` | `scan <dir>` | `why-not <keyword>` | `bench` | `profile <file>`
+
+---
+
+## One-Page Cheatsheet
+
+**The entire gate in one glance:**
+
+```
+TASK → Can Tier 0 (built-in) do it? → YES → PASS
+       NO → Can Tier 1 (HTML/CSS) do it? → YES → PASS
+       NO → Can Tier 2 (data formats) do it? → YES → PASS
+       NO → Can Tier 3 (shell/cli) do it? → YES → PASS
+       NO → Can Tier 4 (SQL) do it? → YES → PASS
+       NO → Can Tier 5 (script) do it? → YES → PASS
+       NO → Can Tier 6 (framework) do it? → YES → PASS
+       NO → Can Tier 7 (infra) do it? → YES → PASS
+       NO → Can Tier 8 (no-code) do it? → YES → PASS
+       NO → ESCALATE
+```
+
+**Instant tier check for common tasks:**
+| Task | Lowest Tier | Anti-Pattern (Too High) |
+|------|-------------|-------------------------|
+| HTTP request | 0 (`fetch`) | axios, node-fetch, request |
+| JSON transform | 3 (`jq`) | Node.js script, lodash |
+| Date format | 0 (`Intl.DateTimeFormat`) | moment, date-fns, dayjs |
+| UUID | 0 (`crypto.randomUUID`) | uuid, nanoid |
+| File read/write | 0 (File System Access) | fs-extra, fs, node fs |
+| CSS toggle | 1+2 (`:has()` + checkbox) | React + useState, Zustand |
+| API proxy | 3 (`curl`) | Express, Fastify, nginx |
+| Scheduled task | 3 (`cron`) | Docker, K8s, bull, node-cron |
+| Static site | 3 (`npx serve`) | Next.js, Vite, webpack |
+| Simple DB | 4 (SQLite) | Prisma, MongoDB, Supabase |
+| Form submit | 1 (`<form>`) | React + axios + validation lib |
+| Email | 5 (sendmail) | nodemailer, SendGrid SDK |
+
+**Verdict meanings:**
+- **PASS** = Proceed (lowest viable tier chosen)
+- **WARN** = Check first (lower tier *might* work)
+- **REJECT** = Must downgrade (lower tier *does* work)
+- **ESCALATE** = Human needed (justification + test plan)
+
+**Severity = Proposed Tier - Lowest Viable Tier** (1-5, higher = worse)
+
+**Quick-Check (50ms):** Framework for one-liner? Runtime for shell? Database for file? → REJECT
+
+**Suppression:** `// simplicity-gate: ignore` | `// sg-ignore` (max 3/file)
+
+**CLI:** `eval <file>` | `fix <file>` | `scan <dir>` | `why-not <term>` | `bench` | `tiers`
+
+---
+
+## Practical Decision Tree
+
+**Common scenarios → immediate tier decision:**
+
+```
+IS IT A DATA TASK? (transform, filter, reformat, extract)
+  → Tier 3: jq, awk, sed, grep
+  → NOT: Node.js, Python, lodash
+
+IS IT AN HTTP TASK? (fetch, proxy, webhook, API call)
+  → Tier 0: fetch()
+  → Tier 3: curl
+  → NOT: axios, express, fastify
+
+IS IT A UI TOGGLE/SHOW-HIDE? (tabs, dropdown, modal, accordion)
+  → Tier 1+2: CSS :has() + hidden checkbox
+  → NOT: React, Vue, Svelte, Zustand, Redux
+
+IS IT A SCHEDULED TASK? (cron, daily, hourly, cleanup)
+  → Tier 3: crontab, systemd timer
+  → NOT: Docker, Kubernetes, bull, node-cron
+
+IS IT A STATIC SITE? (blog, docs, landing page, portfolio)
+  → Tier 3: npx serve, static hosting
+  → NOT: Next.js, Gatsby, Astro, Remix
+
+IS IT A SIMPLE DATABASE? (<10 tables, local, simple queries)
+  → Tier 4: SQLite + raw SQL
+  → NOT: Prisma, Supabase, MongoDB, PostgreSQL
+
+IS IT A FORM SUBMISSION? (contact, signup, feedback)
+  → Tier 1: <form action="/api"> + native validation
+  → NOT: React Hook Form, Zod, Yup, axios
+
+IS IT AUTHENTICATION? (login, signup, session)
+  → Tier 5: Native crypto + httpOnly cookies
+  → NOT: NextAuth, Auth.js, Clerk, Firebase Auth (unless SSO/OAuth)
+
+IS IT FILE PROCESSING? (read, write, transform, convert)
+  → Tier 0: File System Access API
+  → Tier 3: jq, sed, awk, ImageMagick, ffmpeg
+  → NOT: fs-extra, sharp, custom Node scripts
+
+IS IT DATE/TIME? (format, parse, timezone, diff)
+  → Tier 0: Intl.DateTimeFormat, Temporal API
+  → NOT: moment, date-fns, dayjs, luxon
+
+IS IT UNIQUE IDs?
+  → Tier 0: crypto.randomUUID()
+  → NOT: uuid, nanoid, shortid
+
+IS IT TEXT SEARCH/REPLACE?
+  → Tier 3: grep, sed, awk, ripgrep
+  → NOT: Python scripts, Node.js, ripgrep-js
+
+IS IT CACHING? (<1000 items, simple TTL)
+  → Tier 5: Map/Object + setTimeout
+  → NOT: Redis, Memcached, LRU cache libs
+
+IS IT REAL-TIME? (WebSocket, SSE, live updates)
+  → Tier 6: Native WebSocket / SSE
+  → NOT: Socket.io, Pusher, Ably (unless scaling needed)
+
+DEFAULT: Start at Tier 0, work up. If unsure → ESCALATE.
+```
+
+---
+
+## When in Doubt — Heuristic Rules
+
+**Quick mental shortcuts for edge cases:**
+
+| Situation | Heuristic | Default Action |
+|-----------|-----------|----------------|
+| "But it's just one file" | One file ≠ one tier. Check the task, not the file count. | REJECT if lower tier works |
+| "We might need it later" | YAGNI. Build for now, migrate when needed. | REJECT speculative complexity |
+| "The team knows React" | Team familiarity ≠ tier justification. Document in overrides. | WARN → check `.simplicity-gate.yml` |
+| "It's more readable" | Readability is not a tier. Simpler code is often more readable. | REJECT if lower tier works |
+| "We need error handling" | `set -euo pipefail`, `jq --exit-status`, `|| exit 1` work in shell. | Check lower tier first |
+| "Cross-platform" | Tier 5 (TypeScript) *may* be justified for Windows. Document in ESCALATE. | ESCALATE with reason |
+| "Performance matters" | Only if measured. "Assumed fast" ≠ fast. Benchmark first. | ESCALATE with data |
+| "Type safety" | JSDoc + TS compile-time = Tier 5. Runtime validation = Tier 6. | Tier 5 for prod, Tier 0/3 for scripts |
+| "It's a one-off script" | One-offs still follow hierarchy. If `jq` works, use `jq`. | REJECT if lower tier works |
+| "But it's an API integration" | Start with `curl`. Escalate only for pooling/persistent connections. | Tier 0/3 first |
+| "Real-time updates" | WebSocket/SSE = Tier 6+. Don't assume you need real-time. Polling = Tier 3. | Check if polling works |
+| "Shell is too slow" | Only if measured <1s. If shell <1s, keep shell. | Measure first |
+| "Strict linting config" | Add override in `.simplicity-gate.yml`. Team conventions win. | Allow with override |
+| "Browser + Node.js" | Evaluate each environment separately. Browser has fetch, Node has fs. | Split by environment |
+
+**Meta-heuristic:** If you're arguing for a higher tier, you're probably over-engineering. The burden of proof is on the higher tier.
+
+---
 
 ## Rules
 
