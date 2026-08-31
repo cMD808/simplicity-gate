@@ -1,14 +1,11 @@
+<p align="center">
+  <img src="assets/Gemini_Generated_Image_4d84p04d84p04d84.jpg" alt="Simplicity Gate" width="600">
+</p>
+
 <h1 align="center">Simplicity Gate</h1>
 
 <p align="center">
-  <em>The Rule of Least Power enforcer for AI coding agents.</em>
-</p>
-
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
-  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome-brightgreen.svg" alt="PRs Welcome"></a>
-  <a href="SKILL.md"><img src="https://img.shields.io/badge/Skill-v2.1.0-orange.svg" alt="Skill Version"></a>
-  <a href="#installation"><img src="https://img.shields.io/badge/Agents-11-supported-blueviolet.svg" alt="Agents Supported"></a>
+  <em>The Rule of Least Power enforcer for AI coding agents. v3.0 — auto-trigger, severity scoring, auto-fix templates.</em>
 </p>
 
 <p align="center">
@@ -374,9 +371,46 @@ Tier 7 — Microservices         Kubernetes, Docker, Express, Django
 | **Roo Code** | `.roo/rules/simplicity-gate.md` | All |
 | **Amazon Q** | `.amazonq/rules/simplicity-gate.md` | All |
 
----
+### Quick Copy
 
-### Claude Code
+One command per agent. Pick yours:
+
+```bash
+# Claude Code
+cat SKILL.md > CLAUDE.md
+
+# OpenCode
+mkdir -p .opencode/skills && cp SKILL.md .opencode/skills/simplicity-gate.md
+
+# Codex
+cat SKILL.md > CODEX.md
+
+# Aider
+aider --read SKILL.md
+
+# Cursor (skip frontmatter)
+tail -n +25 SKILL.md > .cursorrules
+
+# Windsurf (skip frontmatter)
+tail -n +25 SKILL.md > .windsurfrules
+
+# Cline (skip frontmatter)
+tail -n +25 SKILL.md > .clinerules
+
+# GitHub Copilot
+mkdir -p .github && cat SKILL.md > .github/copilot-instructions.md
+
+# Roo Code
+mkdir -p .roo/rules && cp SKILL.md .roo/rules/simplicity-gate.md
+
+# Amazon Q
+mkdir -p .amazonq/rules && cp SKILL.md .amazonq/rules/simplicity-gate.md
+```
+
+<details>
+<summary><strong>Claude Code</strong></summary>
+
+<br>
 
 Claude Code reads `CLAUDE.md` from your project root for instructions.
 
@@ -396,9 +430,12 @@ head -5 CLAUDE.md
 
 **What this does:** Claude Code will read `CLAUDE.md` at the start of every session and follow the Simplicity Gate rules.
 
----
+</details>
 
-### OpenCode
+<details>
+<summary><strong>OpenCode</strong></summary>
+
+<br>
 
 OpenCode has a native skills system. Place the file in the skills directory.
 
@@ -421,9 +458,12 @@ ls .opencode/skills/
 
 **What this does:** OpenCode automatically loads skills from `.opencode/skills/` and applies them to your session.
 
----
+</details>
 
-### Codex (OpenAI)
+<details>
+<summary><strong>Codex (OpenAI)</strong></summary>
+
+<br>
 
 Codex reads `CODEX.md` from your project root.
 
@@ -438,9 +478,12 @@ cat path/to/simplicity-gate/SKILL.md > CODEX.md
 Get-Content path\to\simplicity-gate\SKILL.md | Set-Content CODEX.md
 ```
 
----
+</details>
 
-### Aider
+<details>
+<summary><strong>Aider</strong></summary>
+
+<br>
 
 Aider can read instruction files via command-line flag or config.
 
@@ -458,28 +501,34 @@ read:
 EOF
 ```
 
----
+</details>
 
-### Cursor
+<details>
+<summary><strong>Cursor</strong></summary>
 
-Cursor reads `.cursorrules` from your project root. Skip the YAML frontmatter (first 14 lines).
+<br>
+
+Cursor reads `.cursorrules` from your project root. Skip the YAML frontmatter (first 24 lines).
 
 ```bash
 # Step 1: Navigate to your project
 cd your-project/
 
 # Step 2: Copy the skill, skipping frontmatter (macOS/Linux)
-tail -n +15 path/to/simplicity-gate/SKILL.md > .cursorrules
+tail -n +25 path/to/simplicity-gate/SKILL.md > .cursorrules
 
 # Step 2: Copy the skill, skipping frontmatter (Windows PowerShell)
-Get-Content path\to\simplicity-gate\SKILL.md | Select-Object -Skip 14 | Set-Content .cursorrules
+Get-Content path\to\simplicity-gate\SKILL.md | Select-Object -Skip 24 | Set-Content .cursorrules
 
 # Step 3: Restart Cursor to load the new rules
 ```
 
----
+</details>
 
-### Windsurf
+<details>
+<summary><strong>Windsurf</strong></summary>
+
+<br>
 
 Windsurf reads `.windsurfrules` from your project root.
 
@@ -488,17 +537,20 @@ Windsurf reads `.windsurfrules` from your project root.
 cd your-project/
 
 # Step 2: Copy the skill, skipping frontmatter (macOS/Linux)
-tail -n +15 path/to/simplicity-gate/SKILL.md > .windsurfrules
+tail -n +25 path/to/simplicity-gate/SKILL.md > .windsurfrules
 
 # Step 2: Copy the skill, skipping frontmatter (Windows PowerShell)
-Get-Content path\to\simplicity-gate\SKILL.md | Select-Object -Skip 14 | Set-Content .windsurfrules
+Get-Content path\to\simplicity-gate\SKILL.md | Select-Object -Skip 24 | Set-Content .windsurfrules
 
 # Step 3: Restart Windsurf
 ```
 
----
+</details>
 
-### Cline (VS Code Extension)
+<details>
+<summary><strong>Cline (VS Code Extension)</strong></summary>
+
+<br>
 
 Cline reads `.clinerules` from your project root.
 
@@ -507,17 +559,20 @@ Cline reads `.clinerules` from your project root.
 cd your-project/
 
 # Step 2: Copy the skill, skipping frontmatter (macOS/Linux)
-tail -n +15 path/to/simplicity-gate/SKILL.md > .clinerules
+tail -n +25 path/to/simplicity-gate/SKILL.md > .clinerules
 
 # Step 2: Copy the skill, skipping frontmatter (Windows PowerShell)
-Get-Content path\to\simplicity-gate\SKILL.md | Select-Object -Skip 14 | Set-Content .clinerules
+Get-Content path\to\simplicity-gate\SKILL.md | Select-Object -Skip 24 | Set-Content .clinerules
 
 # Step 3: Reload VS Code window (Ctrl+Shift+P → "Reload Window")
 ```
 
----
+</details>
 
-### Continue
+<details>
+<summary><strong>Continue</strong></summary>
+
+<br>
 
 Continue reads rules from its config file.
 
@@ -538,9 +593,12 @@ Start-Process "$env:USERPROFILE\.continue\config.json"
 }
 ```
 
----
+</details>
 
-### GitHub Copilot
+<details>
+<summary><strong>GitHub Copilot</strong></summary>
+
+<br>
 
 Copilot reads `.github/copilot-instructions.md` from your repository.
 
@@ -558,9 +616,12 @@ cat path/to/simplicity-gate/SKILL.md > .github/copilot-instructions.md
 Get-Content path\to\simplicity-gate\SKILL.md | Set-Content .github\copilot-instructions.md
 ```
 
----
+</details>
 
-### Roo Code
+<details>
+<summary><strong>Roo Code</strong></summary>
+
+<br>
 
 Roo Code reads rules from `.roo/rules/`.
 
@@ -578,9 +639,12 @@ cp path/to/simplicity-gate/SKILL.md .roo/rules/simplicity-gate.md
 Copy-Item path\to\simplicity-gate\SKILL.md .roo\rules\simplicity-gate.md
 ```
 
----
+</details>
 
-### Amazon Q Developer
+<details>
+<summary><strong>Amazon Q Developer</strong></summary>
+
+<br>
 
 Amazon Q reads rules from `.amazonq/rules/`.
 
@@ -598,7 +662,7 @@ cp path/to/simplicity-gate/SKILL.md .amazonq/rules/simplicity-gate.md
 Copy-Item path\to\simplicity-gate\SKILL.md .amazonq\rules\simplicity-gate.md
 ```
 
----
+</details>
 
 ## How It Works
 
@@ -608,15 +672,24 @@ When your agent proposes a solution, Simplicity Gate evaluates it against the hi
 PROPOSAL: "Write a Node.js script to rename JSON keys"
 
 Simplicity Gate checks:
-  Tier 1 — Can HTTP/HTML handle this?          → No
-  Tier 2 — Can a data format express this?     → No
-  Tier 3 — Can a shell command transform this? → Yes
+  Context — Node.js already in project?          → No (would be new runtime)
+  Tier 1 — Can HTTP/HTML handle this?            → No
+  Tier 2 — Can a data format express this?       → No
+  Tier 3 — Can a shell command transform this?   → Yes
 
-VERDICT: REJECT
+VERDICT: REJECT [Severity: 3]
   Proposed:    Node.js script (Tier 6)
   Use instead: jq (Tier 3)
   Command:     jq '{new_key: .old_key}' input.json > output.json
+  Cost Savings: ~2,000 tokens saved
+
+  --- AUTO-FIX ---
+  jq '{new_key: .old_key} | del(.deprecated)' input.json > output.json
 ```
+
+### Auto-Trigger
+
+This skill fires automatically on every code generation, dependency addition, and architecture decision. No manual invocation needed.
 
 ### Decision Flowchart
 
@@ -624,6 +697,26 @@ VERDICT: REJECT
 PROPOSAL RECEIVED
        │
        ▼
+┌─────────────────────────────┐
+│ 1. CHECK PROJECT CONTEXT    │
+│    What's already installed?│
+└─────────────┬───────────────┘
+              │
+              ▼
+┌─────────────────────────────┐
+│ 2. CHECK LANGUAGE TIERS     │
+│    Language-specific over-  │
+│    rides?                   │
+└─────────────┬───────────────┘
+              │
+              ▼
+┌─────────────────────────────┐
+│ 3. CHECK DEPENDENCY GRAPH   │
+│    Does the dependency      │
+│    already exist?           │
+└─────────────┬───────────────┘
+              │
+              ▼
 Can a platform feature handle it?  ─── YES ──▶ PASS (Tier 1)
        │ NO
        ▼
@@ -657,7 +750,9 @@ Does it need orchestration?        ─── YES ──▶ PASS (Tier 7)
 | `PASS` | Lowest viable tier chosen | Proceed with implementation |
 | `REJECT` | A lower tier works | Must downgrade before proceeding |
 | `WARN` | Lower tier may work | Check if simpler option suffices |
-| `ESCALATE` | Needs human judgment | Present justification for review |
+| `ESCALATE` | Needs human judgment | Present justification + test plan for review |
+
+Every REJECT and WARN includes a **severity score (1-5)** indicating how much over-engineering is proposed.
 
 ### PASS
 
@@ -666,35 +761,54 @@ SIMPLICITY GATE — PASS
 Tool:     Python script (Tier 6)
 Why:      Requires retry logic, template rendering, and multi-recipient
           routing — features that exceed shell pipeline expressiveness.
+Cost:     ~1,500 tokens (already optimal)
 ```
 
 ### REJECT
 
 ```
-SIMPLICITY GATE — REJECT
+SIMPLICITY GATE — REJECT [Severity: 3]
 Proposed:    Node.js script (Tier 6)
 Use instead: jq (Tier 3)
 Why:         jq renames keys and removes fields in one pipeline.
 Command:     jq '{new_key: .old_key} | del(.deprecated)' input.json > output.json
+Cost Savings: ~2,000 tokens saved
+
+--- AUTO-FIX ---
+jq '{new_key: .old_key} | del(.deprecated)' input.json > output.json
+
+--- MIGRATION PATH ---
+1. Save the jq command as rename.sh
+2. Replace Node.js script calls with: bash rename.sh
+3. Remove Node.js script file
+4. Remove any npm dependencies used only for this task
 ```
 
 ### WARN
 
 ```
-SIMPLICITY GATE — WARN
+SIMPLICITY GATE — WARN [Severity: 2]
 Proposed:  Python + pyyaml (Tier 6)
 Note:      yq (Tier 3) can validate structure with fewer dependencies.
 Check:     Does the validation require logic beyond structural checks?
+Savings:   ~1,000 tokens if yq works
+
+--- AUTO-FIX ---
+yq eval '.' config.yaml > /dev/null 2>&1 && echo "Valid" || echo "Invalid"
 ```
 
 ### ESCALATE
 
 ```
 SIMPLICITY GATE — ESCALATE
-Reason:   Cross-platform support required (Windows + Linux)
-Evidence: Tier 3 shell commands don't work on Windows
-Override: Use Node.js (Tier 6) for cross-platform compatibility
+Reason:      Cross-platform support required (Windows + Linux)
+Evidence:    Tier 3 shell commands don't work on Windows
+Override:    Use Node.js (Tier 6) for cross-platform compatibility
+Test Plan:   Unit tests for each platform, CI matrix testing
+Cost Impact: ~3,000 additional tokens for higher tier
 ```
+
+Escalation requires human approval and a test plan.
 
 ---
 
@@ -752,6 +866,26 @@ Measured across typical agent-proposed solutions:
 
 ---
 
+## What's New in v3.0
+
+| Feature | Description |
+|:--------|:------------|
+| **Auto-Trigger** | Skill fires automatically on every code generation, dependency addition, and architecture decision |
+| **Severity Scoring** | Every REJECT/WARN includes a severity score (1-5) indicating over-engineering level |
+| **Auto-Fix Templates** | Every REJECT includes copy-pasteable replacement code |
+| **Project Context Awareness** | Checks what's already installed before evaluating |
+| **Cost Estimation** | Token savings included in every verdict |
+| **Test Coverage for Escalations** | Escalations require a test plan |
+| **Dependency Graph Check** | Verifies dependencies before adding new ones |
+| **Performance Benchmarks** | REJECT includes benchmark data when available |
+| **Migration Path Suggestions** | REJECT includes steps to migrate from proposed solution |
+| **Team-Specific Overrides** | `.simplicity-gate.yml` for team customization |
+| **CI/CD Integration** | GitHub Action template included |
+| **Metrics Tracking** | Session summaries and violation counts |
+| **Language-Specific Tiers** | Adjusted tiers for JS, Python, Go, Rust |
+
+---
+
 ## Examples
 
 Full walkthroughs with code comparisons in [`examples/`](examples/):
@@ -761,8 +895,13 @@ Full walkthroughs with code comparisons in [`examples/`](examples/):
 | [JSON Reformatting](examples/reformat-json.md) | Node.js + lodash (T6) | `jq` (T3) | REJECT |
 | [UI Toggle](examples/css-toggle.md) | React + Zustand (T6) | CSS `:has()` (T1+2) | REJECT |
 | [Disk Monitor](examples/shell-monitor.md) | Python + psutil (T6) | `df \| awk` (T3) | PASS* |
+| [SQL vs Python](examples/sql-vs-python.md) | Python + pandas (T6) | SQL query (T4) | REJECT |
+| [CSS vs JS Validation](examples/css-vs-js-validation.md) | JavaScript validator (T6) | HTML5 + CSS (T1+2) | REJECT |
+| [curl vs Express](examples/curl-vs-express.md) | Express.js proxy (T7) | `curl` + cron (T3) | REJECT |
+| [Make vs npm Scripts](examples/make-vs-npm.md) | npm scripts (T6) | Make (Tier 3) | WARN |
 
 *\*PASS when retry logic, templates, or multi-recipient routing are required.*
+*\*\*WARN when npm is already your project's runtime.*
 
 ---
 
@@ -834,9 +973,13 @@ simplicity-gate/
 ├── SECURITY.md           Security policy
 ├── LICENSE               MIT License
 └── examples/
-    ├── css-toggle.md     React vs CSS toggle implementation
-    ├── reformat-json.md  Node.js vs jq JSON transformation
-    └── shell-monitor.md  Python vs shell disk monitoring
+    ├── css-toggle.md         React vs CSS toggle implementation
+    ├── reformat-json.md      Node.js vs jq JSON transformation
+    ├── shell-monitor.md      Python vs shell disk monitoring
+    ├── sql-vs-python.md      SQL vs pandas data queries
+    ├── css-vs-js-validation.md  HTML5 vs JavaScript form validation
+    ├── curl-vs-express.md    curl vs Express API proxying
+    └── make-vs-npm.md        Make vs npm scripts build automation
 ```
 
 ---
@@ -872,5 +1015,5 @@ MIT License. See [LICENSE](LICENSE).
 ---
 
 <p align="center">
-  <sub>Built to help AI agents write less code and ship more value.</sub>
+  <sub>Built to help AI agents write less code and ship more value. Now with auto-trigger.</sub>
 </p>
