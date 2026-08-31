@@ -1,11 +1,13 @@
 ---
 name: simplicity-gate
-version: "4.1.0"
+version: "5.0.0"
 description: >
   Evaluates tool/code proposals against the Rule of Least Power.
   Forces selection of the simplest viable tier. Blocks over-engineering.
   Auto-triggers on every code generation, dependency addition, and architecture decision.
-  v4.1: 11 language tiers, quick-check mode, AST detection, security audit, bundle estimation.
+  v5.0: Proactive write prevention, real-world cost calculator, community pattern library,
+  agent behavior profiling, interactive teaching mode, team gamification, auto-migration,
+  dependency weight reporter. 11 language tiers, quick-check mode, AST detection.
 triggers:
   - tool_invocation
   - code_generation
@@ -21,6 +23,9 @@ triggers:
   - new_endpoint
   - new_component
   - new_function
+  - write_operation
+  - file_edit
+  - shell_command
 auto_trigger: true
 settings:
   auto_fix: true
@@ -35,9 +40,17 @@ settings:
   ast_detection: true
   bundle_estimation: true
   security_audit: true
+  proactive_prevention: true
+  real_world_costs: true
+  community_patterns: true
+  agent_profiling: true
+  teaching_mode: true
+  gamification: true
+  auto_migration: true
+  dependency_weight: true
 ---
 
-# Simplicity Gate v4.1
+# Simplicity Gate v5.0
 
 > Choose the least powerful tool that does the job.
 
@@ -415,6 +428,794 @@ DEPENDENCY TREE: express
 
 ALTERNATIVE: curl (0 deps)
 ```
+
+---
+
+## Game-Changing Features (v5.0)
+
+### 1. Proactive Write Prevention
+
+**The gate BLOCKS over-engineered code before it's written, not after.**
+
+When the agent attempts to write code that violates the hierarchy, the gate intercepts the write operation and prevents it from happening.
+
+```
+SIMPLICITY GATE — WRITE BLOCKED
+Operation:  File write (server.js)
+Violation:  Express.js (Tier 7) for simple HTTP proxy
+Blocker:    curl (Tier 3) can handle this task
+Status:     WRITE PREVENTED — agent must choose simpler alternative
+
+Agent attempted:
+  const express = require('express');
+  const app = express();
+  app.get('/proxy', (req, res) => { ... });
+
+Gate says:
+  STOP. Use curl instead.
+  curl -s -H "Authorization: Bearer $TOKEN" https://api.example.com/data
+```
+
+**Prevention rules:**
+
+| Trigger                        | Action                              |
+| ------------------------------ | ----------------------------------- |
+| `npm install <high-tier>`        | Block install, suggest alternative  |
+| `require('express')`             | Block import, suggest curl/http     |
+| `import React` for simple toggle | Block import, suggest CSS           |
+| `from django` for API endpoint   | Block import, suggest Flask or curl |
+| `docker run` for cron job        | Block, suggest native cron          |
+
+**Prevention modes:**
+
+```yaml
+proactive_prevention:
+  mode: strict  # strict | warn | off
+  # strict: BLOCK the write, require alternative
+  # warn:   SHOW warning, allow override with reason
+  # off:    Log only, never block
+  
+  # Allow specific patterns to bypass prevention
+  exemptions:
+    - pattern: "existing-project-stack"
+      reason: "Reusing installed runtime"
+    - pattern: "team-approved-override"
+      reason: "Approved in .simplicity-gate.yml"
+```
+
+**How it works:**
+
+1. Agent attempts a write operation (file edit, package install, import)
+2. Gate intercepts BEFORE the operation executes
+3. Gate evaluates against the tier hierarchy
+4. If violation detected → BLOCK the operation
+5. Gate provides the simpler alternative with auto-fix
+6. Agent must choose the alternative or ESCALATE with justification
+
+---
+
+### 2. Real-World Cost Calculator
+
+**Ties tier violations to actual cloud costs, bandwidth, and maintenance burden.**
+
+Every verdict includes real-world cost impact, not just token estimates.
+
+```
+REAL-WORLD COST ANALYSIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Proposed: Express.js (Tier 7) for API proxy
+
+Monthly Costs:
+├── AWS EC2 (t3.micro):        $8.47/mo
+├── Load balancer:             $16.20/mo
+├── CloudWatch logs:           $2.50/mo
+├── Bandwidth (10GB):          $9.00/mo
+├── SSL certificate:           $0 (Let's Encrypt)
+├── Maintenance (2hr/mo):      $150.00/mo
+└── Total:                     $186.17/mo
+
+Alternative: curl + cron (Tier 3)
+├── Existing server:           $0 (already running)
+├── Bandwidth:                 $0 (same server)
+├── Maintenance:               $0 (set and forget)
+└── Total:                     $0/mo
+
+Annual Savings:               $2,234.04
+```
+
+**Cost database:**
+
+```yaml
+real_world_costs:
+  cloud:
+    aws_ec2_t3_micro: 8.47
+    aws_ec2_t3_small: 15.42
+    aws_lambda_per_1m: 0.20
+    aws_s3_per_gb: 0.023
+    aws_rds_mysql: 12.41
+    gcp_e2_micro: 7.67
+    azure_b1s: 7.59
+  
+  bandwidth:
+    aws_per_gb: 0.09
+    cloudflare: 0  # free tier
+    heroku_per_gb: 10.00
+  
+  maintenance:
+    per_hour: 75.00  # avg engineer hourly rate
+  
+  dependencies:
+    npm_per_package: 0.002  # avg install time cost
+    pip_per_package: 0.001
+    docker_per_image: 0.05  # storage cost
+```
+
+**Cost calculation rules:**
+
+- Always show monthly and annual costs
+- Compare proposed vs alternative
+- Include maintenance burden (hours × rate)
+- Include bandwidth costs for APIs
+- Include storage costs for data
+- Show total savings in bold
+
+---
+
+### 3. Community Pattern Library
+
+**Growing database of anti-patterns → simpler alternatives, contributed by the community.**
+
+```yaml
+# .simplicity-gate/patterns.yml
+community_patterns:
+  - id: "react-toggle-css"
+    name: "React Toggle → CSS :has()"
+    anti_pattern: "React + useState for show/hide"
+    alternative: "CSS :has() + checkbox"
+    tier_gap: 6
+    tokens_saved: 3500
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        const [show, setShow] = useState(false);
+        return (
+          <div>
+            <button onClick={() => setShow(!show)}>Toggle</button>
+            {show && <Content />}
+          </div>
+        );
+      after: |
+        <input type="checkbox" id="toggle" class="toggle-input">
+        <label for="toggle">Toggle</label>
+        <div class="content">Content</div>
+        
+        .toggle-input:checked ~ .content { display: block; }
+        .content { display: none; }
+  
+  - id: "express-proxy-curl"
+    name: "Express Proxy → curl"
+    anti_pattern: "Express.js app for API proxy"
+    alternative: "curl + cron"
+    tier_gap: 4
+    tokens_saved: 2000
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        const express = require('express');
+        const axios = require('axios');
+        const app = express();
+        app.get('/proxy', async (req, res) => {
+          const data = await axios.get('https://api.example.com');
+          res.json(data);
+        });
+      after: |
+        curl -s -H "Authorization: Bearer $TOKEN" https://api.example.com > data.json
+  
+  - id: "lodash-native"
+    name: "lodash → Native Methods"
+    anti_pattern: "lodash for cloneDeep, map, filter"
+    alternative: "structuredClone, Array methods"
+    tier_gap: 6
+    tokens_saved: 1500
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        const _ = require('lodash');
+        const clone = _.cloneDeep(obj);
+        const mapped = _.map(arr, x => x * 2);
+        const filtered = _.filter(arr, x => x > 10);
+      after: |
+        const clone = structuredClone(obj);
+        const mapped = arr.map(x => x * 2);
+        const filtered = arr.filter(x => x > 10);
+  
+  - id: "moment-intl"
+    name: "moment → Intl.DateTimeFormat"
+    anti_pattern: "moment.js for date formatting"
+    alternative: "Intl.DateTimeFormat"
+    tier_gap: 6
+    tokens_saved: 2000
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        const moment = require('moment');
+        const formatted = moment().format('YYYY-MM-DD');
+      after: |
+        const formatted = new Intl.DateTimeFormat('en-CA').format(new Date());
+  
+  - id: "axios-fetch"
+    name: "axios → fetch"
+    anti_pattern: "axios for HTTP requests"
+    alternative: "fetch() API"
+    tier_gap: 6
+    tokens_saved: 1000
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        const axios = require('axios');
+        const data = await axios.get('https://api.example.com');
+      after: |
+        const data = await fetch('https://api.example.com').then(r => r.json());
+  
+  - id: "docker-cron"
+    name: "Docker Cron → System Cron"
+    anti_pattern: "Docker container for scheduled tasks"
+    alternative: "System crontab"
+    tier_gap: 4
+    tokens_saved: 5000
+    contributed_by: "simplicity-gate-community"
+    verified: true
+    examples:
+      before: |
+        FROM alpine:latest
+        COPY script.sh /script.sh
+        RUN chmod +x /script.sh
+        CMD ["/script.sh"]
+      after: |
+        0 * * * * /path/to/script.sh
+```
+
+**Pattern library rules:**
+
+- Community contributes via pull request
+- Patterns must include before/after code
+- Patterns must include token savings
+- Patterns are verified by maintainers
+- Top patterns are featured in Quick-Check
+- Patterns are searchable by anti-pattern name
+
+**Pattern matching:**
+
+```
+PATTERN MATCH FOUND:
+├── Anti-pattern: "React + useState for toggle"
+├── Matched: "react-toggle-css" (98% confidence)
+├── Alternative: CSS :has() + checkbox
+├── Token savings: ~3,500
+└── Auto-applied: YES
+```
+
+---
+
+### 4. Agent Behavior Profiling
+
+**Tracks which AI agents over-engineer most and creates a simplicity leaderboard.**
+
+```yaml
+# .simplicity-gate/agent-profiles.yml
+agent_profiles:
+  - agent: "claude-3.5-sonnet"
+    evaluations: 156
+    pass_rate: 0.72
+    reject_rate: 0.18
+    warn_rate: 0.08
+    escalate_rate: 0.02
+    avg_severity: 2.3
+    top_violations:
+      - "Adding Express for simple APIs"
+      - "Using lodash instead of native"
+    simplicity_score: 72
+    trend: "improving"
+  
+  - agent: "gpt-4-turbo"
+    evaluations: 134
+    pass_rate: 0.65
+    reject_rate: 0.24
+    warn_rate: 0.08
+    escalate_rate: 0.03
+    avg_severity: 2.8
+    top_violations:
+      - "React for CSS-only tasks"
+      - "Docker for cron jobs"
+      - "Python for grep tasks"
+    simplicity_score: 65
+    trend: "stable"
+  
+  - agent: "codestral"
+    evaluations: 89
+    pass_rate: 0.81
+    reject_rate: 0.12
+    warn_rate: 0.05
+    escalate_rate: 0.02
+    avg_severity: 1.9
+    top_violations:
+      - "Using moment.js"
+    simplicity_score: 81
+    trend: "improving"
+```
+
+**Profile metrics:**
+
+| Metric                 | Description                                  |
+| ---------------------- | -------------------------------------------- |
+| `simplicity_score`       | 0-100, higher = simpler suggestions         |
+| `pass_rate`              | % of suggestions that pass the gate         |
+| `reject_rate`            | % of suggestions that get rejected          |
+| `avg_severity`           | Average severity of violations              |
+| `top_violations`         | Most common over-engineering patterns       |
+| `trend`                  | improving / stable / declining              |
+| `evaluations`            | Total number of gate evaluations            |
+
+**Leaderboard output:**
+
+```
+SIMPLICITY GATE — AGENT LEADERBOARD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Rank  Agent              Score   Pass Rate   Trend
+ 1    codestral          81      81%         ↑ improving
+ 2    claude-3.5-sonnet  72      72%         ↑ improving
+ 3    gpt-4-turbo        65      65%         → stable
+ 4    gemini-pro         58      58%         ↓ declining
+
+Insights:
+├── codestral rarely suggests frameworks for simple tasks
+├── gpt-4-turbo over-engineers React components 24% of the time
+├── gemini-pro tends to add unnecessary dependencies
+└── All agents improved after teaching mode enabled
+```
+
+**Profiling rules:**
+
+- Track every evaluation per agent
+- Calculate rolling scores (last 100 evaluations)
+- Update profiles at session end
+- Share profiles across sessions (with consent)
+- Leaderboard is optional (gamification)
+
+---
+
+### 5. Interactive Teaching Mode
+
+**Don't just fix it — teach the agent WHY simpler is better.**
+
+When a REJECT happens, the gate explains the thinking pattern that led to over-engineering and teaches the correct mental model.
+
+```
+SIMPLICITY GATE — TEACHING MOMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You proposed: Express.js (Tier 7) for API proxy
+
+YOUR THINKING PATTERN:
+"You need to make HTTP requests, so you need a server framework."
+
+THIS IS WRONG BECAUSE:
+Express is designed for building web applications with routing,
+middleware, and complex request handling. You're using a web
+framework as a proxy — that's like using a truck to carry a letter.
+
+THE CORRECT THINKING PATTERN:
+"What's the simplest tool that makes HTTP requests?"
+→ curl (Tier 3) does exactly this. One command. No runtime.
+
+LESSON LEARNED:
+When you need to make HTTP requests, start with curl.
+Only escalate if you need:
+├── Persistent connections → Node.js http module (Tier 5)
+├── Complex routing → Express (Tier 7)
+├── Middleware pipeline → Express (Tier 7)
+└── WebSocket handling → ws library (Tier 6)
+
+YOUR SIMPLICITY SCORE: 65/100
+Keep learning! You're improving.
+```
+
+**Teaching modes:**
+
+```yaml
+teaching_mode:
+  enabled: true
+  
+  # When to teach
+  triggers:
+    - severity_above: 3  # Teach on serious violations
+    - repeat_offense: true  # Teach when same mistake repeated
+    - new_pattern: true  # Teach when encountering new anti-pattern
+  
+  # What to teach
+  lessons:
+    - "Think in utilities, not frameworks"
+    - "Start at Tier 1, stop at first match"
+    - "Dependencies have real costs"
+    - "Shell commands are composable"
+    - "Built-in APIs are free"
+  
+  # How to teach
+  style: socratic  # socratic | direct | example-based
+  # socratic: Ask questions to guide thinking
+  # direct: Tell the agent what to do
+  # example-based: Show before/after examples
+```
+
+**Teaching examples:**
+
+```
+TEACHING — SOCRATIC STYLE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Agent: "I'll use React to toggle a panel."
+Gate: "What does the toggle need to do?"
+Agent: "Show/hide content when clicked."
+Gate: "Can CSS handle show/hide?"
+Agent: "Yes, with display: none/block."
+Gate: "Then why do you need React?"
+Agent: "..."
+Gate: "CSS :has() + checkbox can do this. Here's how..."
+
+TEACHING — EXAMPLE-BASED:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WRONG (you proposed):
+const [show, setShow] = useState(false);
+return <div>{show && <Content />}</div>;
+
+RIGHT (simpler):
+<input type="checkbox" id="toggle">
+<label for="toggle">Show</label>
+<div class="content">Content</div>
+<style>.content { display: none; }
+.toggle:checked ~ .content { display: block; }</style>
+
+WHY: CSS handles state without JavaScript runtime.
+```
+
+---
+
+### 6. Team Gamification
+
+**Gamifies simplicity — teams compete for the highest simplicity scores.**
+
+```yaml
+# .simplicity-gate/gamification.yml
+gamification:
+  enabled: true
+  
+  # Team definitions
+  teams:
+    - name: "Alpha"
+      members: ["alice", "bob", "charlie"]
+      simplicity_score: 87
+      streak: 12  # consecutive sessions without REJECT
+    
+    - name: "Beta"
+      members: ["dave", "eve", "frank"]
+      simplicity_score: 72
+      streak: 5
+    
+    - name: "Gamma"
+      members: ["grace", "henry"]
+      simplicity_score: 91
+      streak: 20
+  
+  # Achievements
+  achievements:
+    - id: "first-pass"
+      name: "First PASS"
+      description: "First suggestion that passes the gate"
+      icon: "✓"
+    
+    - id: "streak-5"
+      name: "On Fire"
+      description: "5 consecutive sessions without REJECT"
+      icon: "🔥"
+    
+    - id: "streak-10"
+      name: "Unstoppable"
+      description: "10 consecutive sessions without REJECT"
+      icon: "⚡"
+    
+    - id: "streak-20"
+      name: "Simplicity Master"
+      description: "20 consecutive sessions without REJECT"
+      icon: "👑"
+    
+    - id: "zero-react"
+      name: "CSS Champion"
+      description: "Entire session with zero React for simple tasks"
+      icon: "🎨"
+    
+    - id: "zero-lodash"
+      name: "Native Ninja"
+      description: "Entire session with zero lodash imports"
+      icon: "🥷"
+    
+    - id: "cost-saver"
+      name: "Cost Cutter"
+      description: "Saved $100+ in cloud costs in one session"
+      icon: "💰"
+  
+  # Leaderboard display
+  leaderboard:
+    show: true
+    refresh: "after_each_session"
+    format: "table"
+```
+
+**Leaderboard output:**
+
+```
+SIMPLICITY GATE — TEAM LEADERBOARD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Rank  Team     Score   Streak   Members          Achievements
+ 1    Gamma    91      20       grace, henry     👑 ⚡ 🔥 ✓
+ 2    Alpha    87      12       alice, bob, charlie  ⚡ 🔥 ✓
+ 3    Beta     72      5        dave, eve, frank 🔥 ✓
+
+Recent Achievements:
+├── grace earned "Simplicity Master" (20 streak)
+├── alice earned "Cost Cutter" (saved $150 this session)
+├── bob earned "CSS Champion" (zero React violations)
+└── dave earned "On Fire" (5 streak)
+
+This Week:
+├── Total evaluations: 234
+├── Total tokens saved: ~45,000
+├── Total cost saved: ~$312
+└── Team Alpha reduced React usage by 40%
+```
+
+**Gamification rules:**
+
+- Scores update after each session
+- Achievements unlock automatically
+- Leaderboard refreshes after each session
+- Monthly resets with all-time records preserved
+- Team leads can customize achievements
+
+---
+
+### 7. Auto-Migration
+
+**Scans codebase for old over-engineering and suggests migration to simpler alternatives.**
+
+```
+SIMPLICITY GATE — AUTO-MIGRATION SCAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Scanning: /path/to/project
+Files analyzed: 147
+Over-engineering found: 12 instances
+
+MIGRATION OPPORTUNITIES:
+├── src/utils/parse.js (Node.js + lodash)
+│   └── Migrate to: jq script (save ~2,000 tokens)
+│
+├── src/api/proxy.js (Express.js)
+│   └── Migrate to: curl + cron (save ~3,500 tokens)
+│
+├── src/components/Toggle.jsx (React + useState)
+│   └── Migrate to: CSS :has() (save ~1,500 tokens)
+│
+├── scripts/monitor.py (Python + psutil)
+│   └── Migrate to: df + awk (save ~1,200 tokens)
+│
+└── config/validate.js (Node.js + ajv)
+    └── Migrate to: JSON Schema CLI (save ~800 tokens)
+
+TOTAL POTENTIAL SAVINGS: ~9,000 tokens
+ESTIMATED ANNUAL COST SAVINGS: ~$180
+
+Migrate all? [y/N/select]:
+```
+
+**Migration modes:**
+
+```yaml
+auto_migration:
+  enabled: true
+  
+  # Scan settings
+  scan:
+    include: ["*.js", "*.ts", "*.py", "*.jsx", "*.tsx"]
+    exclude: ["node_modules", "dist", "build", ".git"]
+    max_files: 1000
+  
+  # Migration strategies
+  strategies:
+    - name: "safe"
+      description: "Migrate one file at a time, run tests between"
+      risk: "low"
+      speed: "slow"
+    
+    - name: "batch"
+      description: "Migrate all similar patterns at once"
+      risk: "medium"
+      speed: "fast"
+    
+    - name: "aggressive"
+      description: "Migrate everything, fix issues as they arise"
+      risk: "high"
+      speed: "fastest"
+  
+  # Auto-fix settings
+  auto_fix:
+    enabled: true
+    create_backup: true
+    backup_dir: ".simplicity-gate/backups/"
+    run_tests: true
+    test_command: "npm test"
+```
+
+**Migration process:**
+
+1. **Scan** — Find all over-engineering instances
+2. **Prioritize** — Sort by token savings (highest first)
+3. **Plan** — Create migration plan with dependencies
+4. **Backup** — Save current state for rollback
+5. **Migrate** — Apply changes in order
+6. **Verify** — Run tests after each migration
+7. **Report** — Show before/after comparison
+
+**Migration output:**
+
+```
+SIMPLICITY GATE — MIGRATION COMPLETE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Migrated: 12 files
+├── 4 Node.js scripts → shell scripts
+├── 3 React components → CSS solutions
+├── 2 Python scripts → shell pipelines
+├── 2 Express apps → curl + cron
+└── 1 lodash utility → native methods
+
+Results:
+├── Files modified: 12
+├── Files deleted: 5
+├── Dependencies removed: 8 (lodash, moment, axios, express, react, psutil, ajv, cors)
+├── Tokens saved: ~9,000
+├── Bundle size reduced: ~420 KB
+├── Tests passing: ✓
+└── Time taken: 3m 42s
+
+Before: 147 files, 12,450 lines, 18 dependencies
+After:  142 files, 8,200 lines, 10 dependencies
+```
+
+---
+
+### 8. Dependency Weight Reporter
+
+**Shows real dependency costs before adding packages — size, transitive deps, CVEs, maintenance burden.**
+
+```
+DEPENDENCY WEIGHT REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Package: express@4.18.2
+
+Size Impact:
+├── Direct size:        1.2 MB
+├── Gzipped:           230 KB
+├── Transitive deps:   68 packages
+├── Total tree size:   4.2 MB
+└── Install time:      ~3.5s
+
+Security:
+├── Known CVEs:        2
+│   ├── CVE-2024-29041: Open redirect (Medium)
+│   └── CVE-2024-29042: XSS (Low)
+├── Last patched:      2024-03-25
+└── Maintenance:       Active (weekly commits)
+
+Maintenance Burden:
+├── Updates per year:  ~12
+├── Breaking changes:  ~2 per year
+├── Migration effort:  ~4 hours per breaking change
+└── Annual cost:      ~$600 (at $75/hr)
+
+Alternatives:
+├── curl (Tier 3)
+│   ├── Size: 0 KB
+│   ├── Deps: 0
+│   ├── CVEs: 0
+│   └── Annual cost: $0
+│
+├── Node.js http module (Tier 5)
+│   ├── Size: 0 KB (built-in)
+│   ├── Deps: 0
+│   ├── CVEs: 0
+│   └── Annual cost: $0
+│
+└── Fastify (Tier 7)
+    ├── Size: 850 KB
+    ├── Deps: 32
+    ├── CVEs: 0
+    └── Annual cost: ~$400
+
+RECOMMENDATION: Use curl (Tier 3) or Node.js http module (Tier 5)
+```
+
+**Weight database:**
+
+```yaml
+dependency_weight:
+  # Common packages with real costs
+  packages:
+    express:
+      size: "1.2 MB"
+      gzipped: "230 KB"
+      transitive_deps: 68
+      cves: 2
+      updates_per_year: 12
+      breaking_per_year: 2
+    
+    lodash:
+      size: "4.2 MB"
+      gzipped: "73.8 KB"
+      transitive_deps: 0
+      cves: 2
+      updates_per_year: 0  # unmaintained
+      breaking_per_year: 0
+    
+    moment:
+      size: "2.9 MB"
+      gzipped: "72 KB"
+      transitive_deps: 0
+      cves: 1
+      updates_per_year: 0  # deprecated
+      breaking_per_year: 0
+    
+    axios:
+      size: "1.1 MB"
+      gzipped: "5.3 KB"
+      transitive_deps: 12
+      cves: 0
+      updates_per_year: 8
+      breaking_per_year: 1
+    
+    react:
+      size: "210 KB"
+      gzipped: "42 KB"
+      transitive_deps: 4
+      cves: 0
+      updates_per_year: 6
+      breaking_per_year: 1
+  
+  # Cost multipliers
+  costs:
+    per_mb_per_month: 0.023  # S3 storage
+    per_cve_risk: 500  # avg remediation cost
+    per_breaking_change_hours: 4
+    hourly_rate: 75
+```
+
+**Weight rules:**
+
+- Always show before adding a dependency
+- Compare to alternatives (Tier 0-3)
+- Include annual cost projection
+- Highlight CVEs and maintenance burden
+- Show transitive dependency tree
+- Recommend simplest alternative
 
 ---
 
@@ -1272,6 +2073,16 @@ One-off scripts still follow the hierarchy. If jq can do it, use jq — even for
 Check if curl (Tier 3) can handle the integration. Only escalate to Tier 6 if you need persistent connections, connection pooling, or complex retry logic.
 
 ## Changelog
+
+### v5.0.0
+- Added Proactive Write Prevention — blocks over-engineered code before it's written
+- Added Real-World Cost Calculator — ties tier violations to actual cloud costs
+- Added Community Pattern Library — growing database of anti-patterns → alternatives
+- Added Agent Behavior Profiling — tracks which agents over-engineer most
+- Added Interactive Teaching Mode — explains WHY simpler is better
+- Added Team Gamification — simplicity leaderboard and achievements
+- Added Auto-Migration — scans codebase for old over-engineering
+- Added Dependency Weight Reporter — real dependency costs before adding packages
 
 ### v4.1.0
 - Added 7 new language tiers: TypeScript, Java, C#, PHP, Ruby, Swift, Kotlin, Scala

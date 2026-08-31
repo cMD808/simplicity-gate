@@ -9,13 +9,15 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-4.1.0-blue" alt="Version">
+  <img src="https://img.shields.io/badge/version-5.0.0-blue" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
   <img src="https://img.shields.io/badge/agents-12+-purple" alt="Agents">
   <img src="https://img.shields.io/badge/languages-11-orange" alt="Languages">
   <img src="https://img.shields.io/badge/quick--check-50ms-brightgreen" alt="Quick Check">
   <img src="https://img.shields.io/badge/auto--fix-enabled-brightgreen" alt="Auto-Fix">
   <img src="https://img.shields.io/badge/learning--mode-enabled-brightgreen" alt="Learning Mode">
+  <img src="https://img.shields.io/badge/proactive--prevention-enabled-brightgreen" alt="Proactive Prevention">
+  <img src="https://img.shields.io/badge/gamification-enabled-brightgreen" alt="Gamification">
 </p>
 
 <div align="center">
@@ -74,7 +76,7 @@ cp SKILL.md ~/.codex/skills/simplicity-gate.md
 cp SKILL.md .aider.conf.yml  # or add to .aider/skills/
 
 # Cursor / Windsurf / Cline
-tail -n +25 SKILL.md > .cursorrules  # skip YAML frontmatter
+tail -n +52 SKILL.md > .cursorrules  # skip YAML frontmatter
 
 # GitHub Copilot
 mkdir -p .github/copilot-instructions
@@ -140,7 +142,7 @@ cp SKILL.md .aider/skills/simplicity-gate.md
 <summary>Cursor / Windsurf / Cline</summary>
 
 ```bash
-tail -n +25 SKILL.md > .cursorrules
+tail -n +52 SKILL.md > .cursorrules
 # Restart editor after copying
 ```
 
@@ -308,23 +310,30 @@ settings:
   suppressions: true
   multi_file_scan: true
   dependency_cost: true
+  proactive_prevention: true
+  real_world_costs: true
+  community_patterns: true
+  agent_profiling: true
+  teaching_mode: true
+  gamification: true
+  auto_migration: true
+  dependency_weight: true
 ```
 
 ---
 
-<h2 align="center">What's New in v4.1</h2>
+<h2 align="center">What's New in v5.0</h2>
 
 | Feature | What It Does |
 |:--------|:-------------|
-| **11 Languages** | TypeScript, Java, C#, PHP, Ruby, Swift, Kotlin, Scala + Tier 0 for all |
-| **Quick-Check** | 50ms instant REJECT for obvious violations |
-| **Cached Patterns** | Instant lookup for common over-engineering |
-| **Early Termination** | Stop at first tier match, skip rest |
-| **AST Detection** | Find anti-patterns: `JSON.parse(JSON.stringify())`, lodash, moment, axios |
-| **Bundle Estimation** | Show KB impact before adding dependencies |
-| **Security Audit** | Check CVEs before adding packages |
-| **Profiling Tips** | Recommend tools when higher tier justified |
-| **Dependency Tree** | Show full transitive dependency graph |
+| **Proactive Write Prevention** | Blocks over-engineered code before it's written |
+| **Real-World Cost Calculator** | Ties tier violations to actual cloud costs ($/month) |
+| **Community Pattern Library** | Growing database of anti-patterns → alternatives |
+| **Agent Behavior Profiling** | Tracks which agents over-engineer most |
+| **Interactive Teaching Mode** | Explains WHY simpler is better, not just WHAT |
+| **Team Gamification** | Simplicity leaderboard and achievements |
+| **Auto-Migration** | Scans codebase for old over-engineering |
+| **Dependency Weight Reporter** | Real dependency costs before adding packages |
 
 ---
 
