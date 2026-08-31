@@ -8,6 +8,15 @@
   <em>The Rule of Least Power enforcer for AI coding agents.</em>
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/version-3.0.0-blue" alt="Version">
+  <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
+  <img src="https://img.shields.io/badge/agents-12+-purple" alt="Agents">
+  <img src="https://img.shields.io/badge/tiers-7-orange" alt="Tiers">
+  <img src="https://img.shields.io/badge/auto--trigger-enabled-brightgreen" alt="Auto-Trigger">
+  <img src="https://img.shields.io/badge/severity--scoring-1--5-red" alt="Severity Scoring">
+</p>
+
 ---
 
 ## The Problem
