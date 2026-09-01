@@ -670,6 +670,64 @@ When a REJECT is issued, the gate provides a copy-pasteable replacement in the `
 
 ---
 
+## 🧪 Testing
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run smoke test
+node bin/simplicity-gate.js eval examples/reformat-json.md
+
+# Run benchmark
+npm run bench
+```
+
+### Test Structure
+
+```
+__tests__/
+├── helpers.test.js      # Unit tests for helper functions
+├── eval.test.js         # Tests for eval command
+├── scan.test.js         # Tests for scan command
+├── why-not.test.js      # Tests for why-not command
+├── fix.test.js          # Tests for fix command
+├── integration.test.js  # End-to-end CLI tests
+└── fixtures/            # Test data files
+    ├── proposals/       # Sample proposal files
+    ├── scan-target/     # Files for scan testing
+    └── fix-target/      # Files for fix testing
+```
+
+### Writing Tests
+
+Tests use Jest and follow this pattern:
+
+```javascript
+const { functionName } = require('../lib/module');
+
+describe('functionName', () => {
+  test('does something', () => {
+    // Arrange
+    const input = 'test';
+    
+    // Act
+    const result = functionName(input);
+    
+    // Assert
+    expect(result).toBe('expected');
+  });
+});
+```
+
+---
+
 ## 📈 Impact
 
 <table align="center">

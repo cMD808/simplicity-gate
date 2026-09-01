@@ -28,6 +28,7 @@
   },
   "files": [
     "bin/",
+    "lib/",
     "SKILL.md",
     "README.md",
     "LICENSE"
@@ -36,8 +37,16 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "test": "node bin/simplicity-gate.js eval examples/reformat-json.md",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "bench": "node bin/simplicity-gate.js bench",
     "scan": "node bin/simplicity-gate.js scan ./examples"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testMatch": ["**/__tests__/**/*.test.js"]
   }
 }

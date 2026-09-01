@@ -7,9 +7,35 @@ on:
     branches: [main, develop]
 
 jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run smoke test
+        run: node bin/simplicity-gate.js eval examples/reformat-json.md
+
+      - name: Run benchmark
+        run: npm run bench
+
   simplicity-gate:
     name: Simplicity Gate Check
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,32 +50,18 @@ jobs:
         run: npm ci
 
       - name: Run Simplicity Gate Scan
-        id: scan
         run: |
-          npx simplicity-gate scan . --format json > gate-results.json || true
-          cat gate-results.json
+          node bin/simplicity-gate.js scan .
 
-      - name: Check for violations
+      - name: Run Simplicity Gate Bench
         run: |
-          violations=$(jq '.violations | length' gate-results.json)
-          if [ "$violations" -gt 0 ]; then
-            echo "::warning::Simplicity Gate found $violations over-engineering violations"
-            jq -r '.violations[] | "\(.file):\(.line): \(.tool) (Tier \(.tier)) -> \(.suggestion)"' gate-results.json
-          else
-            echo "✓ No over-engineering violations found"
-          fi
-
-      - name: Upload results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: simplicity-gate-results
-          path: gate-results.json
+          node bin/simplicity-gate.js bench
 
   eval-proposals:
     name: Evaluate Proposals
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,38 +75,9 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Find proposal files
-        id: proposals
+      - name: Find and evaluate proposals
         run: |
-          find . -name "*.proposal.md" -o -name "*-proposal.md" -o -name "PROPOSAL*.md" | head -20 > proposals.txt
-          cat proposals.txt
-
-      - name: Evaluate each proposal
-        if: steps.proposals.outputs.proposals != ''
-        run: |
-          while IFS= read -r file; do
+          find . -name "*.proposal.md" -o -name "*-proposal.md" -o -name "PROPOSAL*.md" | head -20 | while IFS= read -r file; do
             echo "Evaluating: $file"
-            npx simplicity-gate eval "$file" --format json >> eval-results.json || true
-          done < proposals.txt
-
-      - name: Comment on PR
-        if: steps.proposals.outputs.proposals != ''
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const results = fs.readFileSync('eval-results.json', 'utf8');
-            const lines = results.trim().split('\n').filter(l => l);
-            let comment = '## 🛡️ Simplicity Gate Evaluation\n\n';
-            for (const line of lines) {
-              const r = JSON.parse(line);
-              const icon = r.verdict === 'PASS' ? '✅' : r.verdict === 'WARN' ? '⚠️' : '❌';
-              comment += `${icon} **${r.file}** — ${r.verdict} (${r.tool}, Tier ${r.tier})\n`;
-              if (r.suggestion) comment += `  > ${r.suggestion}\n`;
-            }
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: comment
-            });
+            node bin/simplicity-gate.js eval "$file" || true
+          done
