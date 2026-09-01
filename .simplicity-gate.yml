@@ -1,0 +1,27 @@
+# Simplicity Gate Configuration
+# Applied preset: minimal (Minimal (Startup/Solo))
+# Generated: 2026-09-01T00:11:56.132Z
+
+version: 1
+
+# Severity threshold (1=permissive, 5=strict)
+severity_threshold: 3
+
+# Auto-fix over-engineering
+auto_fix: true
+
+# Enable cost/token estimation
+cost_estimation: true
+
+# Allowed tiers (proposals above max tier are REJECTed)
+allowed_tiers: [0, 1, 2, 3]
+
+# Completely blocked tools (always REJECTed)
+blocked_tools: ['express', 'axios', 'lodash', 'redux', 'zustand', 'moment', 'uuid', 'nextjs', 'supabase']
+
+# Per-tool tier adjustments (override canonical tiers)
+tier_adjustments:
+
+
+# Enabled auto-fix templates
+auto_fix_templates: ['express-to-fetch', 'axios-to-fetch', 'lodash-to-native', 'moment-to-date', 'uuid-to-crypto', 'react-to-html', 'nextjs-to-static']

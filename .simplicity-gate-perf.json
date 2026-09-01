@@ -1,0 +1,73 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-09-01T00:37:16.346Z",
+      "results": {
+        "tierLookup": {
+          "totalMs": 0.3455,
+          "perCallUs": 0.3455
+        },
+        "antiPatternScan": {
+          "totalMs": 9.6712,
+          "perCallUs": 9.6712
+        },
+        "yamlParse": {
+          "totalMs": 1.0212,
+          "perCallUs": 1.0212
+        },
+        "fullEval": {
+          "totalMs": 7.9166,
+          "perCallUs": 7.916600000000001
+        }
+      },
+      "nodeVersion": "v24.19.0",
+      "platform": "win32"
+    },
+    {
+      "timestamp": "2026-09-01T00:38:20.598Z",
+      "results": {
+        "tierLookup": {
+          "totalMs": 0.2942,
+          "perCallUs": 0.29419999999999996
+        },
+        "antiPatternScan": {
+          "totalMs": 19.6597,
+          "perCallUs": 19.6597
+        },
+        "yamlParse": {
+          "totalMs": 0.8836,
+          "perCallUs": 0.8836
+        },
+        "fullEval": {
+          "totalMs": 5.586,
+          "perCallUs": 5.586
+        }
+      },
+      "nodeVersion": "v24.19.0",
+      "platform": "win32"
+    }
+  ],
+  "baseline": {
+    "timestamp": "2026-09-01T00:37:16.346Z",
+    "results": {
+      "tierLookup": {
+        "totalMs": 0.3455,
+        "perCallUs": 0.3455
+      },
+      "antiPatternScan": {
+        "totalMs": 9.6712,
+        "perCallUs": 9.6712
+      },
+      "yamlParse": {
+        "totalMs": 1.0212,
+        "perCallUs": 1.0212
+      },
+      "fullEval": {
+        "totalMs": 7.9166,
+        "perCallUs": 7.916600000000001
+      }
+    },
+    "nodeVersion": "v24.19.0",
+    "platform": "win32"
+  }
+}

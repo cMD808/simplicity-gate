@@ -1,0 +1,17 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentation
+    url: https://github.com/cMD808/simplicity-gate#readme
+    about: Check the README for usage, examples, and configuration
+  - name: 💬 Discussions
+    url: https://github.com/cMD808/simplicity-gate/discussions
+    about: Ask questions, share ideas, or discuss the project
+  - name: 🐛 Bug Report
+    url: https://github.com/cMD808/simplicity-gate/issues/new?template=bug_report.md
+    about: Report a bug in the CLI or Skill
+  - name: ✨ Feature Request
+    url: https://github.com/cMD808/simplicity-gate/issues/new?template=feature_request.md
+    about: Suggest a new feature or improvement
+  - name: 🔧 Tool Tier Request
+    url: https://github.com/cMD808/simplicity-gate/issues/new?template=tool_tier_request.md
+    about: Request a new tool to be added to the tier hierarchy

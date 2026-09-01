@@ -1,0 +1,77 @@
+{
+  "decisions": [
+    {
+      "tool": "express",
+      "tier": 6,
+      "context": "API proxy",
+      "confidence": 0.8,
+      "outcome": "corrected",
+      "altTier": 3,
+      "timestamp": "2026-08-31T23:59:14.130Z"
+    },
+    {
+      "tool": "supabase",
+      "tier": 5,
+      "context": "auth",
+      "confidence": 0.7,
+      "outcome": "corrected",
+      "altTier": 3,
+      "timestamp": "2026-08-31T23:59:49.949Z"
+    },
+    {
+      "tool": "nextjs",
+      "tier": 6,
+      "context": "static site",
+      "confidence": 0.9,
+      "outcome": "rejected",
+      "altTier": 1,
+      "timestamp": "2026-08-31T23:59:57.999Z"
+    },
+    {
+      "tool": "redis",
+      "tier": 7,
+      "context": "caching",
+      "confidence": 0.6,
+      "outcome": "accepted",
+      "altTier": null,
+      "timestamp": "2026-09-01T00:00:13.871Z"
+    },
+    {
+      "tool": "mongodb",
+      "tier": 5,
+      "context": "user data",
+      "confidence": 0.5,
+      "outcome": "corrected",
+      "altTier": 4,
+      "timestamp": "2026-09-01T00:00:31.488Z"
+    },
+    {
+      "tool": "axios",
+      "tier": 6,
+      "context": "http",
+      "confidence": 0.8,
+      "outcome": "corrected",
+      "altTier": 0,
+      "timestamp": "2026-09-01T00:00:50.767Z"
+    }
+  ],
+  "patterns": {
+    "express:6": 1,
+    "supabase:5": 1,
+    "nextjs:6": 1,
+    "redis:7": 1,
+    "mongodb:5": 1,
+    "axios:6": 1
+  },
+  "corrections": {
+    "express:6→3": 1,
+    "supabase:5→3": 1,
+    "mongodb:5→4": 1,
+    "axios:6→0": 1
+  },
+  "stats": {
+    "total": 6,
+    "corrected": 5,
+    "avgConfidence": 0.7166666666666667
+  }
+}

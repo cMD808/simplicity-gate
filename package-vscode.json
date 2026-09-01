@@ -1,0 +1,124 @@
+{
+  "name": "simplicity-gate-vscode",
+  "displayName": "Simplicity Gate",
+  "description": "Rule of Least Power enforcer for AI coding agents - VS Code / Cursor / Windsurf extension",
+  "version": "6.1.0",
+  "publisher": "cMD808",
+  "author": "cMD808",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cMD808/simplicity-gate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cMD808/simplicity-gate/issues"
+  },
+  "homepage": "https://github.com/cMD808/simplicity-gate#readme",
+  "engines": {
+    "vscode": "^1.80.0",
+    "cursor": "^0.30.0",
+    "windsurf": "^1.0.0"
+  },
+  "categories": ["Linters", "Other"],
+  "activationEvents": [
+    "onCommand:simplicity-gate.eval",
+    "onCommand:simplicity-gate.scan",
+    "onCommand:simplicity-gate.profile",
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:python",
+    "onLanguage:go",
+    "onLanguage:rust"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "simplicity-gate.eval",
+        "title": "Simplicity Gate: Evaluate Current File",
+        "category": "Simplicity Gate"
+      },
+      {
+        "command": "simplicity-gate.scan",
+        "title": "Simplicity Gate: Scan Workspace",
+        "category": "Simplicity Gate"
+      },
+      {
+        "command": "simplicity-gate.profile",
+        "title": "Simplicity Gate: Profile Current File",
+        "category": "Simplicity Gate"
+      },
+      {
+        "command": "simplicity-gate.whyNot",
+        "title": "Simplicity Gate: Why Not Database",
+        "category": "Simplicity Gate"
+      },
+      {
+        "command": "simplicity-gate.fix",
+        "title": "Simplicity Gate: Auto-Fix File",
+        "category": "Simplicity Gate"
+      },
+      {
+        "command": "simplicity-gate.config",
+        "title": "Simplicity Gate: Apply Team Preset",
+        "category": "Simplicity Gate"
+      }
+    ],
+    "configuration": {
+      "title": "Simplicity Gate",
+      "properties": {
+        "simplicityGate.autoFix": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable auto-fix on save"
+        },
+        "simplicityGate.severityThreshold": {
+          "type": "number",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Severity threshold (1=permissive, 5=strict)"
+        },
+        "simplicityGate.preset": {
+          "type": "string",
+          "enum": ["minimal", "balanced", "enterprise", "frontend", "backend", "data"],
+          "default": "balanced",
+          "description": "Team preset to use"
+        },
+        "simplicityGate.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Simplicity Gate"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "simplicity-gate.eval",
+        "key": "ctrl+shift+g ctrl+e",
+        "mac": "cmd+shift+g cmd+e",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "simplicity-gate.scan",
+        "key": "ctrl+shift+g ctrl+s",
+        "mac": "cmd+shift+g cmd+s"
+      },
+      {
+        "command": "simplicity-gate.profile",
+        "key": "ctrl+shift+g ctrl+p",
+        "mac": "cmd+shift+g cmd+p",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.0.0"
+  }
+}
