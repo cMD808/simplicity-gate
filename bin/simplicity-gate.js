@@ -1,4 +1,4 @@
-herhttps://github.com/cMD808/simplicity-gateopelis teher#!/usr/bin/env node
+herhttps://github.com/cMD808/simplicity-gateopelis teh#!/usr/bin/env node
 
 /**
  * Simplicity Gate CLI — Light, fast, zero-dependency

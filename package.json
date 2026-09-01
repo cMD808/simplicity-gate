@@ -5,11 +5,13 @@
   "keywords": [
     "simplicity",
     "least-power",
+    "over-engineering",
     "ai-agents",
     "code-review",
-    "anti-pattern",
-    "over-engineering",
-    "developer-tools"
+    "architecture",
+    "decision-making",
+    "cli",
+    "rule-of-least-power"
   ],
   "author": "cMD808",
   "license": "MIT",
@@ -17,10 +19,10 @@
     "type": "git",
     "url": "https://github.com/cMD808/simplicity-gate.git"
   },
-  "homepage": "https://github.com/cMD808/simplicity-gate#readme",
   "bugs": {
     "url": "https://github.com/cMD808/simplicity-gate/issues"
   },
+  "homepage": "https://github.com/cMD808/simplicity-gate#readme",
   "bin": {
     "simplicity-gate": "./bin/simplicity-gate.js"
   },
